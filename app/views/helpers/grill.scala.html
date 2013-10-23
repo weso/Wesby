@@ -1,0 +1,35 @@
+@(m: (models.Model, models.InverseModel))
+<table>
+	<tbody>
+		<th>Property</th>
+		<th>Value</th>
+	</tbody>
+	<tfoot>
+		<th>Property</th>
+		<th>Value</th>
+	</tfoot>
+	<tbody>
+	@for(m <-m._1.list){
+		<tr>
+			<td>@m._1.uri</td>
+			<td>
+				<ul>
+				@for(a <- m._2){
+				<li>@a.uri</li>
+				}
+				</ul>
+			</tr>
+	}
+	@for(m <-m._2.list){
+		<tr>
+			<td>Is @m._1.uri of</td>
+			<td>
+				<ul>
+				@for(a <- m._2){
+				<li>@a.uri</li>
+				}
+				</ul>
+			</tr>
+	}
+	</tbody>
+</table>

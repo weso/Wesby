@@ -2,6 +2,7 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import es.weso.wfLodPortal.ModelLoader
 
 object Application extends Controller {
 
@@ -16,10 +17,11 @@ object Application extends Controller {
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }
-
-  def fallback = Action {
+  
+  def fallback(uri:String) = Action {
     implicit request =>
-      render {
+      Ok(views.html.fallback(ModelLoader.loadUri(uri)))
+      /*render {
         case Html() => Ok("")
         case Turtle() => Ok("")
         case XTurtle() => Ok("")
@@ -27,7 +29,7 @@ object Application extends Controller {
         case Json() => Ok("")
         case Xml() => Ok("")
         case _ => BadRequest
-      }
+      }*/
   }
 
 }
