@@ -1,0 +1,22 @@
+@(n: models.Node)
+@n match {
+	case n:Resource => {
+		<a href="@n.uri">
+			@n.label match {
+				case Some(label) => {@label}
+				case None => {<span class="small">&lt;</span>@n.uri<span class="small">&gt;</span>}
+			}
+		</a>
+	}
+	case n:Property => {
+		<a href="@n.uri">
+			@n.label match {
+				case Some(label) => {@label}
+				case None => {<span class="small">&lt;</span>@n.uri<span class="small">&gt;</span>}
+			}
+		</a>
+	}
+	case n:Literal => {
+		@n.value
+	}
+}

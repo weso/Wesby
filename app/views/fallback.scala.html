@@ -1,3 +1,7 @@
-@(m: (models.Model, models.InverseModel))
+@(rs: models.ResultQuery)
 
-@helpers.grill(m)
+@main("Welcome to Play") {
+	
+	@helpers.grill(rs)
+
+}

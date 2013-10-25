@@ -2,6 +2,7 @@ package models
 
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
+import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 
 sealed abstract class Node {
   val uri: String
@@ -11,24 +12,24 @@ case class Resource(uri: String, val label: Option[String]) extends Node
 case class Property(uri: String, val label: Option[String]) extends Node
 case class Literal(uri: String, val value: String) extends Node
 
-case class Model(val subject: Resource) extends DataStore {
+case class ResultQuery(subject: Model, predicate: InverseModel)
+
+case class Model(val jenaModel: JenaModel) extends DataStore {
 
   def add(p: Property, n: Node) = addToDataStore(p, n)
 
   override def toString(): String = {
-    new StringBuilder("Model[ Uri: ").append(subject.uri)
-      .append(", nodes:").append(map.toString()).toString
+    new StringBuilder("Model[nodes:").append(map.toString).append("]").toString
   }
 
 }
 
-case class InverseModel(val predicate: Resource) extends DataStore {
+case class InverseModel(val jenaModel: JenaModel) extends DataStore {
 
   def add(n: Node, p: Property) { addToDataStore(p, n) }
 
   override def toString(): String = {
-    new StringBuilder("InverseModel[ Uri: ").append(predicate.uri)
-      .append(", nodes:").append(map.toString()).toString
+    new StringBuilder("InverseModel[nodes:").append(map.toString).append("]").toString
   }
 }
 
@@ -45,7 +46,7 @@ trait DataStore {
   protected def get(uri: String): Option[(Property, ListBuffer[Node])] = {
     map.get((uri))
   }
-  
+
   def list = map.valuesIterator.toList
 
 }

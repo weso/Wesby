@@ -1,4 +1,4 @@
-@(m: (models.Model, models.InverseModel))
+@(rs: models.ResultQuery)
 <table>
 	<tbody>
 		<th>Property</th>
@@ -9,27 +9,31 @@
 		<th>Value</th>
 	</tfoot>
 	<tbody>
-	@for(m <-m._1.list){
+	@for(n <- rs.subject.list){
 		<tr>
-			<td>@m._1.uri</td>
+			<td>
+				@helpers.anchor(n._1)
+			</td>
 			<td>
 				<ul>
-				@for(a <- m._2){
-				<li>@a.uri</li>
+				@for(a <- n._2){
+					<li>@helpers.anchor(a)</li>
 				}
 				</ul>
-			</tr>
+			</td>
+		</tr>
 	}
-	@for(m <-m._2.list){
+	@for(m <- rs.predicate.list){
 		<tr>
-			<td>Is @m._1.uri of</td>
+			<td>Is @helpers.anchor(m._1) of</td>
 			<td>
 				<ul>
 				@for(a <- m._2){
-				<li>@a.uri</li>
+					<li>@helpers.anchor(a)</li>
 				}
 				</ul>
-			</tr>
+			</td>
+		</tr>
 	}
 	</tbody>
 </table>
