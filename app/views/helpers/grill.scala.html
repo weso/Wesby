@@ -1,0 +1,39 @@
+@(rs: models.ResultQuery)
+<table>
+	<tbody>
+		<th>Property</th>
+		<th>Value</th>
+	</tbody>
+	<tfoot>
+		<th>Property</th>
+		<th>Value</th>
+	</tfoot>
+	<tbody>
+	@for(n <- rs.subject.list){
+		<tr>
+			<td>
+				@helpers.anchor(n._1)
+			</td>
+			<td>
+				<ul>
+				@for(a <- n._2){
+					<li>@helpers.anchor(a)</li>
+				}
+				</ul>
+			</td>
+		</tr>
+	}
+	@for(m <- rs.predicate.list){
+		<tr>
+			<td>Is @helpers.anchor(m._1) of</td>
+			<td>
+				<ul>
+				@for(a <- m._2){
+					<li>@helpers.anchor(a)</li>
+				}
+				</ul>
+			</td>
+		</tr>
+	}
+	</tbody>
+</table>
