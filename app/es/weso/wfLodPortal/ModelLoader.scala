@@ -12,6 +12,9 @@ import models.Model
 import models.InverseModel
 import models.ResultQuery
 import com.hp.hpl.jena.rdf.model.ModelFactory
+import models.Literal
+import com.hp.hpl.jena.sparql.pfunction.PropertyFunction
+import com.hp.hpl.jena.rdf.model.ResourceFactory
 
 object ModelLoader extends Configurable {
 
@@ -24,20 +27,24 @@ object ModelLoader extends Configurable {
   val indexPath = conf.getString("sparql.index")
 
   def loadUri(uri: String) = {
-    val fullUri = "<" + baseUri + uri + ">"
+    val fullUri = baseUri + uri
     ResultQuery(loadSubject(fullUri), loadPredicate(fullUri))
   }
 
   def loadSubject(uri: String) = {
     val rs = performQuery {
       applyFilters(querySubject,
-        Seq(uri))
+        Seq("<"+uri+">"))
     }
     val jenaModel = ModelFactory.createDefaultModel
-    val model = Model(rs.getResourceModel)
+    val model = Model(jenaModel)
+    val resource = ResourceFactory.createResource(uri)
     while (rs.hasNext) {
       val qs = rs.next
-      model.add(processProperty(qs), processPredicate(qs))
+      val property = processProperty(qs)
+      val predicate = processPredicate(qs)
+      jenaModel.add(resource, property.property, predicate.rdfNode)
+      model.add(property, predicate)
     }
     model
   }
@@ -45,37 +52,52 @@ object ModelLoader extends Configurable {
   def loadPredicate(uri: String) = {
     val rs = performQuery {
       applyFilters(queryPredicate,
-        Seq(uri))
+        Seq("<"+uri+">"))
     }
     val jenaModel = ModelFactory.createDefaultModel
-    val model = InverseModel(rs.getResourceModel)
+    val model = InverseModel(jenaModel)
+    val resource = ResourceFactory.createResource(uri)
     while (rs.hasNext) {
       val qs = rs.next
-      model.add(processSubject(qs), processProperty(qs))
+      val subject = processSubject(qs)
+      val property = processProperty(qs)
+      jenaModel.add(subject.resource, property.property, resource)
+      model.add(subject, property)
     }
     model
   }
 
-  protected def processSubject(qs: QuerySolution) = {
-    val uri = qs.get("?s").toString
+  protected def processSubject(qs: QuerySolution) : Resource= {
+    val uri = qs.get("?s")
     val sl = qs.get("?sl")
     val label = if (sl == null) { None } else { Some(sl.toString) }
-
-    Resource(replaceUri(uri), label)
+    Resource(replaceUri(uri.toString), label, uri.asResource)
   }
 
-  protected def processProperty(qs: QuerySolution) = {
+  protected def processProperty(qs: QuerySolution) : Property = {
     val uri = qs.get("?v").toString
     val vl = qs.get("?vl")
     val label = if (vl == null) { None } else { Some(vl.toString) }
-    Property(replaceUri(uri), label)
+    Property(replaceUri(uri), label, ResourceFactory.createProperty(uri))
   }
 
-  protected def processPredicate(qs: QuerySolution) = {
-    val uri = qs.get("?p").toString
-    val vl = qs.get("?pl")
-    val label = if (vl == null) { None } else { Some(vl.toString) }
-    Resource(replaceUri(uri), label)
+  protected def processPredicate(qs: QuerySolution) : Node= {
+
+    val uri = qs.get("?p")
+
+    uri match {
+      case e if e.isLiteral() =>
+        val literal = e.asLiteral
+        val dataType = literal.getDatatype match {
+          case dt if dt != null => Some(dt.extendedTypeDefinition().toString)
+          case _ => None
+        }
+        Literal(literal.getValue.toString, dataType, uri)
+      case e if e.isResource() =>
+        val vl = qs.get("?pl")
+        val label = if (vl == null) { None } else { Some(vl.toString) }
+        Resource(replaceUri(uri.toString), label, uri.asResource)
+    }
   }
 
   protected def replaceUri(uri: String) = {
