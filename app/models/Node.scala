@@ -2,21 +2,43 @@ package models
 
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
+import com.hp.hpl.jena.rdf.model.{ Model => JenaModel, Property => JenaProperty, Resource => JenaResource, RDFNode => JenaRDFNode }
 
 sealed abstract class Node {
-  val uri: String
+  val rdfNode :  JenaRDFNode
 }
 
-case class Resource(uri: String, val label: Option[String]) extends Node
-case class Property(uri: String, val label: Option[String]) extends Node
-case class Literal(uri: String, val value: String) extends Node
+case class Resource(val uri: String, 
+    val label: Option[String], 
+    rdfNode: JenaResource) extends Node {
+  
+  def resource: JenaResource = rdfNode
+  
+}
+case class Property(val uri: String, 
+    val label: Option[String], 
+    rdfNode: JenaProperty) extends Node {
+  
+  def property : JenaProperty = rdfNode
+  
+}
+case class Literal(val value: String, 
+    val dataType: Option[String], 
+    rdfNode: JenaRDFNode) extends Node {
+  
+  def literal: JenaRDFNode = rdfNode
+  
+}
 
 case class ResultQuery(subject: Model, predicate: InverseModel)
 
 case class Model(val jenaModel: JenaModel) extends DataStore {
-
-  def add(p: Property, n: Node) = addToDataStore(p, n)
+  
+  def add(p: Property, r: Resource) { addToDataStore(p, r) }
+  
+  def add(p: Property, l: Literal) { addToDataStore(p, l) }
+  
+  def add(p: Property, n: Node) { addToDataStore(p, n) }
 
   override def toString(): String = {
     new StringBuilder("Model[nodes:").append(map.toString).append("]").toString
@@ -26,6 +48,10 @@ case class Model(val jenaModel: JenaModel) extends DataStore {
 
 case class InverseModel(val jenaModel: JenaModel) extends DataStore {
 
+  def add(r: Resource, p: Property) { addToDataStore(p, r) }
+  
+  def add(l: Literal, p: Property) { addToDataStore(p, l) }
+  
   def add(n: Node, p: Property) { addToDataStore(p, n) }
 
   override def toString(): String = {

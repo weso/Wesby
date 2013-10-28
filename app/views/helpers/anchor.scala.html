@@ -17,6 +17,9 @@
 		</a>
 	}
 	case n:Literal => {
-		@n.value
+		@n.value @n.dataType match {
+			case Some(dataType) => {&#40;@dataType&#41;}
+			case None => {}
+		}
 	}
 }
