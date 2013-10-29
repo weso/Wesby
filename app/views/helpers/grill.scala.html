@@ -17,7 +17,7 @@
 			<td class="value">
 				<ul>
 				@for(a <- n._2){
-					<li>@helpers.anchor(a)</li>
+					<li>@helpers.anchor(a._1)</li>
 				}
 				</ul>
 			</td>
@@ -32,7 +32,7 @@
 						@for(a <- m._2){
 							<tr>
 								<td>
-									@helpers.anchor(a)
+									@helpers.anchor(a._1)
 								</td>
 							</tr>
 						}
