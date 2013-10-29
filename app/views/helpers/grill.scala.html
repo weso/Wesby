@@ -1,20 +1,20 @@
 @(rs: models.ResultQuery)
-<table>
-	<tbody>
-		<th>Property</th>
-		<th>Value</th>
-	</tbody>
-	<tfoot>
-		<th>Property</th>
-		<th>Value</th>
-	</tfoot>
+<table class="propertyBox">
+	<thead>
+		<th class="property">
+			Property
+		</th>
+		<th class="value">
+			Value
+		</th>
+	</thead>
 	<tbody>
 	@for(n <- rs.subject.list){
 		<tr>
-			<td>
+			<td class="property">
 				@helpers.anchor(n._1)
 			</td>
-			<td>
+			<td class="value">
 				<ul>
 				@for(a <- n._2){
 					<li>@helpers.anchor(a)</li>
@@ -25,13 +25,19 @@
 	}
 	@for(m <- rs.predicate.list){
 		<tr>
-			<td>Is @helpers.anchor(m._1) of</td>
-			<td>
-				<ul>
-				@for(a <- m._2){
-					<li>@helpers.anchor(a)</li>
-				}
-				</ul>
+			<td class="property">Is @helpers.anchor(m._1) of</td>
+			<td class="value">
+				<table class="children pages">
+					<tbody>
+						@for(a <- m._2){
+							<tr>
+								<td>
+									@helpers.anchor(a)
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
 			</td>
 		</tr>
 	}

@@ -9,26 +9,31 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=900"/>
-		<title>wiFetcher</title>
-		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/foundation.css")"/>
-		<link href="http://fonts.googleapis.com/css?family=Advent+Pro:200|Bad+Script|Raleway:400|Comfortaa" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/base.css")"/>
-        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/results.css")"/>
-        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/site.css")" />
-        <link rel="icon" type="image/png" href="@routes.Assets.at("images/weso.png")"/>
-        <script src="@routes.Assets.at("javascripts/modernizr.custom.62291.js")"></script>
+		<title>DATA PORTAL</title>
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/style.css")"/>
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/pages.css")"/>
+		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet" type="text/css">
+        <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.png")"/>
     </head>
-    <body>
-        <header id="banner">
-    		<a id="weso-logo" href="/"><img alt="WESO" width="100" height="100" id="logo" src="@routes.Assets.at("images/weso.png")"></a>
-    		<div>
-				<h1 id="title">
-					<a href="/"><span class="computex">wiFetcher</span> <span class="validation">Upload Service</span></a>
-	      		</h1>
-	      		<p id="tagline">The Web Index, World Wide Web Foundation</p>
-    		</div>
-      	</header>
-      	<div id="main">
-        @content
-    </body>
+	<body>
+		<div class="content">
+			<header>
+				<div class="leftHeader">
+					<img alt="World Wide Web Foundation" src="@routes.Assets.at("images/W3F-logo.png")" class="W3F-logo" />
+				</div>
+				<div class="rightHeader">
+					<p class="title1"><span>DATA PORTAL</span></p>
+					<p class="title2"><span></span></p>
+				</div>
+				<div class="border"></div>
+			</header>
+			<div class="body">
+				@content
+			</div>
+			<footer>
+				&copy; 2013 World Wide Web Foundation.
+			</footer>
+		</div>
+	</body>
+	<script src="@routes.Assets.at("javascripts/richTable.js")"></script>
 </html>
