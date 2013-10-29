@@ -28,13 +28,15 @@ object ModelLoader extends Configurable {
 
   def loadUri(uri: String) = {
     val fullUri = baseUri + uri
-    ResultQuery(loadSubject(fullUri), loadPredicate(fullUri))
+    val subject = loadSubject(fullUri)
+    val predicate = loadPredicate(fullUri)
+    ResultQuery(subject, predicate)
   }
 
-  def loadSubject(uri: String) = {
+  def loadSubject(uri: String, deep: Boolean = true): Model = {
     val rs = performQuery {
       applyFilters(querySubject,
-        Seq("<"+uri+">"))
+        Seq("<" + uri + ">"))
     }
     val jenaModel = ModelFactory.createDefaultModel
     val model = Model(jenaModel)
@@ -44,15 +46,22 @@ object ModelLoader extends Configurable {
       val property = processProperty(qs)
       val predicate = processPredicate(qs)
       jenaModel.add(resource, property.property, predicate.rdfNode)
-      model.add(property, predicate)
+      predicate match {
+        case r: Resource =>
+          val descendants = if (deep)
+            Some(loadSubject(localURIToURI(r.uri), false))
+          else None
+          model.add(property, r, descendants)
+        case l: Literal => model.add(property, l)
+      }
     }
     model
   }
 
-  def loadPredicate(uri: String) = {
+  def loadPredicate(uri: String, deep: Boolean = true): InverseModel = {
     val rs = performQuery {
       applyFilters(queryPredicate,
-        Seq("<"+uri+">"))
+        Seq("<" + uri + ">"))
     }
     val jenaModel = ModelFactory.createDefaultModel
     val model = InverseModel(jenaModel)
@@ -62,26 +71,28 @@ object ModelLoader extends Configurable {
       val subject = processSubject(qs)
       val property = processProperty(qs)
       jenaModel.add(subject.resource, property.property, resource)
-      model.add(subject, property)
+      if (deep)
+        model.add(subject, loadPredicate(localURIToURI(subject.uri), false), property)
+      else model.add(subject, property)
     }
     model
   }
 
-  protected def processSubject(qs: QuerySolution) : Resource= {
+  protected def processSubject(qs: QuerySolution): Resource = {
     val uri = qs.get("?s")
     val sl = qs.get("?sl")
     val label = if (sl == null) { None } else { Some(sl.toString) }
-    Resource(replaceUri(uri.toString), label, uri.asResource)
+    Resource(uRIToLocalURI(uri.toString), label, uri.asResource)
   }
 
-  protected def processProperty(qs: QuerySolution) : Property = {
+  protected def processProperty(qs: QuerySolution): Property = {
     val uri = qs.get("?v").toString
     val vl = qs.get("?vl")
     val label = if (vl == null) { None } else { Some(vl.toString) }
-    Property(replaceUri(uri), label, ResourceFactory.createProperty(uri))
+    Property(uRIToLocalURI(uri), label, ResourceFactory.createProperty(uri))
   }
 
-  protected def processPredicate(qs: QuerySolution) : Node= {
+  protected def processPredicate(qs: QuerySolution): Node = {
 
     val uri = qs.get("?p")
 
@@ -96,13 +107,19 @@ object ModelLoader extends Configurable {
       case e if e.isResource() =>
         val vl = qs.get("?pl")
         val label = if (vl == null) { None } else { Some(vl.toString) }
-        Resource(replaceUri(uri.toString), label, uri.asResource)
+        Resource(uRIToLocalURI(uri.toString), label, uri.asResource)
     }
   }
 
-  protected def replaceUri(uri: String) = {
+  protected def uRIToLocalURI(uri: String) = {
     if (replaceable)
       uri.replace(baseUri, actualUri)
+    else uri
+  }
+  
+  protected def localURIToURI(uri: String) = {
+    if (replaceable)
+      uri.replace(actualUri, baseUri)
     else uri
   }
 

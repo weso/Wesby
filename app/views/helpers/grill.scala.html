@@ -17,7 +17,7 @@
 			<td>
 				<ul>
 				@for(a <- n._2){
-					<li>@helpers.anchor(a)</li>
+					<li>@helpers.anchor(a._1)</li>
 				}
 				</ul>
 			</td>
@@ -29,7 +29,7 @@
 			<td>
 				<ul>
 				@for(a <- m._2){
-					<li>@helpers.anchor(a)</li>
+					<li>@helpers.anchor(a._1)</li>
 				}
 				</ul>
 			</td>

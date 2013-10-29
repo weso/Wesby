@@ -15,7 +15,12 @@ case class Resource(
 
   def resource: JenaResource = rdfNode
 
+  override def toString: String = {
+    new StringBuilder("R[uri:'").append(uri).append("', Label:'")
+      .append(label).append("']").toString
+  }
 }
+
 case class Property(
   val uri: String,
   val label: Option[String],
@@ -23,7 +28,12 @@ case class Property(
 
   def property: JenaProperty = rdfNode
 
+  override def toString: String = {
+    new StringBuilder("P[uri:'").append(uri).append("', Label:'")
+      .append(label).append("']").toString
+  }
 }
+
 case class Literal(
   val value: String,
   val dataType: Option[String],
@@ -31,54 +41,57 @@ case class Literal(
 
   def literal: JenaRDFNode = rdfNode
 
+  override def toString: String = {
+    new StringBuilder("L[Value:'").append(value).append("', Data Type:'")
+      .append(dataType).append("']").toString
+  }
+
 }
 
 case class ResultQuery(subject: Model, predicate: InverseModel)
 
 case class Model(
-  val jenaModel: JenaModel,
-  val descendants: Option[Model] = None) extends DataStore {
+  val jenaModel: JenaModel) extends DataStore {
 
-  def add(p: Property, r: Resource) { addToDataStore(p, r) }
+  def add(p: Property, r: Resource, m: Option[Model] = None) { addToDataStore(p, r, m) }
 
   def add(p: Property, l: Literal) { addToDataStore(p, l) }
 
-  def add(p: Property, n: Node) { addToDataStore(p, n) }
-
   override def toString(): String = {
-    new StringBuilder("Model[nodes:").append(map.toString).append("]").toString
+    new StringBuilder("Model[nodes:{").append(map.mkString(", "))
+      .append("}]").toString
   }
 
 }
 
 case class InverseModel(
-  val jenaModel: JenaModel,
-  val ascendants: Option[InverseModel] = None) extends DataStore {
+  val jenaModel: JenaModel) extends DataStore {
 
   def add(r: Resource, p: Property) { addToDataStore(p, r) }
 
+  def add(r: Resource, m: InverseModel, p: Property) { addToDataStore(p, r, Some(m)) }
+
   def add(l: Literal, p: Property) { addToDataStore(p, l) }
 
-  def add(n: Node, p: Property) { addToDataStore(p, n) }
-
   override def toString(): String = {
-    new StringBuilder("InverseModel[nodes:").append(map.toString).append("]").toString
+    new StringBuilder("InverseModel[nodes:{").append(map.mkString(", "))
+      .append("}]").toString
   }
 }
 
 trait DataStore {
 
-  protected val map: HashMap[String, (Property, ListBuffer[Node])] = HashMap.empty
+  protected val map: HashMap[String, (Property, ListBuffer[(Node, Option[DataStore])])] = HashMap.empty
 
-  protected def addToDataStore(p: Property, n: Node) {
-    val m = map.getOrElse(p.uri, (p, new ListBuffer[Node]()))
+  protected def addToDataStore(p: Property, n: Node, d: Option[DataStore] = None) {
+    val m = map.getOrElse(p.uri, (p, new ListBuffer[(Node, Option[DataStore])]()))
     val l = m._2
-    l += n
+    l += ((n, d))
     map += p.uri -> (p, l)
   }
 
-  protected def get(uri: String): Option[(Property, ListBuffer[Node])] = {
-    map.get((uri))
+  def get(uri: String): Option[(Property, ListBuffer[(Node, Option[DataStore])])] = {
+    map.get(uri)
   }
 
   def list = map.valuesIterator.toList
