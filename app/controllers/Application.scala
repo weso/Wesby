@@ -7,10 +7,11 @@ import es.weso.wfLodPortal.UriFormatter
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
-
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
+import models.ResultQuery
+import es.weso.wfLodPortal.TemplateEgine
 
-object Application extends Controller {
+object Application extends Controller with TemplateEgine {
 
   val Html = Accepting("text/html")
 
@@ -43,34 +44,34 @@ object Application extends Controller {
       val predicateModel = resultQuery.predicate.jenaModel
       val models = List(subjectModel, predicateModel)
       render {
-        case Html() => Ok(views.html.fallback(resultQuery))
+        case Html() => renderAsTemplate(resultQuery)
         case N3() =>
-          renderModels(models, ("N3", "utf-8", N3.mimeType))
+          renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
         case Turtle() =>
-          renderModels(models, ("TURTLE", "utf-8", Turtle.mimeType))
+          renderModelsAs(models, ("TURTLE", "utf-8", Turtle.mimeType))
         case XTurtle() =>
-          renderModels(models, ("TURTLE", "utf-8", XTurtle.mimeType))
+          renderModelsAs(models, ("TURTLE", "utf-8", XTurtle.mimeType))
         case RdfXML() =>
-          renderModels(models, ("RDF/XML", "utf-8", RdfXML.mimeType))
+          renderModelsAs(models, ("RDF/XML", "utf-8", RdfXML.mimeType))
         case Xml() =>
-          renderModels(models, ("RDF/XML", "utf-8", Xml.mimeType))
+          renderModelsAs(models, ("RDF/XML", "utf-8", Xml.mimeType))
         case RdfJSON() =>
-          renderModels(models, ("RDF/JSON", "utf-8", RdfJSON.mimeType))
+          renderModelsAs(models, ("RDF/JSON", "utf-8", RdfJSON.mimeType))
         case PlainText() =>
-          renderModels(models, ("N-Triples", "utf-8", PlainText.mimeType))
+          renderModelsAs(models, ("N-Triples", "utf-8", PlainText.mimeType))
       }
   }
 
-  def renderModels(models: Seq[JenaModel], contentType: (String, String, String)) = {
+  def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
     val out = new ByteArrayOutputStream()
     for (model <- models) {
       model.write(out, contentType._1, contentType._2)
     }
 
     Ok(out.toString).as {
-      new StringBuilder(contentType._3).append(" ; charset=")
+      (new StringBuilder(contentType._3)).append(" ; charset=")
         .append(contentType._2).toString
     }
   }
-  
+
 }
