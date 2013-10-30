@@ -208,7 +208,7 @@ richTable.sort = new (function() {
 				headers[i].sort = "empty";
 				
 				var img = new Image();
-				img.src = "empty.png";
+				img.src = "/assets/images/empty.png";
 				headers[i].appendChild(img);
 				
 				headers[i].onclick = function() {
@@ -256,7 +256,7 @@ richTable.sort = new (function() {
 		
 		// Update header image
 		var img = header.querySelectorAll("img");
-		img[0].src = header.sort + ".png";
+		img[0].src = "/assets/images/" + header.sort + ".png";
 		
 		// Update header image for the rest of columns
 		var tHeader = table.tHead.rows[0].cells;
@@ -277,7 +277,8 @@ richTable.sort = new (function() {
 		table.appendChild(tHead);
 		
 		// Insert footer
-		table.appendChild(tFoot);
+		if (tFoot)
+			table.appendChild(tFoot);
 		
 		// Insert sorted rows
 		var tBody = document.createElement('tbody');
@@ -298,7 +299,7 @@ richTable.sort = new (function() {
 		var img = header.querySelectorAll("img");
 		
 		if (img && img.length && img.length > 0)
-			img[0].src = "empty.png";
+			img[0].src = "/assets/images/empty.png";
 			
 		header.sort = "empty";
 	}

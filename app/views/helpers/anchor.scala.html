@@ -4,7 +4,7 @@
 		<a href="@n.uri">
 			@n.label match {
 				case Some(label) => {@label}
-				case None => {<span class="small">&lt;</span>@n.uri<span class="small">&gt;</span>}
+				case None => {<span class="small"></span>@n.uri<span class="small"></span>}
 			}
 		</a>
 	}
@@ -12,13 +12,13 @@
 		<a href="@n.uri">
 			@n.label match {
 				case Some(label) => {@label}
-				case None => {<span class="small">&lt;</span>@n.uri<span class="small">&gt;</span>}
+				case None => {<span class="small"></span>@n.uri<span class="small"></span>}
 			}
 		</a>
 	}
 	case n:Literal => {
 		@n.value @n.dataType match {
-			case Some(dataType) => {&#40;@dataType&#41;}
+			case Some(dataType) => { <span class="type">&#40;@dataType&#41;</span>}
 			case None => {}
 		}
 	}
