@@ -1,0 +1,13 @@
+table.sortable th {
+	font-weight: 200;
+	border-bottom: 0.1em solid #333;
+	text-align: left;
+	cursor: pointer;
+	overflow: auto;
+	padding-right: 1em;
+	padding-bottom: 0.5em;
+}
+
+table.sortable th img {
+	float: right;
+}

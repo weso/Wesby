@@ -30,6 +30,12 @@ h2 {
 	font-size: 1em;
 }
 
+/* Type */
+
+span.type {
+	color: #777;
+}
+
 /* Links */
 
 a:link {
@@ -205,7 +211,7 @@ table.propertyBox th.property {
 
 table.propertyBox td {
 	padding: 0.8em 0;
-	vertical-align: text-top;
+	vertical-align: top;
 	border-bottom: 0.1em dashed #ccc;
 }
 

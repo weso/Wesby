@@ -1,12 +1,14 @@
 @(rs: models.ResultQuery)
-<table class="propertyBox">
+<table class="propertyBox sortable">
 	<thead>
-		<th class="property">
-			Property
-		</th>
-		<th class="value">
-			Value
-		</th>
+		<tr>
+			<th class="property">
+				Property
+			</th>
+			<th class="value">
+				Value
+			</th>
+		</tr>
 	</thead>
 	<tbody>
 	@for(n <- rs.subject.list){
@@ -27,7 +29,8 @@
 		<tr>
 			<td class="property">Is @helpers.anchor(m._1) of</td>
 			<td class="value">
-				<table class="children pages">
+				<table class="children pages sortable">
+					<thead><tr></tr></thead>
 					<tbody>
 						@for(a <- m._2){
 							<tr>

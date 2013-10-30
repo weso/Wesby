@@ -10,7 +10,7 @@ sealed abstract class Node {
 
 case class Resource(
   val uri: String,
-  val label: Option[String],
+  var label: Option[String],
   rdfNode: JenaResource) extends Node {
 
   def resource: JenaResource = rdfNode
@@ -23,7 +23,7 @@ case class Resource(
 
 case class Property(
   val uri: String,
-  val label: Option[String],
+  var label: Option[String],
   rdfNode: JenaProperty) extends Node {
 
   def property: JenaProperty = rdfNode
