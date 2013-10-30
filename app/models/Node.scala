@@ -39,7 +39,7 @@ case class Property(
 
 case class Literal(
   val value: String,
-  val dataType: Option[String],
+  val dataType: Option[Uri],
   rdfNode: JenaRDFNode) extends Node {
 
   def literal: JenaRDFNode = rdfNode

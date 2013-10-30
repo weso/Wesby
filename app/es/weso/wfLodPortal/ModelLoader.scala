@@ -53,6 +53,7 @@ object ModelLoader extends Configurable {
           else None
           model.add(property, r, descendants)
         case l: Literal => model.add(property, l)
+        case _ => {}
       }
     }
     model
@@ -101,7 +102,8 @@ object ModelLoader extends Configurable {
       case e if e.isLiteral() =>
         val literal = e.asLiteral
         val dataType = literal.getDatatype match {
-          case dt if dt != null => Some(dt.extendedTypeDefinition().toString)
+          case dt if dt != null =>
+            Some(UriFormatter.format(dt.getURI))
           case _ => None
         }
         Literal(literal.getValue.toString, dataType, uri)
