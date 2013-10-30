@@ -1,20 +1,32 @@
 @(n: models.Node)
 @n match {
 	case n:Resource => {
-		<a href="@n.uri">
-			@n.label match {
-				case Some(label) => {@label}
-				case None => {<span class="small"></span>@n.uri<span class="small"></span>}
+		<a href="@n.uri.relative">
+		@n.label match {
+			case Some(label) => {<a href="@n.uri.relative">@label</a>}
+			case None => {
+				@n.uri.short match {
+					case Some(short) => {
+						<span class="prefix"><a href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a href="@short.suffix._1">@short.suffix._2</a></span>
+					}
+					case None => {<a href="@n.uri.relative"><span class="small">&lt;</span>@n.uri.absolute<span class="small">&gt;</span></a>}
+				}
 			}
+		}
 		</a>
 	}
 	case n:Property => {
-		<a href="@n.uri">
-			@n.label match {
-				case Some(label) => {@label}
-				case None => {<span class="small"></span>@n.uri<span class="small"></span>}
+		@n.label match {
+			case Some(label) => {<a href="@n.uri.relative">@label</a>}
+			case None => {
+				@n.uri.short match {
+					case Some(short) => {
+						<span class="prefix"><a href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a href="@short.suffix._1">@short.suffix._2</a></span>
+					}
+					case None => {<a href="@n.uri.relative"><span class="small">&lt;</span>@n.uri.absolute<span class="small">&gt;</span></a>}
+				}
 			}
-		</a>
+		}
 	}
 	case n:Literal => {
 		@n.value @n.dataType match {

@@ -49,7 +49,7 @@ object ModelLoader extends Configurable {
       predicate match {
         case r: Resource =>
           val descendants = if (deep)
-            Some(loadSubject(localURIToURI(r.uri), false))
+            Some(loadSubject(r.uri.absolute, false))
           else None
           model.add(property, r, descendants)
         case l: Literal => model.add(property, l)
@@ -72,7 +72,7 @@ object ModelLoader extends Configurable {
       val property = processProperty(qs)
       jenaModel.add(subject.resource, property.property, resource)
       if (deep)
-        model.add(subject, loadPredicate(localURIToURI(subject.uri), false), property)
+        model.add(subject, loadPredicate(subject.uri.absolute, false), property)
       else model.add(subject, property)
     }
     model
@@ -82,14 +82,15 @@ object ModelLoader extends Configurable {
     val uri = qs.get("?s")
     val sl = qs.get("?sl")
     val label = if (sl == null) { None } else { Some(sl.toString) }
-    Resource(uRIToLocalURI(uri.toString), label, uri.asResource)
+
+    Resource(UriFormatter.format(uri.toString), label, uri.asResource)
   }
 
   protected def processProperty(qs: QuerySolution): Property = {
     val uri = qs.get("?v").toString
     val vl = qs.get("?vl")
     val label = if (vl == null) { None } else { Some(vl.toString) }
-    Property(uRIToLocalURI(uri), label, ResourceFactory.createProperty(uri))
+    Property(UriFormatter.format(uri), label, ResourceFactory.createProperty(uri))
   }
 
   protected def processPredicate(qs: QuerySolution): Node = {
@@ -107,20 +108,8 @@ object ModelLoader extends Configurable {
       case e if e.isResource() =>
         val vl = qs.get("?pl")
         val label = if (vl == null) { None } else { Some(vl.toString) }
-        Resource(uRIToLocalURI(uri.toString), label, uri.asResource)
+        Resource(UriFormatter.format(uri.toString), label, uri.asResource)
     }
-  }
-
-  protected def uRIToLocalURI(uri: String) = {
-    if (replaceable)
-      uri.replace(baseUri, actualUri)
-    else uri
-  }
-  
-  protected def localURIToURI(uri: String) = {
-    if (replaceable)
-      uri.replace(actualUri, baseUri)
-    else uri
   }
 
   protected def performQuery(queryStr: String) = {
@@ -152,7 +141,5 @@ object ModelLoader extends Configurable {
   }
 
   def main(args: Array[String]) {
-    println(ModelLoader.applyFilters(querySubject, Seq("cex:Value")))
-    println(ModelLoader.loadUri("<http://data.webfoundation.org/webindex/v2013/dataset/UN_D-Normalised>"))
   }
 }
