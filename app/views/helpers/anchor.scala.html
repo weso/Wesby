@@ -30,7 +30,14 @@
 	}
 	case n:Literal => {
 		@n.value @n.dataType match {
-			case Some(dataType) => { <span class="type">&#40;@dataType&#41;</span>}
+			case Some(dataType) => {
+				@dataType.short match {
+					case Some(short) => {
+						<span class="type">&#40;<span class="prefix"><a href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a href="@short.suffix._1">@short.suffix._2</a></span>&#41;</span>
+					}
+					case None => {<span class="type">&#40;@dataType.absolute&#41;</span>}
+				}
+			}
 			case None => {}
 		}
 	}
