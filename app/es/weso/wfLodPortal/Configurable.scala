@@ -7,4 +7,5 @@ trait Configurable {
   val conf = new CompositeConfiguration
   conf.append(new PropertiesConfiguration("conf/endpoint.properties"))
   conf.append(new PropertiesConfiguration("conf/queries.properties"))
+  conf.append(new PropertiesConfiguration("conf/prefixes.properties"))
 }

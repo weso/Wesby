@@ -8,9 +8,12 @@ sealed abstract class Node {
   val rdfNode: JenaRDFNode
 }
 
+case class Uri(val relative: String, val absolute: String, val short: Option[ShortUri])
+case class ShortUri(val prefix: (String, String), val suffix: (String, String))
+
 case class Resource(
-  val uri: String,
-  var label: Option[String],
+  val uri: Uri,
+  val label: Option[String],
   rdfNode: JenaResource) extends Node {
 
   def resource: JenaResource = rdfNode
@@ -22,8 +25,8 @@ case class Resource(
 }
 
 case class Property(
-  val uri: String,
-  var label: Option[String],
+  val uri: Uri,
+  val label: Option[String],
   rdfNode: JenaProperty) extends Node {
 
   def property: JenaProperty = rdfNode
@@ -84,10 +87,10 @@ trait DataStore {
   protected val map: HashMap[String, (Property, ListBuffer[(Node, Option[DataStore])])] = HashMap.empty
 
   protected def addToDataStore(p: Property, n: Node, d: Option[DataStore] = None) {
-    val m = map.getOrElse(p.uri, (p, new ListBuffer[(Node, Option[DataStore])]()))
+    val m = map.getOrElse(p.uri.relative, (p, new ListBuffer[(Node, Option[DataStore])]()))
     val l = m._2
     l += ((n, d))
-    map += p.uri -> (p, l)
+    map += p.uri.relative -> (p, l)
   }
 
   def get(uri: String): Option[(Property, ListBuffer[(Node, Option[DataStore])])] = {
