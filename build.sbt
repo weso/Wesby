@@ -1,6 +1,6 @@
 name := "wfLodPortal"
 
-version := "0.1-M1-SNAPSHOT"
+version := "0.1-M1"
 
 libraryDependencies ++= Seq(
   jdbc,
