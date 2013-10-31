@@ -11,6 +11,10 @@ sealed abstract class Node {
 case class Uri(val relative: String, val absolute: String, val short: Option[ShortUri])
 case class ShortUri(val prefix: (String, String), val suffix: (String, String))
 
+case class Anon(
+  val label: Option[String],
+  rdfNode: JenaResource) extends Node
+
 case class Resource(
   val uri: Uri,
   val label: Option[String],
@@ -59,6 +63,8 @@ case class Model(
   def add(p: Property, r: Resource, lds: LazyDataStore[Model]) { addToDataStore(p, r, Some(lds)) }
 
   def add(p: Property, l: Literal) { addToDataStore(p, l, None) }
+  
+  def add(p: Property, a: Anon) { addToDataStore(p, a, None) }
 
   override def toString(): String = {
     new StringBuilder("Model[nodes:{").append(map.mkString(", "))
@@ -73,20 +79,20 @@ case class InverseModel(
   def add(r: Resource, p: Property, lds: LazyDataStore[InverseModel]) { addToDataStore(p, r, Some(lds)) }
 
   def add(l: Literal, p: Property, lds: Option[LazyDataStore[InverseModel]]) { addToDataStore(p, l, lds) }
-
+  
   override def toString(): String = {
     new StringBuilder("InverseModel[nodes:{").append(map.mkString(", "))
       .append("}]").toString
   }
 }
 
-case class LazyDataStore[T](uri:Uri, method:(String)=>T){
+case class LazyDataStore[T](uri: Uri, method: (String) => T) {
   lazy val dataStore = method(uri.absolute)
   def data = dataStore
 }
 
 trait DataStore[T] {
-  
+
   protected val map: HashMap[String, (Property, ListBuffer[(Node, Option[LazyDataStore[T]])])] = HashMap.empty
 
   protected def addToDataStore(p: Property, n: Node, lds: Option[LazyDataStore[T]]) {
