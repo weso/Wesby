@@ -1,6 +1,6 @@
-@(n: models.Node)
+@(n: models.RdfNode)
 @n match {
-	case n:Resource => {
+	case n:RdfResource => {
 		@n.label match {
 			case Some(label) => {<a href="@n.uri.relative">@label</a>}
 			case None => {
@@ -13,7 +13,7 @@
 			}
 		}
 	}
-	case n:Property => {
+	case n:RdfProperty => {
 		@n.label match {
 			case Some(label) => {<a href="@n.uri.relative">@label</a>}
 			case None => {
@@ -26,7 +26,7 @@
 			}
 		}
 	}
-	case n:Literal => {
+	case n:RdfLiteral => {
 		@n.value @n.dataType match {
 			case Some(dataType) => {
 				@dataType.short match {
@@ -39,5 +39,5 @@
 			case None => {}
 		}
 	}
-	case a:Anon => { 1 anonymous resource }
+	case a:RdfAnon => { 1 anonymous resource }
 }

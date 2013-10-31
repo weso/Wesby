@@ -4,19 +4,19 @@ import com.hp.hpl.jena.query.QueryExecutionFactory
 import com.hp.hpl.jena.query.QueryFactory
 import com.hp.hpl.jena.query.ResultSetFormatter
 import com.hp.hpl.jena.query.Syntax
-import models.Node
-import models.Property
-import models.Resource
+import models.RdfNode
+import models.RdfProperty
+import models.RdfResource
 import com.hp.hpl.jena.query.QuerySolution
 import models.Model
 import models.InverseModel
 import models.ResultQuery
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import models.Literal
+import models.RdfLiteral
 import com.hp.hpl.jena.sparql.pfunction.PropertyFunction
 import com.hp.hpl.jena.rdf.model.ResourceFactory
 import models.LazyDataStore
-import models.Anon
+import models.RdfAnon
 
 object ModelLoader extends Configurable {
 
@@ -50,10 +50,10 @@ object ModelLoader extends Configurable {
       val predicate = processPredicate(qs)
       jenaModel.add(resource, property.property, predicate.rdfNode)
       predicate match {
-        case r: Resource =>
+        case r: RdfResource =>
           model.add(property, r, LazyDataStore(r.uri, loadSubject))
-        case l: Literal => model.add(property, l)
-        case a: Anon => model.add(property, a)
+        case l: RdfLiteral => model.add(property, l)
+        case a: RdfAnon => model.add(property, a)
         case _ => {}
       }
     }
@@ -78,22 +78,22 @@ object ModelLoader extends Configurable {
     model
   }
 
-  protected def processSubject(qs: QuerySolution): Resource = {
+  protected def processSubject(qs: QuerySolution): RdfResource = {
     val uri = qs.get("?s")
     val sl = qs.get("?sl")
     val label = if (sl == null) { None } else { Some(sl.toString) }
 
-    Resource(UriFormatter.format(uri.toString), label, uri.asResource)
+    RdfResource(UriFormatter.format(uri.toString), label, uri.asResource)
   }
 
-  protected def processProperty(qs: QuerySolution): Property = {
+  protected def processProperty(qs: QuerySolution): RdfProperty = {
     val uri = qs.get("?v").toString
     val vl = qs.get("?vl")
     val label = if (vl == null) { None } else { Some(vl.toString) }
-    Property(UriFormatter.format(uri), label, ResourceFactory.createProperty(uri))
+    RdfProperty(UriFormatter.format(uri), label, ResourceFactory.createProperty(uri))
   }
 
-  protected def processPredicate(qs: QuerySolution): Node = {
+  protected def processPredicate(qs: QuerySolution): RdfNode = {
 
     val uri = qs.get("?p")
 
@@ -101,7 +101,7 @@ object ModelLoader extends Configurable {
       case a if a.isAnon() =>
         val vl = qs.get("?pl")
         val label = if (vl == null) { None } else { Some(vl.toString) }
-        Anon(label, a.asResource())
+        RdfAnon(label, a.asResource())
       case e if e.isLiteral() =>
         val literal = e.asLiteral
         val dataType = literal.getDatatype match {
@@ -109,11 +109,11 @@ object ModelLoader extends Configurable {
             Some(UriFormatter.format(dt.getURI))
           case _ => None
         }
-        Literal(literal.getValue.toString, dataType, uri)
+        RdfLiteral(literal.getValue.toString, dataType, uri)
       case e if e.isResource() =>
         val vl = qs.get("?pl")
         val label = if (vl == null) { None } else { Some(vl.toString) }
-        Resource(UriFormatter.format(uri.toString), label, uri.asResource)
+        RdfResource(UriFormatter.format(uri.toString), label, uri.asResource)
     }
   }
 
