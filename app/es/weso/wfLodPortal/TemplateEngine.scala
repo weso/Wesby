@@ -26,9 +26,7 @@ trait TemplateEgine extends Controller with Configurable {
     
     Ok(
       currentType match {
-        case e if currentType == country => views.html.country(resultQuery)
         case _ => views.html.fallback(resultQuery)
-
       })
   }
 }
