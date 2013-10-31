@@ -19,8 +19,8 @@ trait TemplateEgine extends Controller with Configurable {
 
     val currentType = if (result.isDefined) {
       val r = result.get
-      if (!r._2.isEmpty) {
-        r._2.head._1.rdfNode.asResource.getURI()
+      if (!r.nodes.isEmpty) {
+        r.nodes.head.node.rdfNode.asResource.getURI()
       } else Undefined
     } else Undefined
     
