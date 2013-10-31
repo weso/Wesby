@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory
 import models.Literal
 import com.hp.hpl.jena.sparql.pfunction.PropertyFunction
 import com.hp.hpl.jena.rdf.model.ResourceFactory
+import models.LazyDataStore
 
 object ModelLoader extends Configurable {
 
@@ -33,7 +34,8 @@ object ModelLoader extends Configurable {
     ResultQuery(subject, predicate)
   }
 
-  def loadSubject(uri: String, deep: Boolean = true): Model = {
+  def loadSubject(uri: String): Model = {
+    println("Entra")
     val rs = performQuery {
       applyFilters(querySubject,
         Seq("<" + uri + ">"))
@@ -48,10 +50,7 @@ object ModelLoader extends Configurable {
       jenaModel.add(resource, property.property, predicate.rdfNode)
       predicate match {
         case r: Resource =>
-          val descendants = if (deep)
-            Some(loadSubject(r.uri.absolute, false))
-          else None
-          model.add(property, r, descendants)
+          model.add(property, r, LazyDataStore(r.uri, loadSubject))
         case l: Literal => model.add(property, l)
         case _ => {}
       }
@@ -59,7 +58,7 @@ object ModelLoader extends Configurable {
     model
   }
 
-  def loadPredicate(uri: String, deep: Boolean = true): InverseModel = {
+  def loadPredicate(uri: String): InverseModel = {
     val rs = performQuery {
       applyFilters(queryPredicate,
         Seq("<" + uri + ">"))
@@ -72,9 +71,7 @@ object ModelLoader extends Configurable {
       val subject = processSubject(qs)
       val property = processProperty(qs)
       jenaModel.add(subject.resource, property.property, resource)
-      if (deep)
-        model.add(subject, loadPredicate(subject.uri.absolute, false), property)
-      else model.add(subject, property)
+      model.add(subject, property, LazyDataStore(subject.uri, loadPredicate))
     }
     model
   }
