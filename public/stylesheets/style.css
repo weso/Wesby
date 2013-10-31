@@ -215,6 +215,10 @@ table.propertyBox td {
 	border-bottom: 0.1em dashed #ccc;
 }
 
+table.propertyBox tfoot td {
+	border-bottom: none;
+}
+
 table.propertyBox td.property {
 	color: #333;
 	font-style: italic;
@@ -345,6 +349,6 @@ table.children {
 	}
 	
 	header {
-		padding-bottom: 1em;
+		padding-bottom: 0.5em;
 	}
 }
