@@ -16,6 +16,7 @@ import models.Literal
 import com.hp.hpl.jena.sparql.pfunction.PropertyFunction
 import com.hp.hpl.jena.rdf.model.ResourceFactory
 import models.LazyDataStore
+import models.Anon
 
 object ModelLoader extends Configurable {
 
@@ -52,6 +53,7 @@ object ModelLoader extends Configurable {
         case r: Resource =>
           model.add(property, r, LazyDataStore(r.uri, loadSubject))
         case l: Literal => model.add(property, l)
+        case a: Anon => model.add(property, a)
         case _ => {}
       }
     }
@@ -96,6 +98,10 @@ object ModelLoader extends Configurable {
     val uri = qs.get("?p")
 
     uri match {
+      case a if a.isAnon() =>
+        val vl = qs.get("?pl")
+        val label = if (vl == null) { None } else { Some(vl.toString) }
+        Anon(label, a.asResource())
       case e if e.isLiteral() =>
         val literal = e.asLiteral
         val dataType = literal.getDatatype match {

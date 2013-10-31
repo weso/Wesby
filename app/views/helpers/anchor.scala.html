@@ -1,7 +1,6 @@
 @(n: models.Node)
 @n match {
 	case n:Resource => {
-		<a href="@n.uri.relative">
 		@n.label match {
 			case Some(label) => {<a href="@n.uri.relative">@label</a>}
 			case None => {
@@ -13,7 +12,6 @@
 				}
 			}
 		}
-		</a>
 	}
 	case n:Property => {
 		@n.label match {
@@ -41,4 +39,5 @@
 			case None => {}
 		}
 	}
+	case a:Anon => { 1 anonymous resource }
 }
