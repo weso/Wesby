@@ -11,3 +11,19 @@ table.sortable th {
 table.sortable th img {
 	float: right;
 }
+
+table.sortable tr.select th {
+	border-bottom: none;
+}
+
+table.sortable img.empty {
+	content:url('../images/empty.png');
+}
+
+table.sortable img.up {
+	content:url('../images/up.png');
+}
+
+table.sortable img.down {
+	content:url('../images/down.png');
+}	
