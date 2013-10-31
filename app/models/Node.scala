@@ -54,11 +54,11 @@ case class Literal(
 case class ResultQuery(subject: Model, predicate: InverseModel)
 
 case class Model(
-  val jenaModel: JenaModel) extends DataStore {
+  val jenaModel: JenaModel) extends DataStore[Model] {
 
-  def add(p: Property, r: Resource, m: Option[Model] = None) { addToDataStore(p, r, m) }
+  def add(p: Property, r: Resource, lds: LazyDataStore[Model]) { addToDataStore(p, r, Some(lds)) }
 
-  def add(p: Property, l: Literal) { addToDataStore(p, l) }
+  def add(p: Property, l: Literal) { addToDataStore(p, l, None) }
 
   override def toString(): String = {
     new StringBuilder("Model[nodes:{").append(map.mkString(", "))
@@ -68,13 +68,11 @@ case class Model(
 }
 
 case class InverseModel(
-  val jenaModel: JenaModel) extends DataStore {
+  val jenaModel: JenaModel) extends DataStore[InverseModel] {
 
-  def add(r: Resource, p: Property) { addToDataStore(p, r) }
+  def add(r: Resource, p: Property, lds: LazyDataStore[InverseModel]) { addToDataStore(p, r, Some(lds)) }
 
-  def add(r: Resource, m: InverseModel, p: Property) { addToDataStore(p, r, Some(m)) }
-
-  def add(l: Literal, p: Property) { addToDataStore(p, l) }
+  def add(l: Literal, p: Property, lds: Option[LazyDataStore[InverseModel]]) { addToDataStore(p, l, lds) }
 
   override def toString(): String = {
     new StringBuilder("InverseModel[nodes:{").append(map.mkString(", "))
@@ -82,18 +80,23 @@ case class InverseModel(
   }
 }
 
-trait DataStore {
+case class LazyDataStore[T](uri:Uri, method:(String)=>T){
+  lazy val dataStore = method(uri.absolute)
+  def data = dataStore
+}
 
-  protected val map: HashMap[String, (Property, ListBuffer[(Node, Option[DataStore])])] = HashMap.empty
+trait DataStore[T] {
+  
+  protected val map: HashMap[String, (Property, ListBuffer[(Node, Option[LazyDataStore[T]])])] = HashMap.empty
 
-  protected def addToDataStore(p: Property, n: Node, d: Option[DataStore] = None) {
-    val m = map.getOrElse(p.uri.relative, (p, new ListBuffer[(Node, Option[DataStore])]()))
+  protected def addToDataStore(p: Property, n: Node, lds: Option[LazyDataStore[T]]) {
+    val m = map.getOrElse(p.uri.relative, (p, new ListBuffer[(Node, Option[LazyDataStore[T]])]()))
     val l = m._2
-    l += ((n, d))
+    l += ((n, lds))
     map += p.uri.relative -> (p, l)
   }
 
-  def get(uri: String): Option[(Property, ListBuffer[(Node, Option[DataStore])])] = {
+  def get(uri: String): Option[(Property, ListBuffer[(Node, Option[LazyDataStore[T]])])] = {
     map.get(uri)
   }
 
