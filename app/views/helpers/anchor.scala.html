@@ -1,0 +1,43 @@
+@(n: models.RdfNode)
+@n match {
+	case n:RdfResource => {
+		@n.label match {
+			case Some(label) => {<a href="@n.uri.relative">@label</a>}
+			case None => {
+				@n.uri.short match {
+					case Some(short) => {
+						<span class="prefix"><a href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a href="@short.suffix._1">@short.suffix._2</a></span>
+					}
+					case None => {<a href="@n.uri.relative"><span class="small">&lt;</span>@n.uri.absolute<span class="small">&gt;</span></a>}
+				}
+			}
+		}
+	}
+	case n:RdfProperty => {
+		@n.label match {
+			case Some(label) => {<a href="@n.uri.relative">@label</a>}
+			case None => {
+				@n.uri.short match {
+					case Some(short) => {
+						<span class="prefix"><a href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a href="@short.suffix._1">@short.suffix._2</a></span>
+					}
+					case None => {<a href="@n.uri.relative"><span class="small">&lt;</span>@n.uri.absolute<span class="small">&gt;</span></a>}
+				}
+			}
+		}
+	}
+	case n:RdfLiteral => {
+		@n.value @n.dataType match {
+			case Some(dataType) => {
+				@dataType.short match {
+					case Some(short) => {
+						<span class="type">&#40;<span class="prefix"><a href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a href="@short.suffix._1">@short.suffix._2</a></span>&#41;</span>
+					}
+					case None => {<span class="type">&#40;@dataType.absolute&#41;</span>}
+				}
+			}
+			case None => {}
+		}
+	}
+	case a:RdfAnon => { 1 anonymous resource }
+}

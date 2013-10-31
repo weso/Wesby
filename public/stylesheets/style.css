@@ -1,0 +1,350 @@
+body {
+	background-image: url('../images/bg.png');
+	background-attachment: fixed;
+	padding: 0;
+	margin: 0;
+	font-family: 'trebuchet MS', verdana, arial, sans-serif;
+}
+
+div.content {
+	background-color: #fff;
+	margin: 0;
+	padding: 0;
+}
+
+div.body {
+	padding: 0.5em 1em;
+	overflow: auto;
+}
+
+h1 {
+	margin: 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 2em;
+	color: #333;
+}
+
+h2 {
+	margin: 0.5em 0 2em 0;
+	font-size: 1em;
+}
+
+/* Type */
+
+span.type {
+	color: #777;
+}
+
+/* Links */
+
+a:link {
+	color: #2d87bf;
+}
+
+a:visited {
+	color: #271ba5;
+}
+
+a:hover, a:active {
+	color: #EE6611;
+}
+
+/* Header */
+
+header {
+	font-family: 'Source Sans Pro', sans-serif;
+	overflow: auto;
+}
+
+header div.rightHeader {
+	border-bottom: 0.1em solid #ccc;
+	overflow: auto;
+}
+
+p.title1, p.title2 {
+	font-weight: 200;
+	font-size: 1em;
+	margin: 0;
+	width: 50%;
+	float: left;
+}
+
+p.title1 span {
+	padding-left: 1em;
+	color: #116699;
+}
+
+p.title2 {
+	text-align: right;
+}
+
+p.title2 span {
+	padding-right: 1em;
+}
+
+img.W3F-logo {
+	margin-bottom: 0.5em;
+	max-width: 100%;
+}
+
+/* Footer */
+
+footer {
+	background-color: #222;
+	color: #fff;
+	padding: 0.5em 1em;
+	margin-top: 1em;
+	font-size: 0.9em;
+}
+
+/* Help */
+
+div.help {
+	background-color: #eee;
+	color: #666;
+	font-size: 0.8em;
+	font-style: italic;
+	padding: 0.2em 0.5em;
+	display: none;
+}
+
+/* Step */
+
+div.circle-step {
+	font-size: 2em;
+	width: 2em;
+	height: 1.6em;
+	padding-top: 0.4em;
+	border-radius: 1.5em;
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+	margin: 0.5em auto;
+}
+
+p.description {
+	text-align: center;
+	color: #333;
+	font-family: "Century Gothic", Arial;
+	font-style: italic;
+	border-bottom: 0.1em solid #ccc;
+	padding-bottom: 0.5em;
+}
+
+/* Buttons */
+
+div.buttons {
+	overflow: auto;
+}
+
+div.buttons button {
+	font-size: 1.1em;
+	width: 47%;
+	text-transform: uppercase;
+	background-color: #000;
+	color: #fff;
+	font-weight: 100;
+	letter-spacing: 0.2em;
+	font-family: "Century Gothic", Arial;
+	border: none;
+	padding: 0.8em 0;
+	float: right;
+}
+
+div.buttons button.clear {
+	background-color: #444;
+	float: left;
+}
+
+/* Selector */
+
+div.hidden-selector {
+	display: none;
+}
+
+div.hidden-selector > ul {
+	padding: 0;
+}
+
+div.selector > ul {
+	padding: 0;
+}
+
+#yearSelector li {
+	text-align: center;
+}
+
+#yearSelector div.circleAndText {
+	display: inline-block;
+	text-align: center;
+}
+
+#yearSelector div.circle {
+	float: none;
+	margin: 0 auto;
+}
+
+#yearSelector div.hidden-plusOrMinus {
+	display: none;
+}
+
+/* Data table */
+
+table.propertyBox {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1em;
+}
+
+table.propertyBox th {
+	text-align: left;
+	text-transform: uppercase;
+	font-weight: 100;
+	border-bottom: 0.1em solid #aaa;
+	color: #555;
+}
+
+table.propertyBox th.property {
+	width: 30%;
+}
+
+table.propertyBox td {
+	padding: 0.8em 0;
+	vertical-align: top;
+	border-bottom: 0.1em dashed #ccc;
+}
+
+table.propertyBox td.property {
+	color: #333;
+	font-style: italic;
+	padding-right: 1em;
+}
+
+table.propertyBox td.value ul {
+	padding: 0;
+	margin: 0;
+}
+
+table.propertyBox td.value li {
+	list-style: none;
+}
+
+/* Children */
+
+table.children {
+	width: 100%;
+}
+
+/* 37em */
+
+@media all and (min-width: 37em) {
+	header {
+		overflow: auto;
+		border-bottom: 0.1em solid #ccc;
+		padding-bottom: 0.5em;
+	}
+
+	header div.leftHeader {
+		width: 50%;
+		float: left;
+	}
+
+	header div.rightHeader {
+		width: 50%;
+		float: right;
+		border-bottom: none;
+	}
+	
+	p.title1, p.title2 {
+		width: 100%;
+		float: none;
+		font-size: 1.6em;
+		text-align: right;
+		padding: 0;
+	}
+	
+	p.title1 span, p.title2 span {
+		margin-right: 0.5em;
+		padding: 0;
+		text-align: right;
+	}
+}
+
+/* 45em */
+
+@media all and (min-width: 45em) {
+	header div.leftHeader {
+		width: 50%;
+		float: left;
+	}
+	
+	p.title1, p.title2 {
+		font-size: 2em;
+	}	
+
+	div.buttons {
+		width: 50%;
+		float: right;
+	}
+
+	div.buttons button {
+		width: 45%;
+	}
+}
+
+/* 55em */
+
+@media all and (min-width: 55em) {
+	header {
+		border-bottom: none;
+	}
+	
+	div.border {
+		border-bottom: 0.1em solid #ccc;
+		clear: both;
+		margin: 0 1em;
+		height: 1em;
+	}
+	
+	header div.leftHeader {
+		width: 25em;
+		float: left;
+	}
+	
+	div.columns {
+		overflow: auto;
+	}
+	
+	div.column {
+		width: 32%;
+		float: left;
+	}	
+	
+	div.center-column {
+		margin: 0 2%;
+	}
+	
+	div.hidden-selector {
+		display: block;
+	}
+	
+	div.help {
+		font-size: 1em;
+		padding: 0.4em 1em;
+	}
+}
+
+/* 65em */
+
+@media all and (min-width: 65em) {
+	div.content {
+		width: 80%;
+		margin: 0 auto;
+		box-shadow: 0 0.1em 0.2em #333;
+	}
+	
+	header {
+		padding-bottom: 1em;
+	}
+}

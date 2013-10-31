@@ -3,7 +3,16 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET    /               controllers.Application.index
+HEAD   /               controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+GET    /favicon.ico    controllers.Assets.at(path="/public", file="favicon.ico")
+HEAD   /favicon.ico    controllers.Assets.at(path="/public", file="favicon.ico")
+
+GET    /assets/*file   controllers.Assets.at(path="/public", file)
+HEAD   /assets/*file   controllers.Assets.at(path="/public", file)
+
+GET    /*path          controllers.Application.fallback(path: String)
+HEAD   /*path          controllers.Application.fallback(path: String)

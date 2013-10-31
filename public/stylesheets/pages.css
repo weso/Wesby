@@ -1,0 +1,59 @@
+table.pages tFoot {
+	text-align: right;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+table.pages tFoot td {
+	vertical-align: text-bottom;
+}
+
+table.pages tFoot span.details {
+	float: left;
+	padding-top: 0.3em;
+}
+
+table.pages tFoot a {
+	margin-left: 1em;
+	display: inline-block;
+	width: 2em;
+	height: 1.6em;
+	padding-top: 0.4em;
+	border-radius: 1em;
+	background-color: #888;
+	color: #fff;
+	text-align: center;
+	cursor: pointer;
+}
+
+table.pages tFoot a.selected {
+	background-color: #000;
+}
+
+table.pages tFoot a.not-number {
+	background-color: #fff;
+	border: none;
+	color: #333;
+	width: auto;
+	height: auto;
+	font-style: italic;
+}
+
+table.pages tFoot a.disabled {
+	color: #aaa;
+	pointer-events: none;
+}
+
+table.pages tFoot a.hidden {
+	display: none;
+}
+
+span.show, span.entries {
+	text-transform: none;
+	font-size: 0.8em;
+	font-weight: 100;
+}

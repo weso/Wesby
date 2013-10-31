@@ -1,0 +1,48 @@
+@(rs: models.ResultQuery)
+<table class="propertyBox sortable">
+	<thead>
+		<tr>
+			<th class="property">
+				Property
+			</th>
+			<th class="value">
+				Value
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	@for(n <- rs.subject.list){
+		<tr>
+			<td class="property">
+				@helpers.anchor(n.property)
+			</td>
+			<td class="value">
+				<ul>
+				@for(a <- n.nodes){
+					<li>@helpers.anchor(a.node)</li>
+				}
+				</ul>
+			</td>
+		</tr>
+	}
+	@for(m <- rs.predicate.list){
+		<tr>
+			<td class="property">Is @helpers.anchor(m.property) of</td>
+			<td class="value">
+				<table class="children pages sortable">
+					<thead><tr></tr></thead>
+					<tbody>
+						@for(a <- m.nodes){
+							<tr>
+								<td>
+									@helpers.anchor(a.node)
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	}
+	</tbody>
+</table>
