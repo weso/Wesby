@@ -1,6 +1,20 @@
 table.pages tFoot {
-	text-align: center;
-	font-size: 0.7em;
+	text-align: right;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+table.pages tFoot td {
+	vertical-align: text-bottom;
+}
+
+table.pages tFoot span.details {
+	float: left;
+	padding-top: 0.3em;
 }
 
 table.pages tFoot a {
@@ -14,7 +28,6 @@ table.pages tFoot a {
 	color: #fff;
 	text-align: center;
 	cursor: pointer;
-	user-select: none;
 }
 
 table.pages tFoot a.selected {
@@ -33,4 +46,14 @@ table.pages tFoot a.not-number {
 table.pages tFoot a.disabled {
 	color: #aaa;
 	pointer-events: none;
+}
+
+table.pages tFoot a.hidden {
+	display: none;
+}
+
+span.show, span.entries {
+	text-transform: none;
+	font-size: 0.8em;
+	font-weight: 100;
 }
