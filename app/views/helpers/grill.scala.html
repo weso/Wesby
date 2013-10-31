@@ -14,12 +14,12 @@
 	@for(n <- rs.subject.list){
 		<tr>
 			<td class="property">
-				@helpers.anchor(n._1)
+				@helpers.anchor(n.property)
 			</td>
 			<td class="value">
 				<ul>
-				@for(a <- n._2){
-					<li>@helpers.anchor(a._1)</li>
+				@for(a <- n.nodes){
+					<li>@helpers.anchor(a.node)</li>
 				}
 				</ul>
 			</td>
@@ -27,15 +27,15 @@
 	}
 	@for(m <- rs.predicate.list){
 		<tr>
-			<td class="property">Is @helpers.anchor(m._1) of</td>
+			<td class="property">Is @helpers.anchor(m.property) of</td>
 			<td class="value">
 				<table class="children pages sortable">
 					<thead><tr></tr></thead>
 					<tbody>
-						@for(a <- m._2){
+						@for(a <- m.nodes){
 							<tr>
 								<td>
-									@helpers.anchor(a._1)
+									@helpers.anchor(a.node)
 								</td>
 							</tr>
 						}
