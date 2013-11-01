@@ -28,8 +28,8 @@
 	@for(m <- rs.predicate.list){
 		<tr>
 			<td class="property">Is @helpers.anchor(m.property) of</td>
-			<td class="value">
-				<table class="children pages sortable">
+			<td class="value-parent">
+				<table class="children pages">
 					<thead><tr></tr></thead>
 					<tbody>
 						@for(a <- m.nodes){

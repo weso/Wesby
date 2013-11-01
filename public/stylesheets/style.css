@@ -21,13 +21,13 @@ h1 {
 	margin: 0;
 	font-family: 'Source Sans Pro', sans-serif;
 	font-weight: 400;
-	font-size: 2em;
+	font-size: 1.1em;
 	color: #333;
 }
 
 h2 {
 	margin: 0.5em 0 2em 0;
-	font-size: 1em;
+	font-size: 0.9em;
 }
 
 /* Type */
@@ -85,7 +85,8 @@ p.title2 span {
 
 img.W3F-logo {
 	margin-bottom: 0.5em;
-	max-width: 100%;
+	width: 100%;
+	max-width: 25em;
 }
 
 /* Footer */
@@ -205,14 +206,29 @@ table.propertyBox th {
 	color: #555;
 }
 
-table.propertyBox th.property {
-	width: 30%;
+table.propertyBox th.property, table.propertyBox td.property {
+	width: 40%;
+	word-break: break-word;
 }
 
-table.propertyBox td {
+table.propertyBox th.value, table.propertyBox td.value {
+	width: 60%;
+	word-break: break-word;
+}
+
+
+table.propertyBox td, table.propertyBox th {
 	padding: 0.8em 0;
 	vertical-align: top;
 	border-bottom: 0.1em dashed #ccc;
+}
+
+table.propertyBox tr:last-child td {
+    border-bottom: none;
+}
+
+table.propertyBox td.value-parent {
+	padding: 0;
 }
 
 table.propertyBox tfoot td {
@@ -234,10 +250,59 @@ table.propertyBox td.value li {
 	list-style: none;
 }
 
+a.breakable {
+	word-break: break-word;
+}
+
 /* Children */
 
 table.children {
 	width: 100%;
+}
+
+/* Country view */
+
+img.flag {
+	float: right;
+	width: 3em;
+    height: 3em;
+    border-radius: 1.6em;
+    border: 0.1em solid #ddd;
+}
+
+div.country-map {
+	float: right;
+	width: 3.2em;
+    height: 3.2em;
+    margin-left: 1em;
+    border-radius: 1.6em;
+    overflow: hidden;
+}
+
+div.jvectormap-label {
+	display: none;
+}
+
+/* RESPONSIVE DESIGN */
+
+/* 30em */
+
+@media all and (min-width: 30em) {
+	h1 {
+		font-size: 1.6em;
+	}
+	
+	img.flag {
+		width: 3.5em;
+		height: 3.5em;
+		border-radius: 1.75em;
+	}
+	
+	div.country-map {
+		width: 3.7em;
+		height: 3.7em;
+		border-radius: 2.1em;
+	}
 }
 
 /* 37em */
@@ -247,6 +312,15 @@ table.children {
 		overflow: auto;
 		border-bottom: 0.1em solid #ccc;
 		padding-bottom: 0.5em;
+	}
+	
+	h1 {
+		font-size: 2em;
+	}
+	
+	h2 {
+		font-size: 1.2em;
+		margin-top: 0.2em;
 	}
 
 	header div.leftHeader {
@@ -305,7 +379,7 @@ table.children {
 	}
 	
 	div.border {
-		border-bottom: 0.1em solid #ccc;
+		border-bottom: 0.1em solid #eee;
 		clear: both;
 		margin: 0 1em;
 		height: 1em;
@@ -336,6 +410,18 @@ table.children {
 	div.help {
 		font-size: 1em;
 		padding: 0.4em 1em;
+	}
+	
+	img.flag {
+		width: 4.5em;
+		height: 4.5em;
+		border-radius: 2.25em;
+	}
+	
+	div.country-map {
+		width: 4.7em;
+		height: 4.7em;
+		border-radius: 2.35em;
 	}
 }
 

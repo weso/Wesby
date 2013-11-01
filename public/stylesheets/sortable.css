@@ -1,6 +1,6 @@
 table.sortable th {
 	font-weight: 200;
-	border-bottom: 0.1em solid #333;
+	border-bottom: 0.1em solid #aaa;
 	text-align: left;
 	cursor: pointer;
 	overflow: auto;

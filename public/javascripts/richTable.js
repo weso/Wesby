@@ -7,12 +7,13 @@ var richTable = new Object();
 richTable.pages = new (function() {
 	var firstShownRow = 0;
 	var numberFooterAnchors = 5; // Must be odd
+	var minPageSize = 10;
 
 	(function init() {
 		var tables = document.querySelectorAll("table.pages");
-		var length = tables.length;
-		
-		for (var i = 0; i < length; i++) {
+		var numberOfTables = tables.length;
+	
+		for (var i = 0; i < numberOfTables; i++) {
 			var table = tables[i];
 			
 			// Table properties
@@ -31,7 +32,7 @@ richTable.pages = new (function() {
 			table.numberOfRows = rowNumber;
 			
 			var pageLength = (table.numberOfRows == 0) ? 1 : Math.floor(log10(table.numberOfRows)) + 1;
-			table.rowsPerPage = Math.pow(10, pageLength - 1);
+			table.rowsPerPage = Math.max(Math.pow(10, pageLength - 1), minPageSize);
 		
 			prepareTable(table);
 			
@@ -82,9 +83,10 @@ richTable.pages = new (function() {
 		table.reloadPage = function () {
 			showPage(this);
 		}
-		
+	
 		// Footer
-		createFooter(table);
+		if (table.numberOfPages > 1)
+			createFooter(table);
 	}
 	
 	function changePage(pageNumber) {
@@ -295,7 +297,7 @@ richTable.pages = new (function() {
 			span.appendChild(document.createTextNode(" entries"));
 			
 			//Options
-			var inc = Math.pow(10, length - 1);
+			var inc = table.rowsPerPage;
 			
 			for (var i = 1; i <= 4; i++) {
 				var number = inc * i;
