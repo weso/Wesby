@@ -1,7 +1,7 @@
-@(rs: models.ResultQuery)
+@(rs: models.ResultQuery, label: String, currentType: Tuple2[String, String])
 
-@main("Welcome to Play") {
-	
+@main("") {
+	<h1>@label</h1>
+	<h2><a href="@currentType._1">@currentType._2</a></h2>	
 	@helpers.grill(rs)
-
 }

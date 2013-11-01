@@ -17,7 +17,7 @@ object UriFormatter extends Configurable {
 
   while (it.hasNext) {
     val label = it.next()
-    val prefix = conf.getString(label).replace("<HOST>", actualUri)
+    val prefix = conf.getString(label).replace("<HOST>", baseUri)
 
     prefixes(prefix) = label
   }

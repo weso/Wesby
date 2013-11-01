@@ -1,5 +1,5 @@
 table.pages tFoot {
-	text-align: right;
+	text-align: center;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -8,26 +8,63 @@ table.pages tFoot {
 	user-select: none;
 }
 
+@media all and (min-width: 45em) {
+	table.pages tFoot {
+		text-align: right;
+	}
+}
+
 table.pages tFoot td {
 	vertical-align: text-bottom;
+	font-size: 0.8em;
+}
+
+@media all and (min-width: 30em) {
+	table.pages tFoot td {
+		font-size: 0.9em;
+	}
 }
 
 table.pages tFoot span.details {
-	float: left;
 	padding-top: 0.3em;
+	display: block;
+	text-align: center;
+	margin-bottom: 0.5em;
+}
+
+@media all and (min-width: 45em) {
+	table.pages tFoot span.details {
+		display: inline;
+		float: left;
+	}
+}
+
+@media all and (min-width: 45em) {
+	table.pages tFoot span.details {
+		text-align: left;
+	}
 }
 
 table.pages tFoot a {
-	margin-left: 1em;
+	margin-left: 0.5em;
 	display: inline-block;
-	width: 2em;
-	height: 1.6em;
-	padding-top: 0.4em;
-	border-radius: 1em;
+	width: 1.6em;
+	height: 1.4em;
+	padding-top: 0.2em;
+	border-radius: 0.8em;
 	background-color: #888;
 	color: #fff;
 	text-align: center;
 	cursor: pointer;
+}
+
+@media all and (min-width: 30em) {
+	table.pages tFoot a {
+		width: 2em;
+		height: 1.6em;
+		padding-top: 0.4em;
+		border-radius: 1em;
+	}
 }
 
 table.pages tFoot a.selected {
