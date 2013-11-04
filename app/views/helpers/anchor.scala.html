@@ -26,24 +26,28 @@
 			}
 		}
 	}
-	case n:RdfLiteral => {
-		@n.value @n.dataType match {
-			case Some(dataType) => {
-				@dataType.short match {
-					case Some(short) => {
-						<span class="type">&#40;<span class="prefix"><a class="breakable" href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a class="breakable" href="@short.suffix._1">@short.suffix._2</a></span>&#41;</span>
-					}
-					case None => {<span class="type">&#40;@dataType.absolute&#41;</span>}
-				}
-			}
-			case None => {}
-		}
-	}
+    case n:RdfLiteral => {
+        @n.value @n.dataType match {
+            case Some(dataType) => {
+                @dataType.short match {
+                    case Some(short) => {
+                        <span class="type">&#40;<span class="prefix"><a class="breakable" href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a class="breakable" href="@short.suffix._1">@short.suffix._2</a></span>&#41;</span>
+                    }
+                    case None => {<span class="type">&#40;@dataType.absolute&#41;</span>}
+                }
+            }
+            case None => {}
+        }
+    }
 	case a:RdfAnon => { 1 anonymous resource }
 }
 
-@showLabel(uri:String, label:String) = {
-	@if(label.substring(0,label.indexOf("@")).isEmpty){
-		@uri
-	} else{@label}
+@showLabel(uri:String, label:String) = @{
+	val chunks = label.split("@")
+		
+	if(chunks(0).isEmpty)
+		uri
+	else if(chunks.length>1 && chunks(chunks.length-1)=="en")
+			 chunks(0)
+	else label
 }
