@@ -59,7 +59,7 @@ case class Property[T](val property: RdfProperty) {
 
 case class EnrichNode[T](val node: RdfNode, val dataStore: Option[LazyDataStore[T]])
 
-case class LazyDataStore[T](uri: Uri, method: (String) => T) {
-  lazy val dataStore = method(uri.absolute)
+case class LazyDataStore[T](val uri: Uri, val method: (String) => T) {
+  private lazy val dataStore = method(uri.absolute)
   def data = dataStore
 }
