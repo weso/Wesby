@@ -17,6 +17,8 @@ import com.hp.hpl.jena.sparql.pfunction.PropertyFunction
 import com.hp.hpl.jena.rdf.model.ResourceFactory
 import models.LazyDataStore
 import models.RdfAnon
+import models.OptionalResultQuery
+import models.Uri
 
 object ModelLoader extends Configurable {
 
@@ -50,7 +52,9 @@ object ModelLoader extends Configurable {
       jenaModel.add(resource, property.property, predicate.rdfNode)
       predicate match {
         case r: RdfResource =>
-          model.add(property, r, LazyDataStore(r.uri, loadSubject))
+          val subject = Some(LazyDataStore(r.uri, loadSubject))
+          val predicate = Some(LazyDataStore(r.uri, loadPredicate))
+          model.add(property, r, OptionalResultQuery(subject, predicate))
         case l: RdfLiteral => model.add(property, l)
         case a: RdfAnon => model.add(property, a)
         case _ => {}
@@ -67,12 +71,18 @@ object ModelLoader extends Configurable {
     val jenaModel = ModelFactory.createDefaultModel
     val model = InverseModel(jenaModel)
     val resource = ResourceFactory.createResource(uri)
+    
     while (rs.hasNext) {
       val qs = rs.next
       val subject = processSubject(qs)
       val property = processProperty(qs)
       jenaModel.add(subject.resource, property.property, resource)
-      model.add(subject, property, LazyDataStore(subject.uri, loadPredicate))
+      
+      val subjectAsResource = subject.asInstanceOf[RdfResource]
+      val s = Some(LazyDataStore(subjectAsResource.uri, loadSubject))
+      val p = Some(LazyDataStore(subjectAsResource.uri, loadPredicate))
+
+      model.add(subject, property, OptionalResultQuery(s, p))
     }
     model
   }
