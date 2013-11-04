@@ -11,6 +11,7 @@ import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import models.ResultQuery
 import es.weso.wfLodPortal.TemplateEgine
 import com.hp.hpl.jena.rdf.model.ModelFactory
+import play.api.data.Form
 
 object Application extends Controller with TemplateEgine {
 
@@ -44,23 +45,44 @@ object Application extends Controller with TemplateEgine {
       val subjectModel = resultQuery.subject.jenaModel
       val predicateModel = resultQuery.predicate.jenaModel
       val models = List(subjectModel, predicateModel)
-      render {
-        case Html() => renderAsTemplate(resultQuery)
-        case N3() =>
-          renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
-        case Turtle() =>
-          renderModelsAs(models, ("TURTLE", "utf-8", Turtle.mimeType))
-        case XTurtle() =>
-          renderModelsAs(models, ("TURTLE", "utf-8", XTurtle.mimeType))
-        case RdfXML() =>
-          renderModelsAs(models, ("RDF/XML", "utf-8", RdfXML.mimeType))
-        case Xml() =>
-          renderModelsAs(models, ("RDF/XML", "utf-8", Xml.mimeType))
-        case RdfJSON() =>
-          renderModelsAs(models, ("RDF/JSON", "utf-8", RdfJSON.mimeType))
-        case PlainText() =>
-          renderModelsAs(models, ("N-Triples", "utf-8", PlainText.mimeType))
+      
+      request.getQueryString("format") match {
+        case Some(format) => downloadAs(uri: String, format, models)
+        case None =>
+          render {
+            case Html() => renderAsTemplate(resultQuery)
+            case N3() =>
+              renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
+            case Turtle() =>
+              renderModelsAs(models, ("TURTLE", "utf-8", Turtle.mimeType))
+            case XTurtle() =>
+              renderModelsAs(models, ("TURTLE", "utf-8", XTurtle.mimeType))
+            case RdfXML() =>
+              renderModelsAs(models, ("RDF/XML", "utf-8", RdfXML.mimeType))
+            case Xml() =>
+              renderModelsAs(models, ("RDF/XML", "utf-8", Xml.mimeType))
+            case RdfJSON() =>
+              renderModelsAs(models, ("RDF/JSON", "utf-8", RdfJSON.mimeType))
+            case PlainText() =>
+              renderModelsAs(models, ("N-Triples", "utf-8", PlainText.mimeType))
+          }
       }
+  }
+
+  def downloadAs(uri: String, format: String, models:Seq[JenaModel]) = {
+    format match {
+      case "n3" =>
+        renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
+      case "turtle" =>
+        renderModelsAs(models, ("TURTLE", "utf-8", Turtle.mimeType))
+      case "rdfxml" =>
+        renderModelsAs(models, ("RDF/XML", "utf-8", RdfXML.mimeType))
+      case "rdfjson" =>
+        renderModelsAs(models, ("RDF/JSON", "utf-8", RdfJSON.mimeType))
+      case "n-triples" =>
+        renderModelsAs(models, ("N-Triples", "utf-8", PlainText.mimeType))
+      case _ => BadRequest
+    }
   }
 
   def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
@@ -78,5 +100,4 @@ object Application extends Controller with TemplateEgine {
         .append(contentType._2).toString
     }
   }
-
 }
