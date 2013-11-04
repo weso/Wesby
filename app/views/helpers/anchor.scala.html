@@ -2,7 +2,7 @@
 @n match {
 	case n:RdfResource => {
 		@n.label match {
-			case Some(label) => {<a class="breakable" href="@n.uri.relative">@label</a>}
+			case Some(label) => {<a class="breakable" href="@n.uri.relative">@showLabel(n.uri.absolute, label)</a>}
 			case None => {
 				@n.uri.short match {
 					case Some(short) => {
@@ -15,7 +15,7 @@
 	}
 	case n:RdfProperty => {
 		@n.label match {
-			case Some(label) => {<a class="breakable" href="@n.uri.relative">@label</a>}
+			case Some(label) => {<a class="breakable" href="@n.uri.relative">@showLabel(n.uri.absolute, label)</a>}
 			case None => {
 				@n.uri.short match {
 					case Some(short) => {
@@ -40,4 +40,10 @@
 		}
 	}
 	case a:RdfAnon => { 1 anonymous resource }
+}
+
+@showLabel(uri:String, label:String) = {
+	@if(label.substring(0,label.indexOf("@")).isEmpty){
+		@uri
+	} else{@label}
 }
