@@ -36,7 +36,6 @@ object ModelLoader extends Configurable {
   }
 
   def loadSubject(uri: String): Model = {
-    println("Entra")
     val rs = performQuery {
       applyFilters(querySubject,
         Seq("<" + uri + ">"))

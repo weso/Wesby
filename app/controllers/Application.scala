@@ -10,6 +10,7 @@ import java.nio.charset.CodingErrorAction
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import models.ResultQuery
 import es.weso.wfLodPortal.TemplateEgine
+import com.hp.hpl.jena.rdf.model.ModelFactory
 
 object Application extends Controller with TemplateEgine {
 
@@ -63,10 +64,14 @@ object Application extends Controller with TemplateEgine {
   }
 
   def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
-    val out = new ByteArrayOutputStream()
+    val out = new ByteArrayOutputStream
+    val mergedModel = ModelFactory.createDefaultModel
+
     for (model <- models) {
-      model.write(out, contentType._1, contentType._2)
+      mergedModel.add(model)
     }
+
+    mergedModel.write(out, contentType._1, contentType._2)
 
     Ok(out.toString).as {
       (new StringBuilder(contentType._3)).append(" ; charset=")
