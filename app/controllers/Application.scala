@@ -20,6 +20,7 @@ object Application extends Controller with TemplateEgine {
   val PlainText = Accepting("text/plain")
 
   val N3 = Accepting("text/n3")
+  val RdfN3 = Accepting("text/rdf+n3")
 
   val Turtle = Accepting("text/turtle")
   val XTurtle = Accepting("application/x-turtle")
@@ -45,7 +46,7 @@ object Application extends Controller with TemplateEgine {
       val subjectModel = resultQuery.subject.jenaModel
       val predicateModel = resultQuery.predicate.jenaModel
       val models = List(subjectModel, predicateModel)
-      
+
       request.getQueryString("format") match {
         case Some(format) => downloadAs(uri: String, format, models)
         case None =>
@@ -53,6 +54,8 @@ object Application extends Controller with TemplateEgine {
             case Html() => renderAsTemplate(resultQuery)
             case N3() =>
               renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
+            case RdfN3() =>
+              renderModelsAs(models, ("N3", "utf-8", RdfN3.mimeType))
             case Turtle() =>
               renderModelsAs(models, ("TURTLE", "utf-8", Turtle.mimeType))
             case XTurtle() =>
@@ -69,7 +72,7 @@ object Application extends Controller with TemplateEgine {
       }
   }
 
-  def downloadAs(uri: String, format: String, models:Seq[JenaModel]) = {
+  def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {
     format match {
       case "n3" =>
         renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
@@ -87,13 +90,12 @@ object Application extends Controller with TemplateEgine {
 
   def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
     val out = new ByteArrayOutputStream
-    val mergedModel = ModelFactory.createDefaultModel
+    val mergedModel: JenaModel = ModelFactory.createDefaultModel
 
     for (model <- models) {
       mergedModel.add(model)
     }
-
-    mergedModel.write(out, contentType._1, contentType._2)
+    mergedModel.write(out, contentType._1)
 
     Ok(out.toString).as {
       (new StringBuilder(contentType._3)).append(" ; charset=")
