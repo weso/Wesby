@@ -283,6 +283,21 @@ div.jvectormap-label {
 	display: none;
 }
 
+/* Country concept */
+
+div.country-concept-map {
+	height: 30em;
+}
+
+/* Breadcrumbs */
+
+nav.breadcrumbs {
+	font-size: 0.8em;
+	text-transform: uppercase;
+	margin: 0.5em 0;
+	color: #666;
+}
+
 /* RESPONSIVE DESIGN */
 
 /* 30em */
