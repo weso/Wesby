@@ -1,0 +1,15 @@
+@(n:RdfResource)
+
+@import views.html.helpers.utils._
+
+@n.label match {
+		case Some(label) => {<a class="breakable" href="@n.uri.relative">@showLabel(n.uri.absolute, label)</a>}
+	case None => {
+		@n.uri.short match {
+			case Some(short) => {
+				<span class="prefix"><a href="@short.prefix._1">@short.prefix._2</a></span>:<span class="suffix"><a href="@short.suffix._1">@short.suffix._2</a></span>
+			}
+			case None => {<a class="breakable" href="@n.uri.relative"><span class="small">&lt;</span>@n.uri.absolute<span class="small">&gt;</span></a>}
+		}
+	}
+}
