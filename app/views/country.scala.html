@@ -1,35 +1,26 @@
-@(rs: models.ResultQuery, label: String, currentType: Tuple2[String, String])
+@(rs: ResultQuery)
 
-@iso2 = @{ 
-			rs.subject.get("http://localhost:9000/ontology/has-iso-alpha2-code")
-				.get.nodes(0).node.asInstanceOf[models.RdfLiteral].value.toLowerCase 
-		}
+@import views.html.helpers._
+@import views.html.helpers.utils._
 
-@image = @{ 
-			val img = iso2 + ".png" 
-			
-			routes.Assets.at("images/flags/" + img)
-		}
-		
-@iso2Str = @{ iso2.toUpperCase }
-
-@main("") {
+@main(""){
 	<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
 	<script src="@routes.Assets.at("javascripts/map.js")"></script>
-
+	@defining(label(rs)){label =>
+	
 	<div class="country-map" id="country-map" 
 		title="Map for @label obtained from jVectorMap.com and this from naturalearthdata.com">
 	</div>  
 	<img alt="Country flag for @label obtained from flagpedia.net" class="flag" src="@image" />
 	
 	<h1>@label</h1>
-	<h2><a href="@currentType._1">Country</a></h2>
+	<h2><a href="@rdfType(rs)">Country</a></h2>
 	
-	@helpers.grill(rs)
+	@grill(rs)
 	
 	<script>
 	    $(function(){
-	    	var code = "@iso2Str";
+	    	var code = "@toUpper(iso2(rs))";
 	    	
 	    	var container = "#country-map";
 	
@@ -57,4 +48,12 @@
 	    });
 	    
 	</script>
+	}
+}
+
+
+@image = @{ 
+	val img = toLower(iso2(rs)) + ".png" 
+			
+	routes.Assets.at("images/flags/" + img)
 }

@@ -19,6 +19,10 @@ trait DataStore[T] {
     map += p.uri.relative -> m
   }
 
+  def get(base: String, suffix: String): Option[Property[T]] = {
+    get(base + suffix)
+  }
+  
   def get(uri: String): Option[Property[T]] = {
     map.get(uri)
   }

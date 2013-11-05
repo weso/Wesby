@@ -1,7 +1,10 @@
-@(rs: models.ResultQuery, label: String, currentType: Tuple2[String, String])
+@(rs: models.ResultQuery)
+
+@import views.html.helpers._
+@import views.html.helpers.utils._
 
 @main("") {
-	<h1>@label</h1>
-	<h2><a href="@currentType._1">@currentType._2</a></h2>	
-	@helpers.grill(rs)
+	<h1>@label(rs)</h1>
+	<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	
+	@grill(rs)
 }

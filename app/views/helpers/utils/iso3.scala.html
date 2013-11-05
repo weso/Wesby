@@ -1,0 +1,13 @@
+@(resultQuery:ResultQuery)
+@import es.weso.wfLodPortal.utils.CommonURIS._
+
+@{
+	val iso3 = resultQuery.subject.get(wfOnto,"has-iso-alpha3-code")
+	iso3 match {
+		case Some(iso3) => iso3.nodes.head.node match {
+            case l: RdfLiteral => {l.value}
+            case _ => {}
+        }
+		case None => {}
+	}
+}

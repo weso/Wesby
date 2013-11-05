@@ -1,0 +1,22 @@
+@(resultQuery:ResultQuery)
+
+@import views.html.helpers.utils._
+@import es.weso.wfLodPortal.utils.CommonURIS._
+
+@{
+	val typeResult = resultQuery.subject.get(rdf, "type")
+	typeResult match { 
+		case Some(typeResult) => {
+			typeResult.nodes.head.node match {
+				case r:RdfResource=> {
+					r.label match {
+						case Some(label) => {label}
+						case None => {resourceToUri(r)}
+					}
+				}
+				case _ => {}
+			}
+		}
+		case None => {}
+	}
+}
