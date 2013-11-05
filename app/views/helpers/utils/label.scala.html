@@ -1,0 +1,16 @@
+@(resultQuery:ResultQuery)
+@import es.weso.wfLodPortal.utils.CommonURIS._
+
+@{
+    val label = resultQuery.subject.get(rdfs, "label")
+    label match {
+      case Some(label) =>
+        if (!label.nodes.isEmpty) {
+          label.nodes.head.node match {
+            case l: RdfLiteral => {l.value}
+            case _ => {}
+          }
+        } else {}
+      case None => {}
+    }
+}

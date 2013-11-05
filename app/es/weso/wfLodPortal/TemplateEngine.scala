@@ -4,6 +4,7 @@ import play.api._
 import play.api.mvc._
 import org.apache.commons.configuration.PropertiesConfiguration
 import models.ResultQuery
+import es.weso.wfLodPortal.utils.CommonURIS._
 
 trait TemplateEgine extends Controller with Configurable {
   conf.append(new PropertiesConfiguration("conf/templates.properties"))
@@ -13,14 +14,13 @@ trait TemplateEgine extends Controller with Configurable {
   protected val observation = conf.getString("observation.template")
   protected val dataset = conf.getString("dataset.template")
 
-  protected val RdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-  protected val RdfLabel = "http://www.w3.org/2000/01/rdf-schema#label"
+  protected val RdfType = p(rdf, "type")
+  protected val RdfLabel = p(rdfs, "label")
 
   protected val Undefined = "UNDEFINED"
 
   def renderAsTemplate(resultQuery: ResultQuery) = {
     val typeResult = resultQuery.subject.get(RdfType)
-    val labelResult = resultQuery.subject.get(RdfLabel)
 
     val currentType = if (typeResult.isDefined) {
       val r = typeResult.get
@@ -28,33 +28,16 @@ trait TemplateEgine extends Controller with Configurable {
         r.nodes.head.node.rdfNode.asResource.getURI()
       } else Undefined
     } else Undefined
-    
-    val currentTypeUri : Tuple2[String, String] = if (typeResult.isDefined) {
-      val r = typeResult.get    
-      if (!r.nodes.isEmpty) {
-       (r.nodes.head.node.asInstanceOf[models.RdfResource].uri.relative, 
-       		r.nodes.head.node.asInstanceOf[models.RdfResource].label 
-       			getOrElse 
-       			r.nodes.head.node.asInstanceOf[models.RdfResource].uri.short.get.prefix._2
-       			+ ":" + r.nodes.head.node.asInstanceOf[models.RdfResource].uri.short.get.suffix._2)
-      } else ("", "")
-    } else ("", "")
-    
-    val currentLabel = if (labelResult.isDefined) {
-      val r = labelResult.get     
-      if (!r.nodes.isEmpty) {
-        r.nodes.head.node.asInstanceOf[models.RdfLiteral].value
-      } else ""
-    } else ""
-    
+
     Ok(
       currentType match {
-        case e if currentType == country => views.html.country(resultQuery, currentLabel, currentTypeUri)
-        case e if currentType == indicator => views.html.indicator(resultQuery, currentLabel, currentTypeUri)
-        case e if currentType == observation => views.html.observation(resultQuery, currentLabel, currentTypeUri)
-        case e if currentType == dataset => views.html.dataset(resultQuery, currentLabel, currentTypeUri)
-        case _ => views.html.fallback(resultQuery, currentLabel, currentTypeUri)
+        case e if currentType == country => views.html.country(resultQuery)
+        case e if currentType == indicator => views.html.indicator(resultQuery)
+        case e if currentType == observation => views.html.observation(resultQuery)
+        case e if currentType == dataset => views.html.dataset(resultQuery)
+        case _ => views.html.fallback(resultQuery)
 
       })
   }
+
 }
