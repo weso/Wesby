@@ -43,7 +43,7 @@ a:link {
 }
 
 a:visited {
-	color: #271ba5;
+	color: #888;
 }
 
 a:hover, a:active {
@@ -289,6 +289,104 @@ div.country-concept-map {
 	height: 30em;
 }
 
+nav.country-list {
+	margin-top: 1em;
+	width: 100%;
+}
+
+nav.country-list a.country {
+	display: inline-block;
+	width: 19%;
+	padding: 0.5em 0.5%;
+	float: left;
+	font-size: 0.8em;
+}
+
+div.country-name {
+	text-align: center;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 200;
+	color: #116699;
+	font-size: 1.5em;
+	padding: 0.2em 0;
+	height: 1.1em;
+	margin: -1em 0 1em 0;
+}
+
+div.year {
+	float: right;
+	width: 3em;
+    height: 2em;
+    padding-top: 1em;
+    border-radius: 1.6em;
+    border: 0.1em solid #116699;
+    background-color: #116699;
+    color: #fff;
+    text-align: center;
+    margin-right: 1em;
+}
+
+h3.description {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #333;
+	font-weight: 200;
+	font-size: 1.6em;
+	font-style: italic;
+	margin-bottom: 1em;
+}
+
+div.year span, a.indicator span {
+	font-size: 1.3em;
+}
+
+a.indicator {
+	display: block;
+	float: right;
+	width: 3em;
+    height: 2em;
+    padding-top: 1em;
+    border-radius: 1.6em;
+    border: 0.1em solid #333;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    margin-right: 1em;
+    text-decoration: none;
+}
+
+path.jvectormap-region {
+	cursor: pointer;
+}
+
+div.value {
+	width: 3em;
+	height: 2em;
+	padding-top: 1em;
+	border-radius: 1.5em;
+	border: 0.1em solid #666;
+	background-color: #666;
+	color: #fff;
+	float: right;
+	text-align: center;
+	margin-right: 1em;
+}
+
+div.value p {
+	margin: 0;
+	text-align: center;
+}
+
+div.value p.value {
+	font-size: 1.3em;
+}
+
+div.value p.desc {
+	letter-spacing: 0.1em;
+	font-size: 0.7em;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+}
+
 /* Breadcrumbs */
 
 nav.breadcrumbs {
@@ -310,6 +408,23 @@ nav.breadcrumbs {
 	img.flag {
 		width: 3.5em;
 		height: 3.5em;
+		border-radius: 1.75em;
+	}
+	
+	div.value {
+		width: 3.5em;
+		height: 2.5em;
+		padding-top: 1em;
+		border-radius: 1.75em;
+	}
+	
+	div.value span {
+		font-size: 2.5em;
+	}
+	
+	div.year, a.indicator {
+		width: 3.5em;
+		height: 2.5em;
 		border-radius: 1.75em;
 	}
 	
@@ -430,6 +545,20 @@ nav.breadcrumbs {
 	img.flag {
 		width: 4.5em;
 		height: 4.5em;
+		border-radius: 2.25em;
+	}
+	
+	div.value {
+		width: 4.5em;
+		height: 3.5em;
+		padding-top: 1em;
+		border-radius: 2.75em;
+	}
+	
+	div.year, a.indicator {
+		width: 4.5em;
+		height: 3em;
+		padding-top: 1.5em;
 		border-radius: 2.25em;
 	}
 	

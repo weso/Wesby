@@ -2,9 +2,114 @@
 
 @import views.html.helpers._
 @import views.html.helpers.utils._
+@import es.weso.wfLodPortal.utils.CommonURIS._
+
+@image = @{ 
+	val country = rs.subject.get(wfOnto,"ref-area")
+
+	val code = country.get.nodes.head.dss.subject.get.data.get(wfOnto,"has-iso-alpha2-code")
+				.get.nodes.head.node.asInstanceOf[models.RdfLiteral].value	
+	
+	val img = code.toLowerCase + ".png" 
+			
+	routes.Assets.at("images/flags/" + img)
+}
+
+@countryName = @{
+	val country = rs.subject.get(wfOnto,"ref-area")
+	country match {
+		case Some(country) => country.nodes.head.node match {
+            case l: RdfResource => {l.label}
+            case _ => {}
+        }
+		case None => {}
+	}
+}
+
+@countryURI = @{
+	val country = rs.subject.get(wfOnto,"ref-area")
+
+	country match {
+		case Some(country) => country.nodes.head.node match {
+            case l: RdfResource => {l.uri.relative}
+            case _ => {}
+        }
+		case None => {}
+	}
+}
+
+@indicatorURI = @{
+	val indicator = rs.subject.get(cex,"indicator")
+
+	indicator match {
+		case Some(indicator) => indicator.nodes.head.node match {
+            case l: RdfResource => {l.uri.relative}
+            case _ => {}
+        }
+		case None => {}
+	}
+}
+
+@indicatorName = @{
+	val indicator = rs.subject.get(cex,"indicator")
+
+	indicator match {
+		case Some(indicator) => indicator.nodes.head.node match {
+        case l: RdfResource => {l.uri.short.get.suffix._2}
+            case _ => {}
+        }
+		case None => {}
+	}
+}
+
+@indicatorDescription = @{
+	val indicator = rs.subject.get(cex,"indicator")
+	
+	indicator match {
+		case Some(indicator) => indicator.nodes.head.node match {
+        case l: RdfResource => {l.label getOrElse None}
+            case _ => {}
+        }
+		case None => {}
+	}
+}
+
+@value = @{
+	val value = rs.subject.get(cex,"value")
+	
+	value match {
+		case Some(value) => value.nodes.head.node match {
+        case l: RdfLiteral => {l.value}
+            case _ => {}
+        }
+		case None => {}
+	}
+}
+
+@year = @{
+	val year = rs.subject.get(wfOnto,"ref-year")
+	year match {
+		case Some(year) => year.nodes.head.node match {
+        case l: RdfLiteral => {l.value}
+            case _ => {}
+        }
+		case None => {}
+	}
+}
 
 @main("") {
+	<nav class="breadcrumbs">
+		Data &gt; <a href="/ontology/Country">Country</a> &gt; <a href="@countryURI">@countryName</a> &gt; @label(rs)
+	</nav>
+	
+	<a href="@countryURI"><img alt="Country flag for @countryName obtained from flagpedia.net" class="flag" src="@image" /></a>
+	<div class="year"><span>@year</span></div>
+	<a href="@indicatorURI" class="indicator"><span>@indicatorName</span></a>
+	<div class="value"><p class="value">@value</p><p class="desc">VALUE</p></div>
+
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Observation</a></h2>	
+	<h3 class="description">@indicatorDescription</h3>
+	
 	@grill(rs)
 }

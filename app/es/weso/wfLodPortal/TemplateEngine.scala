@@ -13,6 +13,7 @@ trait TemplateEgine extends Controller with Configurable {
   protected val indicator = conf.getString("indicator.template")
   protected val observation = conf.getString("observation.template")
   protected val dataset = conf.getString("dataset.template")
+  protected val countryConcept = conf.getString("countryConcept.template")
 
   protected val RdfType = p(rdf, "type")
   protected val RdfLabel = p(rdfs, "label")
@@ -35,6 +36,7 @@ trait TemplateEgine extends Controller with Configurable {
         case e if currentType == indicator => views.html.indicator(resultQuery)
         case e if currentType == observation => views.html.observation(resultQuery)
         case e if currentType == dataset => views.html.dataset(resultQuery)
+        case e if currentType == countryConcept => views.html.countryConcept(resultQuery)
         case _ => views.html.fallback(resultQuery)
 
       })
