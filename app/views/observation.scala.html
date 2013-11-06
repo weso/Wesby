@@ -1,14 +1,16 @@
-@(rs: models.ResultQuery)
+@(rs: es.weso.wfLodPortal.models.ResultQuery)
+
+@import es.weso.wfLodPortal.utils.CommonURIS._
+@import es.weso.wfLodPortal.models._
 
 @import views.html.helpers._
 @import views.html.helpers.utils._
-@import es.weso.wfLodPortal.utils.CommonURIS._
 
 @image = @{ 
 	val country = rs.subject.get(wfOnto,"ref-area")
 
 	val code = country.get.nodes.head.dss.subject.get.data.get(wfOnto,"has-iso-alpha2-code")
-				.get.nodes.head.node.asInstanceOf[models.RdfLiteral].value	
+				.get.nodes.head.node.asInstanceOf[RdfLiteral].value	
 	
 	val img = code.toLowerCase + ".png" 
 			

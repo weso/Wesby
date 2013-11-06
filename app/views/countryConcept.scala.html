@@ -1,19 +1,21 @@
-@(rs: ResultQuery)
+@(rs: es.weso.wfLodPortal.models.ResultQuery)
+
+@import es.weso.wfLodPortal.utils.CommonURIS._
+@import es.weso.wfLodPortal.models._
 
 @import views.html.helpers._
 @import views.html.helpers.utils._
-@import es.weso.wfLodPortal.utils.CommonURIS._
 
 @countries = @{ 
 	var countries = scala.collection.mutable.Map[String,Tuple2[String, String]]()
 	
 	for(country <- rs.predicate.get(rdf, "type").get.nodes) {
 		val data = country.dss.subject.get.data
-		val label = country.node.asInstanceOf[models.RdfResource].label getOrElse "Empty"	
+		val label = country.node.asInstanceOf[RdfResource].label getOrElse "Empty"	
 		
-		val iso2 = data.get(wfOnto,"has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[models.RdfLiteral].value
+		val iso2 = data.get(wfOnto,"has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[RdfLiteral].value
 		
-		val uri = country.node.asInstanceOf[models.RdfResource].uri.relative
+		val uri = country.node.asInstanceOf[RdfResource].uri.relative
 		
 		countries(label) = (iso2, uri)
 	}
@@ -36,7 +38,7 @@
 		}
 	</nav>
 	
-	@helpers.subjectGrill(rs)
+	@subjectGrill(rs)
 
 	<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
 	<script src="@routes.Assets.at("javascripts/map.js")"></script>	

@@ -1,4 +1,7 @@
-@(rs: models.ResultQuery)
+@(rs: es.weso.wfLodPortal.models.ResultQuery)
+
+@import views.html.helpers._
+
 <table class="propertyBox sortable">
 	<thead>
 		<tr>
@@ -14,12 +17,12 @@
 	@for(n <- rs.subject.list){
 		<tr>
 			<td class="property">
-				@helpers.anchor(n.property)
+				@anchor(n.property)
 			</td>
 			<td class="value">
 				<ul>
 				@for(a <- n.nodes){
-					<li>@helpers.anchor(a.node)</li>
+					<li>@anchor(a.node)</li>
 				}
 				</ul>
 			</td>

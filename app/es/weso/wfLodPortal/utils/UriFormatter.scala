@@ -1,10 +1,10 @@
-package es.weso.wfLodPortal
+package es.weso.wfLodPortal.utils
 
-import org.apache.commons.configuration.CompositeConfiguration
-import org.apache.commons.configuration.PropertiesConfiguration
 import scala.collection.mutable.HashMap
-import models.Uri
-import models.ShortUri
+
+import es.weso.wfLodPortal.Configurable
+import es.weso.wfLodPortal.models.ShortUri
+import es.weso.wfLodPortal.models.Uri
 
 object UriFormatter extends Configurable {
 

@@ -1,31 +1,29 @@
-package es.weso.wfLodPortal
+package es.weso.wfLodPortal.sparql
 
 import com.hp.hpl.jena.query.QueryExecutionFactory
 import com.hp.hpl.jena.query.QueryFactory
-import com.hp.hpl.jena.query.ResultSetFormatter
-import com.hp.hpl.jena.query.Syntax
-import models.RdfNode
-import models.RdfProperty
-import models.RdfResource
 import com.hp.hpl.jena.query.QuerySolution
-import models.Model
-import models.InverseModel
-import models.ResultQuery
+import com.hp.hpl.jena.query.Syntax
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import models.RdfLiteral
-import com.hp.hpl.jena.sparql.pfunction.PropertyFunction
 import com.hp.hpl.jena.rdf.model.ResourceFactory
-import models.LazyDataStore
-import models.RdfAnon
-import models.OptionalResultQuery
-import models.Uri
+
+import es.weso.wfLodPortal.Configurable
+import es.weso.wfLodPortal.models.InverseModel
+import es.weso.wfLodPortal.models.LazyDataStore
+import es.weso.wfLodPortal.models.Model
+import es.weso.wfLodPortal.models.OptionalResultQuery
+import es.weso.wfLodPortal.models.RdfAnon
+import es.weso.wfLodPortal.models.RdfLiteral
+import es.weso.wfLodPortal.models.RdfNode
+import es.weso.wfLodPortal.models.RdfProperty
+import es.weso.wfLodPortal.models.RdfResource
+import es.weso.wfLodPortal.models.ResultQuery
+import es.weso.wfLodPortal.utils.UriFormatter
 
 object ModelLoader extends Configurable {
 
-  val replaceable = true
   val querySubject = conf.getString("query.subject")
   val queryPredicate = conf.getString("query.predicate")
-  val sparqlEndpoint = conf.getString("sparql.endpoint")
   val baseUri = conf.getString("sparql.baseuri")
   val actualUri = conf.getString("sparql.actualuri")
   val indexPath = conf.getString("sparql.index")
@@ -37,11 +35,8 @@ object ModelLoader extends Configurable {
     ResultQuery(subject, predicate)
   }
 
-  def loadSubject(uri: String): Model = {
-    val rs = performQuery {
-      applyFilters(querySubject,
-        Seq("<" + uri + ">"))
-    }
+  protected def loadSubject(uri: String): Model = {
+    val rs = QueryEngine.performQuery(querySubject, Seq("<" + uri + ">"))
     val jenaModel = ModelFactory.createDefaultModel
     val model = Model(jenaModel)
     val resource = ResourceFactory.createResource(uri)
@@ -64,20 +59,18 @@ object ModelLoader extends Configurable {
   }
 
   def loadPredicate(uri: String): InverseModel = {
-    val rs = performQuery {
-      applyFilters(queryPredicate,
-        Seq("<" + uri + ">"))
-    }
+    val rs = QueryEngine.performQuery (queryPredicate,Seq("<" + uri + ">"))
+    
     val jenaModel = ModelFactory.createDefaultModel
     val model = InverseModel(jenaModel)
     val resource = ResourceFactory.createResource(uri)
-    
+
     while (rs.hasNext) {
       val qs = rs.next
       val subject = processSubject(qs)
       val property = processProperty(qs)
       jenaModel.add(subject.resource, property.property, resource)
-      
+
       val subjectAsResource = subject.asInstanceOf[RdfResource]
       val s = Some(LazyDataStore(subjectAsResource.uri, loadSubject))
       val p = Some(LazyDataStore(subjectAsResource.uri, loadPredicate))
@@ -126,34 +119,4 @@ object ModelLoader extends Configurable {
     }
   }
 
-  protected def performQuery(queryStr: String) = {
-    val query = QueryFactory.create(queryStr, Syntax.syntaxARQ)
-    val qexec = QueryExecutionFactory.sparqlService(sparqlEndpoint, query)
-    val rs = qexec.execSelect()
-    if (rs == null) {
-      throw new Exception("Invalid ResultSet")
-    }
-    rs
-  }
-
-  private def applyFilters(queryStr: String, args: Seq[String]) = {
-    val query = new StringBuilder(queryStr)
-    for (arg <- args) {
-      replace(query, "{0}", arg)
-    }
-    query.toString
-
-  }
-
-  private def replace(builder: StringBuilder, target: String, replacement: String): StringBuilder = {
-    var indexOfTarget = builder.indexOf(target)
-    while (indexOfTarget >= 0) {
-      builder.replace(indexOfTarget, indexOfTarget + target.length, replacement)
-      indexOfTarget = builder.indexOf(target)
-    }
-    builder
-  }
-
-  def main(args: Array[String]) {
-  }
 }

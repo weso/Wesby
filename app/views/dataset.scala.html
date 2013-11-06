@@ -1,10 +1,10 @@
-@(rs: ResultQuery)
+@(rs: es.weso.wfLodPortal.models.ResultQuery)
 
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
 @main("") {
-	<h1>"@label(rs)</h1>
+	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Dataset</a></h2>
 	@grill(rs)
 }

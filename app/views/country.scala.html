@@ -1,8 +1,9 @@
-@(rs: ResultQuery)
+@(rs: es.weso.wfLodPortal.models.ResultQuery)
 
+@import es.weso.wfLodPortal.utils.CommonURIS._
+@import es.weso.wfLodPortal.models._
 @import views.html.helpers._
 @import views.html.helpers.utils._
-@import es.weso.wfLodPortal.utils.CommonURIS._
 
 @iso2var = @{ 
 		val iso2 = rs.subject.get(wfOnto,"has-iso-alpha2-code")
