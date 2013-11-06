@@ -2,15 +2,16 @@
 
 @import views.html.helpers._
 @import views.html.helpers.utils._
+@import es.weso.wfLodPortal.utils.CommonURIS._
 
 @countries = @{ 
 	var countries = scala.collection.mutable.Map[String,Tuple2[String, String]]()
 	
-	for(country <- rs.predicate.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").get.nodes) {
+	for(country <- rs.predicate.get(rdf, "type").get.nodes) {
 		val data = country.dss.subject.get.data
 		val label = country.node.asInstanceOf[models.RdfResource].label getOrElse "Empty"	
 		
-		val iso2 = data.get("http://localhost:9000/ontology/has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[models.RdfLiteral].value
+		val iso2 = data.get(wfOnto,"has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[models.RdfLiteral].value
 		
 		val uri = country.node.asInstanceOf[models.RdfResource].uri.relative
 		
