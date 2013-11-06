@@ -1,4 +1,4 @@
-package models
+package es.weso.wfLodPortal.models
 
 import com.hp.hpl.jena.rdf.model.{ Property => JenaProperty, Resource => JenaResource, RDFNode => JenaRDFNode }
 

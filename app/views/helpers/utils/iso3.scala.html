@@ -1,5 +1,7 @@
-@(resultQuery:ResultQuery)
+@(resultQuery: es.weso.wfLodPortal.models.ResultQuery)
+
 @import es.weso.wfLodPortal.utils.CommonURIS._
+@import es.weso.wfLodPortal.models._
 
 @{
 	val iso3 = resultQuery.subject.get(wfOnto,"has-iso-alpha3-code")

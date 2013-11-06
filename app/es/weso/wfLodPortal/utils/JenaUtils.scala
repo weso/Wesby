@@ -7,8 +7,6 @@ import java.io.StringWriter
 import java.net.URI
 import java.net.URL
 
-import scala.collection.JavaConverters.asScalaSetConverter
-
 import org.apache.jena.atlas.AtlasException
 import org.apache.jena.riot.RiotException
 

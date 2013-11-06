@@ -1,11 +1,16 @@
-@(rs: models.ResultQuery, label: String, currentType: Tuple2[String, String])
+@(rs: es.weso.wfLodPortal.models.ResultQuery)
+
+@import es.weso.wfLodPortal.models._
+@import es.weso.wfLodPortal.utils.CommonURIS._
+@import views.html.helpers._
+@import views.html.helpers.utils._
 
 @main("") {
 	<nav class="breadcrumbs">
 		Data &gt; Country
 	</nav>
 	<h1>@label</h1>
-	<h2><a href="@currentType._1">@currentType._2</a></h2>	
+	<h2><a href="@rdfType(rs)">"@rdfTypeLabel(rs)</a></h2>	
 	<div id="world-map" class="country-concept-map"></div>
 	@helpers.grill(rs)
 	
@@ -15,11 +20,11 @@
 		var countryCodes = {};
 		var countries = {};
 		
-		@for(country <- rs.predicate.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").get.nodes) {	
-			countryCodes["@country.dss.subject.get.data.get("http://localhost:9000/ontology/has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[models.RdfLiteral].value"]  =		
-			"@country.node.asInstanceOf[models.RdfResource].uri.relative";
+		@for(country <- rs.predicate.get(rdf,"type").get.nodes) {	
+			countryCodes["@country.dss.subject.get.data.get(wfOnto,"has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[RdfLiteral].value"]  =		
+			"@country.node.asInstanceOf[RdfResource].uri.relative";
 			
-			countries["@country.dss.subject.get.data.get("http://localhost:9000/ontology/has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[models.RdfLiteral].value"]  = 1;
+			countries["@country.dss.subject.get.data.get(wfOnto,"has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[RdfLiteral].value"]  = 1;
 		}
 		
 		$('#world-map').vectorMap({

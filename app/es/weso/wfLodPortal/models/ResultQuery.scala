@@ -1,8 +1,9 @@
-package models
+package es.weso.wfLodPortal.models
 
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
+
+import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
 
 case class ResultQuery(subject: Model, predicate: InverseModel) {
   val s = subject

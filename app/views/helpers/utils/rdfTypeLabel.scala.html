@@ -1,7 +1,8 @@
-@(resultQuery:ResultQuery)
+@(resultQuery: es.weso.wfLodPortal.models.ResultQuery)
 
-@import views.html.helpers.utils._
+@import es.weso.wfLodPortal.models._
 @import es.weso.wfLodPortal.utils.CommonURIS._
+@import views.html.helpers.utils._
 
 @{
 	val typeResult = resultQuery.subject.get(rdf, "type")

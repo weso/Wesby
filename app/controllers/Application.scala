@@ -1,17 +1,17 @@
 package controllers
 
-import play.api._
-import play.api.mvc._
-import es.weso.wfLodPortal.ModelLoader
-import es.weso.wfLodPortal.UriFormatter
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
-import models.ResultQuery
-import es.weso.wfLodPortal.TemplateEgine
+
+import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import play.api.data.Form
+
+import es.weso.wfLodPortal.TemplateEgine
+import es.weso.wfLodPortal.sparql._
+import play.api.mvc.Accepting
+import play.api.mvc.Action
+import play.api.mvc.Controller
 
 object Application extends Controller with TemplateEgine {
 
