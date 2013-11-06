@@ -2,10 +2,10 @@
 @import es.weso.wfLodPortal.utils.CommonURIS._
 
 @{
-	val iso3 = resultQuery.subject.get(wfOnto,"has-iso-alpha2-code")
-	iso3 match {
+	val iso2 = resultQuery.subject.get(wfOnto,"has-iso-alpha2-code")
+	iso2 match {
 		case Some(iso2) => iso2.nodes.head.node match {
-            case l: RdfLiteral => {l.value}
+        case l: RdfLiteral => {l.value.toUpperCase}
             case _ => {}
         }
 		case None => {}

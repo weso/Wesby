@@ -1,0 +1,29 @@
+@(rs: models.ResultQuery)
+<table class="propertyBox sortable">
+	<thead>
+		<tr>
+			<th class="property">
+				Property
+			</th>
+			<th class="value">
+				Value
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	@for(n <- rs.subject.list){
+		<tr>
+			<td class="property">
+				@helpers.anchor(n.property)
+			</td>
+			<td class="value">
+				<ul>
+				@for(a <- n.nodes){
+					<li>@helpers.anchor(a.node)</li>
+				}
+				</ul>
+			</td>
+		</tr>
+	}
+	</tbody>
+</table>
