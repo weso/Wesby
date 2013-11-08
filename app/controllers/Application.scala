@@ -51,7 +51,7 @@ object Application extends Controller with TemplateEgine {
         case Some(format) => downloadAs(uri: String, format, models)
         case None =>
           render {
-            case Html() => renderAsTemplate(resultQuery)
+            case Html() => renderAsTemplate(resultQuery, ModelLoader.fullUri(uri))
             case N3() =>
               renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
             case RdfN3() =>

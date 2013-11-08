@@ -1,0 +1,31 @@
+@(viewOptions: Map[String,String])
+
+@import helper._
+
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/codemirror.css")"/>
+<script src="@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
+<script src="@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
+<script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
+<div class="sparql">
+	<h4>Data source</h4>
+	<textarea id="query">@{viewOptions("query").replace("\\n", "\n").replace("\\t", "\t")}</textarea>
+	<button id="test-query">Test query</button>
+</div>
+<script>
+	// Button
+	var button = document.getElementById("test-query");
+	
+	button.onclick = function() {
+		var query = editor.doc.getValue();
+		window.location.href = "@{viewOptions("endpoint")}?default-graph-uri=&query=" + encodeURIComponent(query);
+	};
+	
+	// Codemirror (Pretty code)
+	
+	var editor = CodeMirror.fromTextArea(document.getElementById("query"), {
+    	mode: "application/x-sparql-query",
+        tabMode: "indent",
+        lineNumbers: true,
+        matchBrackets: true
+    });
+</script>

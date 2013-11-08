@@ -1,4 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery)
+@(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
@@ -21,10 +21,10 @@
 	val country = rs.subject.get(wfOnto,"ref-area")
 	country match {
 		case Some(country) => country.nodes.head.node match {
-            case l: RdfResource => {l.label}
-            case _ => {}
+            case l: RdfResource => l.label getOrElse ""
+            case _ => ""
         }
-		case None => {}
+		case None => ""
 	}
 }
 
@@ -33,10 +33,10 @@
 
 	country match {
 		case Some(country) => country.nodes.head.node match {
-            case l: RdfResource => {l.uri.relative}
-            case _ => {}
+            case l: RdfResource => l.uri.relative.toString
+            case _ => ""
         }
-		case None => {}
+		case None => ""
 	}
 }
 
@@ -69,10 +69,10 @@
 	
 	indicator match {
 		case Some(indicator) => indicator.nodes.head.node match {
-        case l: RdfResource => {l.label getOrElse None}
-            case _ => {}
+        case l: RdfResource => l.label getOrElse ""
+            case _ => ""
         }
-		case None => {}
+		case None => ""
 	}
 }
 
@@ -81,7 +81,7 @@
 	
 	value match {
 		case Some(value) => value.nodes.head.node match {
-        case l: RdfLiteral => {l.value}
+        case l: RdfLiteral => { BigDecimal(l.value).setScale(2, BigDecimal.RoundingMode.HALF_UP) }
             case _ => {}
         }
 		case None => {}
@@ -101,7 +101,8 @@
 
 @main("") {
 	<nav class="breadcrumbs">
-		Data &gt; <a href="/ontology/Country">Country</a> &gt; <a href="@countryURI">@countryName</a> &gt; @label(rs)
+		Data &gt; <a href="/ontology/Country">Country</a> &gt; 
+		<a href="@countryURI">@showLabel(countryURI, countryName)</a> &gt; @label(rs)
 	</nav>
 	
 	<a href="@countryURI"><img alt="Country flag for @countryName obtained from flagpedia.net" class="flag" src="@image" /></a>
@@ -111,7 +112,7 @@
 
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Observation</a></h2>	
-	<h3 class="description">@indicatorDescription</h3>
+	<h3 class="description">@showLabel("", indicatorDescription)</h3>
 	
 	@grill(rs)
 }

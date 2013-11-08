@@ -5,6 +5,7 @@ import play.api.mvc._
 import org.apache.commons.configuration.PropertiesConfiguration
 import models.ResultQuery
 import es.weso.wfLodPortal.utils.CommonURIS._
+import es.weso.wfLodPortal.sparql._
 
 trait TemplateEgine extends Controller with Configurable {
   conf.append(new PropertiesConfiguration("conf/templates.properties"))
@@ -20,7 +21,7 @@ trait TemplateEgine extends Controller with Configurable {
 
   protected val Undefined = "UNDEFINED"
 
-  def renderAsTemplate(resultQuery: ResultQuery) = {
+  def renderAsTemplate(resultQuery: ResultQuery, uri: String) = {
     val typeResult = resultQuery.subject.get(RdfType)
 
     val currentType = if (typeResult.isDefined) {
@@ -30,14 +31,16 @@ trait TemplateEgine extends Controller with Configurable {
       } else Undefined
     } else Undefined
 
+    val options = Map("endpoint" -> conf.getString("sparql.endpoint"), "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")))
+
     Ok(
       currentType match {
-        case e if currentType == country => views.html.country(resultQuery)
-        case e if currentType == indicator => views.html.indicator(resultQuery)
-        case e if currentType == observation => views.html.observation(resultQuery)
-        case e if currentType == dataset => views.html.dataset(resultQuery)
-        case e if currentType == countryConcept => views.html.countryConcept(resultQuery)
-        case _ => views.html.fallback(resultQuery)
+        case e if currentType == country => views.html.country(resultQuery, options)
+        case e if currentType == indicator => views.html.indicator(resultQuery, options)
+        case e if currentType == observation => views.html.observation(resultQuery, options)
+        case e if currentType == dataset => views.html.dataset(resultQuery, options)
+        case e if currentType == countryConcept => views.html.countryConcept(resultQuery, options)
+        case _ => views.html.fallback(resultQuery, options)
 
       })
   }

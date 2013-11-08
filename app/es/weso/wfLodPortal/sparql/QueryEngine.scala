@@ -31,7 +31,7 @@ object QueryEngine extends Cacheable with Configurable {
     rs
   }
 
-  private def applyFilters(queryStr: String, args: Seq[String]): String = {
+  def applyFilters(queryStr: String, args: Seq[String]): String = {
     val query = new StringBuilder(queryStr)
     for (arg <- args) {
       replace(query, "{0}", arg)

@@ -1,4 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery)
+@(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
@@ -11,13 +11,14 @@
 	
 	for(country <- rs.predicate.get(rdf, "type").get.nodes) {
 		val data = country.dss.subject.get.data
-		val label = country.node.asInstanceOf[RdfResource].label getOrElse "Empty"	
-		
+		val label = country.node.asInstanceOf[RdfResource].label getOrElse "Empty"
+		val uri = country.node.asInstanceOf[RdfResource].uri.relative
 		val iso2 = data.get(wfOnto,"has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[RdfLiteral].value
 		
-		val uri = country.node.asInstanceOf[RdfResource].uri.relative
+		val chunks = label.split("@")
+		val cleanLabel = if (chunks.length > 1 && chunks(chunks.length-1) == "en") chunks(0); else label
 		
-		countries(label) = (iso2, uri)
+		countries(cleanLabel.toString) = (iso2, uri)
 	}
 	
 	countries.toList.sorted
