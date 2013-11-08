@@ -22,8 +22,12 @@ object UriFormatter extends Configurable {
     prefixes(prefix) = label
   }
 
-  protected def uRIToLocalURI(uri: String) = {
+  def uRIToLocalURI(uri: String) = {
     uri.replace(baseUri, actualUri)
+  }
+  
+  def uRIToBaseURI(uri:String) = {
+    uri.replace(actualUri, baseUri)
   }
 
   def format(uri: String): Uri = {

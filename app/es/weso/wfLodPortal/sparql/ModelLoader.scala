@@ -19,6 +19,7 @@ import es.weso.wfLodPortal.models.RdfProperty
 import es.weso.wfLodPortal.models.RdfResource
 import es.weso.wfLodPortal.models.ResultQuery
 import es.weso.wfLodPortal.utils.UriFormatter
+import es.weso.wfLodPortal.utils.UriFormatter._
 
 object ModelLoader extends Configurable {
 
@@ -34,6 +35,13 @@ object ModelLoader extends Configurable {
 
   def loadUri(uri: String) = {
     val fullUri = baseUri + uri
+    val subject = loadSubject(fullUri)
+    val predicate = loadPredicate(fullUri)
+    ResultQuery(subject, predicate)
+  }
+
+  def loadUri(sufix: String, preffix: String) = {
+    val fullUri = uRIToBaseURI(sufix + preffix)
     val subject = loadSubject(fullUri)
     val predicate = loadPredicate(fullUri)
     ResultQuery(subject, predicate)
@@ -63,8 +71,8 @@ object ModelLoader extends Configurable {
   }
 
   def loadPredicate(uri: String): InverseModel = {
-    val rs = QueryEngine.performQuery (queryPredicate,Seq("<" + uri + ">"))
-    
+    val rs = QueryEngine.performQuery(queryPredicate, Seq("<" + uri + ">"))
+
     val jenaModel = ModelFactory.createDefaultModel
     val model = InverseModel(jenaModel)
     val resource = ResourceFactory.createResource(uri)
