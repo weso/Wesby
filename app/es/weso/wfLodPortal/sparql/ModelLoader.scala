@@ -28,6 +28,10 @@ object ModelLoader extends Configurable {
   val actualUri = conf.getString("sparql.actualuri")
   val indexPath = conf.getString("sparql.index")
 
+  def fullUri(uri: String) = {
+  	baseUri + uri
+  }
+
   def loadUri(uri: String) = {
     val fullUri = baseUri + uri
     val subject = loadSubject(fullUri)
