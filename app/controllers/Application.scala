@@ -3,15 +3,20 @@ package controllers
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
-
-import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
+import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
-
 import es.weso.wfLodPortal.TemplateEgine
 import es.weso.wfLodPortal.sparql._
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
+import es.weso.wfLodPortal.sparql.custom._
+import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
+import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
+
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json.Json
 
 object Application extends Controller with TemplateEgine {
 
@@ -72,7 +77,21 @@ object Application extends Controller with TemplateEgine {
       }
   }
 
-  def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {
+  def compareGET(mode:String)= Action{
+    val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode))
+    val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode))
+    val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode))
+    Ok(views.html.compare(c,y,s))
+  }
+  
+  def comparePOST(mode: String, countries: String, years: String, indicators: String) = Action {
+    val c = countries.split(",")
+    val y = years.split(",")
+    val i = indicators.split(",")
+    Ok(""+ YearsCustomQuery.loadYears(mode))
+  }
+
+  protected def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {
     format match {
       case "n3" =>
         renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
@@ -88,7 +107,7 @@ object Application extends Controller with TemplateEgine {
     }
   }
 
-  def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
+  protected def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
     val out = new ByteArrayOutputStream
     val mergedModel: JenaModel = ModelFactory.createDefaultModel
 
