@@ -19,12 +19,15 @@ import play.api.libs.json.Writes
 import es.weso.wfLodPortal.models.DataStore
 import es.weso.wfLodPortal.models.InverseModel
 import es.weso.wfLodPortal.models.OptionalResultQuery
-
-case class Subindex(uri: String, label: String, components: List[Component])
-case class Component(uri: String, label: String, indicator: List[Indicator])
-case class Indicator(uri: String, label: String)
+import es.weso.wfLodPortal.models.Uri
+import es.weso.wfLodPortal.models.Uri._
+import es.weso.wfLodPortal.utils.UriFormatter
 
 object SubindexCustomQuery extends CustomQuery with Configurable {
+
+  case class Subindex(uri: Uri, label: String, components: List[Component])
+  case class Component(uri: Uri, label: String, indicator: List[Indicator])
+  case class Indicator(uri: Uri, label: String)
 
   implicit val indicatorReads = Json.reads[Indicator]
   implicit val indicatorWrites = Json.writes[Indicator]
@@ -46,7 +49,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
       if (uri.contains(param)) {
         val label = r.label.getOrElse("Undefined Label")
         val components = loadComponents(orq.s.get)
-        Some(Subindex(uri, label, components))
+        Some(Subindex(UriFormatter.format(uri), label, components))
       } else None
     }
 
@@ -60,7 +63,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
       val uri = r.uri.absolute
       val label = r.label.getOrElse("Undefined Label")
       val indicators = loadIndicators(orq.s.get)
-      Component(uri, label, indicators)
+      Component(UriFormatter.format(uri), label, indicators)
     }
     handleResource[Component](ls.data, cex, "element", inner _)
   }
@@ -70,7 +73,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
     def inner(r: RdfResource, orq: OptionalResultQuery): Indicator = {
       val uri = r.uri.absolute
       val label = r.label.getOrElse("Undefined Label")
-      Indicator(uri, label)
+      Indicator(UriFormatter.format(uri), label)
     }
     handleResource[Indicator](ls.data, cex, "element", inner _)
   }
