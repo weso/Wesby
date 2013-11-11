@@ -14,17 +14,17 @@ HEAD   /favicon.ico                                                             
 GET    /assets/*file                                                               controllers.Assets.at(path="/public", file)
 HEAD   /assets/*file                                                               controllers.Assets.at(path="/public", file)
 
-GET    /webindex/compare                                                           controllers.Application.compareGET(mode="webindex")
-HEAD   /webindex/compare                                                           controllers.Application.compareGET(mode="webindex")
+GET    /webindex/compare                                                           controllers.Application.preCompare(mode="webindex")
+HEAD   /webindex/compare                                                           controllers.Application.preCompare(mode="webindex")
 
-POST   /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.comparePOST(mode="webindex", countries, years, indicators)
-HEAD   /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.comparePOST(mode="webindex", countries, years, indicators)
+GET    /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.compare(mode="webindex", countries, years, indicators)
+HEAD   /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.compare(mode="webindex", countries, years, indicators)
 
-GET    /odb/compare                                                                controllers.Application.compareGET(mode="odb")
-HEAD   /odb/compare                                                                controllers.Application.compareGET(mode="odb")
+GET    /odb/compare                                                                controllers.Application.preCompare(mode="odb")
+HEAD   /odb/compare                                                                controllers.Application.preCompare(mode="odb")
 
-POST   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.comparePOST(mode="odb", countries, years, indicators)
-HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.comparePOST(mode="odb", countries, years,  indicators)
+GET    /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years, indicators)
+HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years,  indicators)
 
 GET    /*path                                                                      controllers.Application.fallback(path: String)
 HEAD   /*path                                                                      controllers.Application.fallback(path: String)
