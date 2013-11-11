@@ -1,7 +1,44 @@
 @(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue)
 
-@countries
-
-@years
-
-@subindexes
+@main(""){
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/Selector.min.css")"/>
+	<div id="help" class="help"></div>
+	<div class="columns">
+		<div class="column">
+			<div id="countryColumn">
+				<div class="circle-step">1</div>
+				<p class="description">Select ONE or MORE countries.</p>
+			</div>
+			<div id="countrySelector" class="hidden-selector"></div>
+		</div>
+		<div class="column center-column">
+			<div id="indicatorColumn">
+				<div class="circle-step">2</div>
+				<p class="description">Select ONE or MORE indicators.</p>
+			</div>
+			<div id="indicatorSelector" class="hidden-selector"></div>					
+		</div>
+		<div class="column">
+			<div id="yearColumn">
+				<div class="circle-step">3</div>
+				<p class="description">Select ONE or MORE years.</p>
+			</div>	
+			<div id="yearSelector" class="hidden-selector"></div>				
+		</div>
+	</div>
+	<form class="buttons" action="/compare" method="post">
+		<button id="clearButton" class="clear">Clear</button>
+		<button id="compareButton">Compare</button>
+	</form>
+	<script>
+		var dataCountries = @Html(play.api.libs.json.Json.stringify(countries))
+		var dataYears = @Html(play.api.libs.json.Json.stringify(years))
+		var dataIndicators = @Html(play.api.libs.json.Json.stringify(subindexes))
+	
+		for (var i = 0; i < dataYears.length; i++) {
+			dataYears[i] = { label: dataYears[i], code: dataYears[i] };
+		}
+	</script>
+	<script src="@routes.Assets.at("javascripts/comparer/Selector.min.js")"></script>
+	<script src="@routes.Assets.at("javascripts/comparer/comparer.js")"></script>
+}

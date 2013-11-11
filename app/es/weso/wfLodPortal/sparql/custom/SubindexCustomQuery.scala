@@ -5,6 +5,7 @@ import es.weso.wfLodPortal.models.DataStore
 import es.weso.wfLodPortal.models.LazyDataStore
 import es.weso.wfLodPortal.models.Model
 import es.weso.wfLodPortal.models.RdfResource
+import es.weso.wfLodPortal.models.ShortUri
 import es.weso.wfLodPortal.sparql.ModelLoader
 import es.weso.wfLodPortal.utils.CommonURIS.cex
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
@@ -20,9 +21,9 @@ import es.weso.wfLodPortal.models.DataStore
 import es.weso.wfLodPortal.models.InverseModel
 import es.weso.wfLodPortal.models.OptionalResultQuery
 
-case class Subindex(uri: String, label: String, components: List[Component])
-case class Component(uri: String, label: String, indicator: List[Indicator])
-case class Indicator(uri: String, label: String)
+case class Subindex(uri: String, label: String, children: List[Component])
+case class Component(uri: String, label: String, children: List[Indicator])
+case class Indicator(uri: String, label: String, code: String)
 
 object SubindexCustomQuery extends CustomQuery with Configurable {
 
@@ -70,7 +71,11 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
     def inner(r: RdfResource, orq: OptionalResultQuery): Indicator = {
       val uri = r.uri.absolute
       val label = r.label.getOrElse("Undefined Label")
-      Indicator(uri, label)
+      val code = r.uri.short match  {
+      		case Some(s:ShortUri) => s.suffix._2
+      		case None => label
+      }
+      Indicator(uri, label, code)
     }
     handleResource[Indicator](ls.data, cex, "element", inner _)
   }

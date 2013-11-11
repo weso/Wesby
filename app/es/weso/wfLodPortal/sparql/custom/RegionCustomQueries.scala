@@ -16,8 +16,8 @@ import play.api.libs.json.Reads
 import play.api.libs.json.Writes
 import es.weso.wfLodPortal.models.OptionalResultQuery
 
-case class Region(uri: String, label: String, countries: List[Country])
-case class Country(uri: String, label: String, code2: String, code3: String)
+case class Region(uri: String, label: String, children: List[Country])
+case class Country(uri: String, label: String, code2: String, code: String)
 
 object RegionCustomQueries extends CustomQuery with Configurable {
 
