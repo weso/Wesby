@@ -57,13 +57,13 @@ var Comparer = new (function () {
 	}
 	
 	function compare() {
-		var url = "/";
+		var url = document.URL + "/";
 		
 		url += result.country + "/";
 		url += result.year + "/";
-		url += result.indicator + "/";
+		url += result.indicator;
 			
-		this.parentNode.action += url;	
+		this.parentNode.action = url;	
 	}
 	
 	function setToggleColumn(clickArea, showArea) {

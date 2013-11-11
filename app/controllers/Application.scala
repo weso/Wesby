@@ -93,7 +93,7 @@ object Application extends Controller with TemplateEgine {
     val i = indicators.split(",")
     val observations = IndicatorCustomQuery.loadObservations(c, y, i)
     val json = Json.toJson[Map[String, Indicator]](observations)
-    Ok("" + json)
+    Ok(views.html.comparison(json))
   }
 
   protected def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {

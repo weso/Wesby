@@ -15,14 +15,11 @@ import play.api.libs.json.Json
 import play.api.libs.json.Reads
 import play.api.libs.json.Writes
 import es.weso.wfLodPortal.models.OptionalResultQuery
-import es.weso.wfLodPortal.models.Uri
-import es.weso.wfLodPortal.models.Uri._
-import es.weso.wfLodPortal.utils.UriFormatter
+
+case class Region(uri: String, label: String, children: List[Country])
+case class Country(uri: String, label: String, code2: String, code: String)
 
 object RegionCustomQueries extends CustomQuery with Configurable {
-
-  case class Region(uri: Uri, label: String, countries: List[Country])
-  case class Country(uri: Uri, label: String, code2: String, code3: String)
 
   val queryCountries = conf.getString("query.subject")
 
@@ -43,7 +40,7 @@ object RegionCustomQueries extends CustomQuery with Configurable {
       if (uri.contains(param)) {
         val label = r.label.getOrElse("Undefined Label")
         val countries = loadCountries(orq.s.get)
-        Some(Region(UriFormatter.format(uri), label, countries))
+        Some(Region(uri, label, countries))
       } else None
     }
 
@@ -55,7 +52,7 @@ object RegionCustomQueries extends CustomQuery with Configurable {
   protected def loadCountries(ls: LazyDataStore[Model]): List[Country] = {
 
     def inner(r: RdfResource, orq: OptionalResultQuery): Country = {
-      val uri = UriFormatter.format(r.uri.absolute)
+      val uri = r.uri.absolute
       val label = r.label.getOrElse("Undefined Label")
       val dataStore = orq.s.get.data
       val iso2 = firstNodeAsLiteral(dataStore, wfOnto, "has-iso-alpha2-code")
