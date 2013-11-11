@@ -152,7 +152,7 @@ div.circle-step {
 p.description {
 	text-align: center;
 	color: #333;
-	font-family: "Century Gothic", Arial;
+	font-family: 'Source Sans Pro', sans-serif;
 	font-style: italic;
 	border-bottom: 0.1em solid #ccc;
 	padding-bottom: 0.5em;
@@ -172,7 +172,7 @@ div.buttons button {
 	color: #fff;
 	font-weight: 100;
 	letter-spacing: 0.2em;
-	font-family: "Century Gothic", Arial;
+	font-family: 'Source Sans Pro', sans-serif;
 	border: none;
 	padding: 0.8em 0;
 	float: right;
@@ -352,7 +352,14 @@ div.shown {
 	display: block;
 }
 
-
+h4.indicator-description {
+	margin: 0.5em 0 0 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 200;
+	font-style: italic;
+	font-size: 1.4em;
+	color: #116699;
+}
 
 /* Country concept */
 
