@@ -18,8 +18,8 @@ import es.weso.wfLodPortal.utils.UriFormatter
 import es.weso.wfLodPortal.models.Uri
 
 object IndicatorCustomQuery extends Configurable {
-  case class Indicator(val uri: Uri, val code: String, observations: ListBuffer[Observation])
-  case class Observation(val uri: Uri, val value: Float, val country: Country)
+  case class Indicator(val uri: Uri, val code: String, var description: String, observations: ListBuffer[Observation])
+  case class Observation(val uri: Uri, val value: Float, val year: Float, val country: Country)
   case class Country(uri: Uri, val label: String, iso3: String)
 
   val queryCountries = conf.getString("query.compare")
@@ -45,8 +45,12 @@ object IndicatorCustomQuery extends Configurable {
       val qs = rs.next
       val uri = UriFormatter.format(qs.getResource("?indicator").getURI)
       val code = qs.getLiteral("?indicatorCode").getString
+      val description = qs.getLiteral("?definition").getString
 
-      val indicator = map.getOrElse(code, Indicator(uri, code, ListBuffer.empty))
+      val indicator = map.getOrElse(code, Indicator(uri, code, description, ListBuffer.empty))
+      
+      if (description.length > indicator.description.length)
+      	indicator.description = description
 
       indicator.observations += loadObservation(qs, indicator)
       map += code -> indicator
@@ -57,7 +61,8 @@ object IndicatorCustomQuery extends Configurable {
   protected def loadObservation(qs: QuerySolution, indicator: Indicator) = {
     val uri = UriFormatter.format(qs.getResource("?obs").getURI())
     val value = qs.getLiteral("?value").getFloat
-    Observation(uri, value, loadCountry(qs))
+    val year = qs.getLiteral("?year").getFloat
+    Observation(uri, value, year, loadCountry(qs))
   }
 
   protected def loadCountry(qs: QuerySolution) = {

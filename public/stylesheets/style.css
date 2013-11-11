@@ -792,3 +792,24 @@ div.selector > ul {
 		padding: 0.4em 1em;
 	}
 }
+
+/* Comparison result */
+
+div.graphs {
+	min-height: 25em;
+}
+
+div.graphs h3 {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #116699;
+	font-weight: normal;
+	font-size: 1.5em;
+}
+
+p.indicator-description {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #333;
+	font-weight: 200;
+	font-size: 1.3em;
+	margin-bottom: 1em;
+}

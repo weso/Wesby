@@ -1,0 +1,139 @@
+@(observations:play.api.libs.json.JsValue)
+
+@main(""){
+	<div id="graphs" class="graphs"></div>
+	<script src="@routes.Assets.at("javascripts/SortedArray.js")"></script>
+	<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
+	<script src="@routes.Assets.at("javascripts/GraphSettings.js")"></script>
+	<script>
+		function IndicatorInfo(code, name, uri) {
+			this.code = code;
+			this.name = name;
+			this.uri = uri;
+			
+			var countries = {};
+			var countryNames = new SortedArray();
+			var years = new SortedArray();
+			
+			this.insert = function(countryCode, countryName, countryUri, year, value, observationUri) {
+				var country = countries[countryName];
+				
+				if (!country) {
+					country = new CountryInfo(countryCode, countryName, countryUri);
+					countryNames.uniqueInsert(countryName);
+					countries[countryName] = country;
+				}
+				
+				years.uniqueInsert(year);
+				country.insert(year, value, observationUri);
+			}
+			
+			this.toJSON = function() {
+				var series = [];
+				var yearArray = years.getArray();
+				var numberOfYears = yearArray.length;
+				
+				var _countries = countryNames.getArray();
+				var length = _countries.length;
+				
+				for (var i = 0; i < length; i++) {
+					var countryName = _countries[i];
+					var country = countries[countryName];
+					var values = [];
+					var uris = [];
+					
+					for (var j = 0; j < numberOfYears; j++) {
+						var year = yearArray[j];
+						var info = country.get(year);
+						values.push(info.value);
+						uris.push(info.uri);
+					}
+					
+					series.push({
+						name: countryName,
+						values: values,
+						urls: uris
+					});
+				}
+				
+				return {
+					values: yearArray,
+					series: series	
+				};
+			}
+		}
+		
+		function CountryInfo(code, name, uri) {
+			this.code = code;
+			this.name = name;
+			this.uri = uri;
+			
+			var obs = [];
+			
+			this.insert = function(year, value, uri) {
+				obs[year] = {
+					value: value,
+					uri: uri
+				};
+			}
+			
+			this.get = function(year) {
+				return obs[year] ? obs[year] : { value: 0, uri: "" };
+			}
+		}
+		
+		var observations = @Html(play.api.libs.json.Json.stringify(observations))
+		var graphDiv = document.getElementById("graphs");
+
+		var graphSettings = GraphSettings.get();
+		graphSettings.height = graphDiv.offsetHeight;
+		graphSettings.width = graphDiv.offsetWidth;
+		graphSettings.margins = [10, 30, 10, 0];
+		graphSettings.yAxis.title = "";
+		graphSettings.yAxis.margin = 1.5;
+
+		for (var indicator in observations) {
+			var element = observations[indicator];
+			
+			var description = element.description;
+			
+			var code = element.code;
+			var obs = element.observations;
+			var uri = element.uri.relative;
+			
+			var indicatorInfo = new IndicatorInfo(code, code, uri);
+			
+			var length = obs.length;
+			
+			for (var i = 0; i < obs.length; i++) {
+				var observation = obs[i];
+				
+				var countryCode = observation.country.iso3;
+				var countryName = observation.country.label;
+				var countryUri = observation.country.uri.relative;
+				var year = observation.year;
+				var value = observation.value;
+				var obsUri = observation.uri.relative;
+			
+				indicatorInfo.insert(countryCode, countryName, countryUri, year, value, obsUri);
+			}
+			
+			// Graph
+			var options = indicatorInfo.toJSON();
+			graphSettings.xAxis.values = options.values;
+			graphSettings.series = options.series;
+			
+			var h3 = document.createElement("h3");
+			graphDiv.appendChild(h3);
+			h3.innerHTML = indicator;
+			
+			var p = document.createElement("p");
+			graphDiv.appendChild(p);
+			p.className = "indicator-description";
+			p.innerHTML = description;
+			
+			var graph = jGraf.barChart(graphSettings).render();
+			graphDiv.appendChild(graph);
+		}
+	</script>
+}
