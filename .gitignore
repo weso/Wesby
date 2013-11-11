@@ -1,46 +1,21 @@
 
-logs
-tmp
-
-*.jar
+# general
 *~
+*.log
+*.jar
 *.class
-*.log
+.settings
+tmp
+dump
 
 
-bin/
-
-project/project
-project/target
-
-.target
-.history
-
-dist
-
-/.idea
-/*.iml
-/out
-/.idea_modules
-/.classpath
-/.project
-/RUNNING_PID
-/.settings
-
-# Latex specific
-*.bbl
-*.blg
-*.aux
-*.log
-*.out
-
-# Sbt specific
-dist/*
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
+# Eclipse
+.settings
+.cache
+.project
+.classpath
+.scala_dependencies
+bin
 
 # Scala-IDE specific
 .scala_dependencies
@@ -48,9 +23,20 @@ project/plugins/project/
 .classpath
 .cache
 .DS_Store
+ 
+# SBT
+dist
+project/boot
+project/target
+project/plugins/target
+target
+.target
+lib_managed/
+src_managed/
+
+# Play
+logs
+RUNNING_PID
 
 # Git specific
 *.orig
-
-# EARL FILES
-public/earls/*.ttl

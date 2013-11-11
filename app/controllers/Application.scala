@@ -3,15 +3,17 @@ package controllers
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
-
-import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
+import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
-
 import es.weso.wfLodPortal.TemplateEgine
 import es.weso.wfLodPortal.sparql._
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
+import es.weso.wfLodPortal.sparql.custom._
+
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json.Json
 
 object Application extends Controller with TemplateEgine {
 
@@ -51,7 +53,7 @@ object Application extends Controller with TemplateEgine {
         case Some(format) => downloadAs(uri: String, format, models)
         case None =>
           render {
-            case Html() => renderAsTemplate(resultQuery)
+            case Html() => renderAsTemplate(resultQuery, ModelLoader.fullUri(uri))
             case N3() =>
               renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
             case RdfN3() =>
@@ -72,7 +74,29 @@ object Application extends Controller with TemplateEgine {
       }
   }
 
-  def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {
+  def preCompare(mode: String) = Action {
+    import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
+    import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+    import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
+
+    val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode))
+    val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode))
+    val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode))
+    Ok(views.html.compare(c, y, s))
+  }
+
+  def compare(mode: String, countries: String, years: String, indicators: String) = Action {
+    import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery._
+    
+    val c = countries.split(",")
+    val y = years.split(",")
+    val i = indicators.split(",")
+    val observations = IndicatorCustomQuery.loadObservations(c, y, i)
+    val json = Json.toJson[Map[String, Indicator]](observations)
+    Ok("" + json)
+  }
+
+  protected def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {
     format match {
       case "n3" =>
         renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
@@ -88,7 +112,7 @@ object Application extends Controller with TemplateEgine {
     }
   }
 
-  def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
+  protected def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
     val out = new ByteArrayOutputStream
     val mergedModel: JenaModel = ModelFactory.createDefaultModel
 

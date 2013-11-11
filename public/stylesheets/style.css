@@ -91,6 +91,31 @@ img.W3F-logo {
 
 /* Footer */
 
+div.sparql h4 {
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1.2em;
+	letter-spacing: 0.2em;
+	font-weight: 400;
+	color: #333;
+	padding-bottom: 0.2em;
+	margin-bottom: 0;
+	margin-top: 2em;
+}
+
+div.sparql button {
+	font-size: 1.1em;
+	text-transform: uppercase;
+	background-color: #000;
+	color: #fff;
+	font-weight: 400;
+	letter-spacing: 0.2em;
+	font-family: 'Source Sans Pro', sans-serif;
+	border: none;
+	padding: 0.8em 3em;
+	margin: 1em 0;
+	float: right;
+}
+
 footer {
 	background-color: #222;
 	color: #fff;
@@ -127,7 +152,7 @@ div.circle-step {
 p.description {
 	text-align: center;
 	color: #333;
-	font-family: "Century Gothic", Arial;
+	font-family: 'Source Sans Pro', sans-serif;
 	font-style: italic;
 	border-bottom: 0.1em solid #ccc;
 	padding-bottom: 0.5em;
@@ -147,7 +172,7 @@ div.buttons button {
 	color: #fff;
 	font-weight: 100;
 	letter-spacing: 0.2em;
-	font-family: "Century Gothic", Arial;
+	font-family: 'Source Sans Pro', sans-serif;
 	border: none;
 	padding: 0.8em 0;
 	float: right;
@@ -216,7 +241,6 @@ table.propertyBox th.value, table.propertyBox td.value {
 	word-break: break-word;
 }
 
-
 table.propertyBox td, table.propertyBox th {
 	padding: 0.8em 0;
 	vertical-align: top;
@@ -260,6 +284,43 @@ table.children {
 	width: 100%;
 }
 
+/* Select */
+
+div.dropdown {
+	display: inline-block;
+	width: 13em;
+	height: 1.6em;
+	overflow: hidden;
+	background: url('../images/arrow.png') no-repeat 97% 50% #fff;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #eee;
+	margin-left: 1em;
+}
+
+div.dropdown select {
+	background: transparent;
+	width: 98%;
+	padding: 1% 0.53em;
+	font-size: 0.9em;
+	line-height: 1;
+	border: 0;
+	border-radius: 0;
+	height: 1.6em;
+	-webkit-appearance: none;
+	color: #444;
+}
+
+/* Help */
+
+.help {
+	font-size: 1.1em;
+	color: #888;
+	font-style: italic;
+	font-weight: 100;
+}
+
 /* Country view */
 
 img.flag {
@@ -281,6 +342,23 @@ div.country-map {
 
 div.jvectormap-label {
 	display: none;
+}
+
+div.hidden {
+	display: none;
+}
+
+div.shown {
+	display: block;
+}
+
+h4.indicator-description {
+	margin: 0.5em 0 0 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 200;
+	font-style: italic;
+	font-size: 1.4em;
+	color: #116699;
 }
 
 /* Country concept */
@@ -580,5 +658,137 @@ nav.breadcrumbs {
 	
 	header {
 		padding-bottom: 0.5em;
+	}
+}
+
+/* ----------------- Comparer ------------------- */
+
+/* Help */
+
+div.help {
+	background-color: #eee;
+	color: #666;
+	font-size: 0.8em;
+	font-style: italic;
+	padding: 0.2em 0.5em;
+	display: none;
+}
+
+/* Step */
+
+div.circle-step {
+	font-size: 2em;
+	width: 2em;
+	height: 1.6em;
+	padding-top: 0.4em;
+	border-radius: 1.5em;
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+	margin: 0.5em auto;
+}
+
+p.description {
+	text-align: center;
+	color: #333;
+	font-family: "Century Gothic", Arial;
+	font-style: italic;
+	border-bottom: 0.1em solid #ccc;
+	padding-bottom: 0.5em;
+}
+
+/* Buttons */
+
+form.buttons {
+	overflow: auto;
+}
+
+form.buttons button {
+	font-size: 1.1em;
+	width: 47%;
+	text-transform: uppercase;
+	background-color: #000;
+	color: #fff;
+	font-weight: 100;
+	letter-spacing: 0.2em;
+	font-family: "Century Gothic", Arial;
+	border: none;
+	padding: 0.8em 0;
+	float: right;
+}
+
+form.buttons button.clear {
+	background-color: #444;
+	float: left;
+}
+
+/* Selector */
+
+div.hidden-selector {
+	display: none;
+}
+
+div.hidden-selector > ul {
+	padding: 0;
+}
+
+div.selector > ul {
+	padding: 0;
+}
+
+#yearSelector li {
+	text-align: center;
+}
+
+#yearSelector div.circleAndText {
+	display: inline-block;
+	text-align: center;
+}
+
+#yearSelector div.circle {
+	float: none;
+	margin: 0 auto;
+}
+
+#yearSelector div.hidden-plusOrMinus {
+	display: none;
+}
+
+/* 45em */
+
+@media all and (min-width: 45em) {
+	form.buttons {
+		width: 50%;
+		float: right;
+	}
+
+	form.buttons button {
+		width: 45%;
+	}
+}
+
+/* 55em */
+
+@media all and (min-width: 55em) {
+	div.columns {
+		overflow: auto;
+	}
+	
+	div.column {
+		width: 32%;
+		float: left;
+	}	
+	
+	div.center-column {
+		margin: 0 2%;
+	}
+	
+	div.hidden-selector {
+		display: block;
+	}
+	
+	div.help {
+		font-size: 1em;
+		padding: 0.4em 1em;
 	}
 }

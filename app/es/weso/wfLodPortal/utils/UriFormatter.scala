@@ -10,7 +10,7 @@ object UriFormatter extends Configurable {
 
   val actualUri = conf.getString("sparql.actualuri")
   val baseUri = conf.getString("sparql.baseuri")
-  
+
   val prefixes = HashMap[String, String]();
 
   val it = conf.getKeys
@@ -22,19 +22,24 @@ object UriFormatter extends Configurable {
     prefixes(prefix) = label
   }
 
-  protected def uRIToLocalURI(uri: String) = {
+  def uRIToLocalURI(uri: String) = {
     uri.replace(baseUri, actualUri)
+  }
+  
+  def uRIToBaseURI(uri:String) = {
+    uri.replace(actualUri, baseUri)
   }
 
   def format(uri: String): Uri = {
     val index = math.max(uri.lastIndexOf("#"), uri.lastIndexOf("/")) + 1
     val prefix = uri.subSequence(0, index).toString
+    val localUri=  uRIToLocalURI(uri)
     val shortUri = if (prefixes contains prefix) {
       val suffix = uri.substring(index).toString
-      Some(ShortUri((prefix, prefixes.get(prefix).get), (uri, suffix)))
+      val localPrefix =  uRIToLocalURI(prefix)  
+      Some(ShortUri((localPrefix, prefixes.get(prefix).get), (localUri, suffix)))
     } else None
-
-    Uri(uRIToLocalURI(uri), uri, shortUri)
+    Uri(localUri, uri, shortUri)
   }
 
 }

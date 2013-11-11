@@ -3,11 +3,32 @@ package es.weso.wfLodPortal.models
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 
-import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
+import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 
-case class ResultQuery(subject: Model, predicate: InverseModel) {
+case class ResultQuery(val subject: Model, val predicate: InverseModel) {
   val s = subject
   val p = predicate
+}
+
+case class OptionalResultQuery(val subject: Option[LazyDataStore[Model]], val predicate: Option[LazyDataStore[InverseModel]]) {
+  val s = subject
+  val p = predicate
+}
+
+object ResultQueryImplicits {
+
+  def resultQueryConverter(ors: OptionalResultQuery): ResultQuery = {
+    val subject: Model = ors.subject match {
+      case Some(subject) => subject.data
+      case None => new Model(null)
+    }
+    val predicate: InverseModel = ors.predicate match {
+      case Some(predicate) => predicate.data
+      case None => new InverseModel(null)
+    }
+    ResultQuery(subject, predicate)
+  }
+
 }
 
 trait DataStore[T] {
@@ -23,7 +44,7 @@ trait DataStore[T] {
   def get(base: String, suffix: String): Option[Property[T]] = {
     get(base + suffix)
   }
-  
+
   def get(uri: String): Option[Property[T]] = {
     map.get(uri)
   }
@@ -70,11 +91,6 @@ case class Property[T](val property: RdfProperty) {
 case class Node[T](val node: RdfNode, val dataStores: OptionalResultQuery) {
   val n = node
   val dss = dataStores
-}
-
-case class OptionalResultQuery(val subject: Option[LazyDataStore[Model]], val predicate: Option[LazyDataStore[InverseModel]]) {
-  val s = subject
-  val p = predicate
 }
 
 case class LazyDataStore[T](val uri: Uri, val method: (String) => T) {
