@@ -6,6 +6,7 @@ import org.apache.commons.configuration.PropertiesConfiguration
 import models.ResultQuery
 import es.weso.wfLodPortal.utils.CommonURIS._
 import es.weso.wfLodPortal.sparql._
+import es.weso.wfLodPortal.models.RdfResource
 
 trait TemplateEgine extends Controller with Configurable {
   conf.append(new PropertiesConfiguration("conf/templates.properties"))
@@ -22,16 +23,19 @@ trait TemplateEgine extends Controller with Configurable {
   protected val Undefined = "UNDEFINED"
 
   def renderAsTemplate(resultQuery: ResultQuery, uri: String) = {
-    val typeResult = resultQuery.subject.get(RdfType)
+    val typeResult = resultQuery.subject.get.get(RdfType)
 
-    val currentType = if (typeResult.isDefined) {
-      val r = typeResult.get
-      if (!r.nodes.isEmpty) {
-        r.nodes.head.node.rdfNode.asResource.getURI()
-      } else Undefined
-    } else Undefined
+    val currentType = resultQuery.subject.get.get(RdfType) match {
+      case Some(result)=> result.nodes.toList match {
+        case r :: tail => r.rdfNode.asResource.getURI
+        case _ => Undefined
+      }
+      case None => Undefined
+    }
 
-    val options = Map("endpoint" -> conf.getString("sparql.endpoint"), "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")))
+    val options = Map(
+        "endpoint" -> conf.getString("sparql.endpoint"), 
+        "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")))
 
     Ok(
       currentType match {

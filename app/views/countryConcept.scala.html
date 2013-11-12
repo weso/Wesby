@@ -2,29 +2,26 @@
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
-
 @import views.html.helpers._
 @import views.html.helpers.utils._
+@import views.helpers.Handlers._
+@import views.helpers.Utils._
 
-@countries = @{ 
-	var countries = scala.collection.mutable.Map[String,Tuple2[String, String]]()
+@loadCountries = @{ 
+  var countries = scala.collection.mutable.Map[String,Tuple2[String, String]]()
 	
-	for(country <- rs.predicate.get(rdf, "type").get.nodes) {
-		val data = country.dss.subject.get.data
-		val label = country.node.asInstanceOf[RdfResource].label getOrElse "Empty"
-		val uri = country.node.asInstanceOf[RdfResource].uri.relative
-		val iso2 = data.get(wfOnto,"has-iso-alpha2-code").get.nodes.head.node.asInstanceOf[RdfLiteral].value
-		
-		val chunks = label.split("@")
-		val cleanLabel = if (chunks.length > 1 && chunks(chunks.length-1) == "en") chunks(0); else label
-		
-		countries(cleanLabel.toString) = (iso2, uri)
+  for(country <- rs.predicate.get.get(rdf, "type").get.nodes) {
+    country match {
+      case r:RdfResource=>
+        val countryLabel:String= label(r.dss)
+        val uri = r.uri.relative
+		countries(countryLabel) = (iso2(r.dss), uri)
+		}
 	}
-	
 	countries.toList.sorted
 }
-
 @main("") {
+	@defining(loadCountries) { countries =>
 	<nav class="breadcrumbs">
 		Data &gt; Country
 	</nav>
@@ -85,4 +82,5 @@
 		    }
 		});
 	</script>
+	}
 }

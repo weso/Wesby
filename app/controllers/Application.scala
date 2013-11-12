@@ -45,8 +45,9 @@ object Application extends Controller with TemplateEgine {
   def fallback(uri: String) = Action {
     implicit request =>
       val resultQuery = ModelLoader.loadUri(uri)
-      val subjectModel = resultQuery.subject.jenaModel
-      val predicateModel = resultQuery.predicate.jenaModel
+      
+      val subjectModel = resultQuery.subject.get.jenaModel
+      val predicateModel = resultQuery.predicate.get.jenaModel
       val models = List(subjectModel, predicateModel)
 
       request.getQueryString("format") match {
@@ -87,7 +88,7 @@ object Application extends Controller with TemplateEgine {
 
   def compare(mode: String, countries: String, years: String, indicators: String) = Action {
     import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery._
-    
+
     val c = countries.split(",")
     val y = years.split(",")
     val i = indicators.split(",")

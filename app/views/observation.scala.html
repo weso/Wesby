@@ -3,14 +3,17 @@
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
 
+@import views.helpers.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
-
+@*
 @image = @{ 
-	val country = rs.subject.get(wfOnto,"ref-area")
-
-	val code = country.get.nodes.head.dss.subject.get.data.get(wfOnto,"has-iso-alpha2-code")
-				.get.nodes.head.node.asInstanceOf[RdfLiteral].value	
+	val data = rs.subject.get
+	
+	val country = data.get(wfOnto,"ref-area")
+	Utils
+	val code = country.get.nodes.head.asInstanceOf[RdfResource].dss.subject.get.get(wfOnto,"has-iso-alpha2-code")
+				.get.nodes.head.asInstanceOf[RdfLiteral].value	
 	
 	val img = code.toLowerCase + ".png" 
 			
@@ -18,9 +21,9 @@
 }
 
 @countryName = @{
-	val country = rs.subject.get(wfOnto,"ref-area")
+	val country = rs.subject.get.get(wfOnto,"ref-area")
 	country match {
-		case Some(country) => country.nodes.head.node match {
+		case Some(country) => country.nodes.head match {
             case l: RdfResource => l.label getOrElse ""
             case _ => ""
         }
@@ -98,8 +101,9 @@
 		case None => {}
 	}
 }
-
+*@
 @main("") {
+	@*
 	<nav class="breadcrumbs">
 		Data &gt; <a href="/ontology/Country">Country</a> &gt; 
 		<a href="@countryURI">@showLabel(countryURI, countryName)</a> &gt; @label(rs)
@@ -113,7 +117,7 @@
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Observation</a></h2>	
 	<h3 class="description">@showLabel("", indicatorDescription)</h3>
-	
+	*@
 	@grill(rs)
 	@sparqlQuery(options)
 }

@@ -4,35 +4,42 @@ import com.hp.hpl.jena.rdf.model.{ Property => JenaProperty, Resource => JenaRes
 
 sealed abstract class RdfNode {
   val rdfNode: JenaRDFNode
+  val r: JenaRDFNode = rdfNode
+}
+
+trait Resource {
+  val dataStores: ResultQuery
+  val dss = dataStores
 }
 
 case class RdfAnon(
-  val label: Option[String],
-  rdfNode: JenaResource) extends RdfNode
+  rdfNode: JenaResource) extends RdfNode {
+  val resource = rdfNode
+}
 
 case class RdfResource(
   val uri: Uri,
-  val label: Option[String],
-  rdfNode: JenaResource) extends RdfNode {
+  dataStores: ResultQuery,
+  rdfNode: JenaResource) extends RdfNode with Resource {
 
-  def resource: JenaResource = rdfNode
+  val u = uri
+  val resource = rdfNode
 
   override def toString: String = {
-    new StringBuilder("R[uri:'").append(uri).append("', Label:'")
-      .append(label).append("']").toString
+    new StringBuilder("R[uri:'").append(uri).append("']").toString
   }
 }
 
 case class RdfProperty(
   val uri: Uri,
-  val label: Option[String],
-  rdfNode: JenaProperty) extends RdfNode {
+  dataStores: ResultQuery,
+  rdfNode: JenaProperty) extends RdfNode with Resource {
 
-  def property: JenaProperty = rdfNode
+  val u = uri
+  val property: JenaProperty = rdfNode
 
   override def toString: String = {
-    new StringBuilder("P[uri:'").append(uri).append("', Label:'")
-      .append(label).append("']").toString
+    new StringBuilder("P[uri:'").append(uri).append("']").toString
   }
 }
 

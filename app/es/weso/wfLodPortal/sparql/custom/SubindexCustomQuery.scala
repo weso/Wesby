@@ -18,7 +18,6 @@ import play.api.libs.json.Reads
 import play.api.libs.json.Writes
 import es.weso.wfLodPortal.models.DataStore
 import es.weso.wfLodPortal.models.InverseModel
-import es.weso.wfLodPortal.models.OptionalResultQuery
 import es.weso.wfLodPortal.models.Uri
 import es.weso.wfLodPortal.models.Uri._
 import es.weso.wfLodPortal.utils.UriFormatter
@@ -44,38 +43,38 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
       case "odb" => "http://data.webfoundation.org/odb/v2013/"
     }
 
-    def inner(r: RdfResource, orq: OptionalResultQuery): Option[Subindex] = {
+    def inner(r: RdfResource): Option[Subindex] = {
       val uri = r.uri.absolute
       if (uri.contains(param)) {
-        val label = r.label.getOrElse("Undefined Label")
-        val components = loadComponents(orq.s.get)
+        val label = loadLabel(r)
+        val components = loadComponents(r.dataStores.subject.get)
         Some(Subindex(UriFormatter.format(uri), label, components))
       } else None
     }
 
     val rs = ModelLoader.loadUri(cex, "SubIndex")
 
-    handleResource[Option[Subindex]](rs.predicate, rdf, "type", inner _).flatten
+    handleResource[Option[Subindex]](rs.predicate.get, rdf, "type", inner _).flatten
   }
 
-  protected def loadComponents(ls: LazyDataStore[Model]): List[Component] = {
-    def inner(r: RdfResource, orq: OptionalResultQuery): Component = {
+  protected def loadComponents(dataStore: Model): List[Component] = {
+    def inner(r: RdfResource): Component = {
       val uri = r.uri.absolute
-      val label = r.label.getOrElse("Undefined Label")
-      val indicators = loadIndicators(orq.s.get)
+      val label = loadLabel(r)
+      val indicators = loadIndicators(r.dataStores.subject.get)
       Component(UriFormatter.format(uri), label, indicators)
     }
-    handleResource[Component](ls.data, cex, "element", inner _)
+    handleResource[Component](dataStore, cex, "element", inner _)
   }
 
-  protected def loadIndicators(ls: LazyDataStore[Model]): List[Indicator] = {
+  protected def loadIndicators(dataStore: Model): List[Indicator] = {
 
-    def inner(r: RdfResource, orq: OptionalResultQuery): Indicator = {
+    def inner(r: RdfResource): Indicator = {
       val uri = r.uri.absolute
-      val label = r.label.getOrElse("Undefined Label")
+      val label =  loadLabel(r)
       Indicator(UriFormatter.format(uri), label)
     }
-    handleResource[Indicator](ls.data, cex, "element", inner _)
+    handleResource[Indicator](dataStore, cex, "element", inner _)
   }
 
 }

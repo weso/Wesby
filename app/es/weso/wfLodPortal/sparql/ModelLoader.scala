@@ -6,12 +6,10 @@ import com.hp.hpl.jena.query.QuerySolution
 import com.hp.hpl.jena.query.Syntax
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import com.hp.hpl.jena.rdf.model.ResourceFactory
-
 import es.weso.wfLodPortal.Configurable
 import es.weso.wfLodPortal.models.InverseModel
 import es.weso.wfLodPortal.models.LazyDataStore
 import es.weso.wfLodPortal.models.Model
-import es.weso.wfLodPortal.models.OptionalResultQuery
 import es.weso.wfLodPortal.models.RdfAnon
 import es.weso.wfLodPortal.models.RdfLiteral
 import es.weso.wfLodPortal.models.RdfNode
@@ -20,6 +18,8 @@ import es.weso.wfLodPortal.models.RdfResource
 import es.weso.wfLodPortal.models.ResultQuery
 import es.weso.wfLodPortal.utils.UriFormatter
 import es.weso.wfLodPortal.utils.UriFormatter._
+import es.weso.wfLodPortal.models.Uri
+import play.Logger
 
 object ModelLoader extends Configurable {
 
@@ -29,21 +29,25 @@ object ModelLoader extends Configurable {
   val actualUri = conf.getString("sparql.actualuri")
   val indexPath = conf.getString("sparql.index")
 
+  val Subject = "?s"
+  val Verb = "?v"
+  val Predicate = "?p"
+    
   def fullUri(uri: String) = {
-  	baseUri + uri
+    baseUri + uri
   }
 
   def loadUri(uri: String) = {
-    val fullUri = baseUri + uri
-    val subject = loadSubject(fullUri)
-    val predicate = loadPredicate(fullUri)
+    val fullUri: Uri = UriFormatter.format(baseUri + uri)
+    val subject = LazyDataStore(fullUri, loadSubject)
+    val predicate = LazyDataStore(fullUri, loadPredicate)
     ResultQuery(subject, predicate)
   }
 
   def loadUri(sufix: String, preffix: String) = {
-    val fullUri = uRIToBaseURI(sufix + preffix)
-    val subject = loadSubject(fullUri)
-    val predicate = loadPredicate(fullUri)
+    val fullUri = UriFormatter.format(sufix + preffix)
+    val subject = LazyDataStore(fullUri, loadSubject)
+    val predicate = LazyDataStore(fullUri, loadPredicate)
     ResultQuery(subject, predicate)
   }
 
@@ -54,18 +58,10 @@ object ModelLoader extends Configurable {
     val resource = ResourceFactory.createResource(uri)
     while (rs.hasNext) {
       val qs = rs.next
-      val property = processProperty(qs)
+      val property = processProperty(qs, Verb)
       val predicate = processPredicate(qs)
       jenaModel.add(resource, property.property, predicate.rdfNode)
-      predicate match {
-        case r: RdfResource =>
-          val subject = Some(LazyDataStore(r.uri, loadSubject))
-          val predicate = Some(LazyDataStore(r.uri, loadPredicate))
-          model.add(property, r, OptionalResultQuery(subject, predicate))
-        case l: RdfLiteral => model.add(property, l)
-        case a: RdfAnon => model.add(property, a)
-        case _ => {}
-      }
+      model.add(property, predicate)
     }
     model
   }
@@ -79,44 +75,27 @@ object ModelLoader extends Configurable {
 
     while (rs.hasNext) {
       val qs = rs.next
-      val subject = processSubject(qs)
-      val property = processProperty(qs)
-      jenaModel.add(subject.resource, property.property, resource)
-
-      val subjectAsResource = subject.asInstanceOf[RdfResource]
-      val s = Some(LazyDataStore(subjectAsResource.uri, loadSubject))
-      val p = Some(LazyDataStore(subjectAsResource.uri, loadPredicate))
-
-      model.add(subject, property, OptionalResultQuery(s, p))
+      val vl = qs.get(Subject)
+      val property = processProperty(qs, Verb)
+      if (vl.isAnon()) {
+        val subject = RdfAnon(vl.asResource())
+        jenaModel.add(subject.resource, property.property, resource)
+        model.add(subject, property)
+      } else {
+        val subject = processResource(qs, Subject)
+        jenaModel.add(subject.resource, property.property, resource)
+        model.add(subject, property)
+      }
     }
     model
   }
 
-  protected def processSubject(qs: QuerySolution): RdfResource = {
-    val uri = qs.get("?s")
-    val sl = qs.get("?sl")
-    val label = if (sl == null) { None } else { Some(sl.toString) }
-
-    RdfResource(UriFormatter.format(uri.toString), label, uri.asResource)
-  }
-
-  protected def processProperty(qs: QuerySolution): RdfProperty = {
-    val uri = qs.get("?v").toString
-    val vl = qs.get("?vl")
-    val label = if (vl == null) { None } else { Some(vl.toString) }
-    RdfProperty(UriFormatter.format(uri), label, ResourceFactory.createProperty(uri))
-  }
-
   protected def processPredicate(qs: QuerySolution): RdfNode = {
-
-    val uri = qs.get("?p")
-
+    val uri = qs.get(Predicate)
     uri match {
-      case a if a.isAnon() =>
-        val vl = qs.get("?pl")
-        val label = if (vl == null) { None } else { Some(vl.toString) }
-        RdfAnon(label, a.asResource())
-      case e if e.isLiteral() =>
+      case a if a.isAnon =>
+        RdfAnon(a.asResource)
+      case e if e.isLiteral =>
         val literal = e.asLiteral
         val dataType = literal.getDatatype match {
           case dt if dt != null =>
@@ -124,11 +103,28 @@ object ModelLoader extends Configurable {
           case _ => None
         }
         RdfLiteral(literal.getValue.toString, dataType, uri)
-      case e if e.isResource() =>
-        val vl = qs.get("?pl")
-        val label = if (vl == null) { None } else { Some(vl.toString) }
-        RdfResource(UriFormatter.format(uri.toString), label, uri.asResource)
+      case e if e.isResource => processResource(qs, Predicate)
     }
+  }
+
+  protected def processResource(qs: QuerySolution, param: String) = {
+    val vl = qs.get(param)
+    val uri = UriFormatter.format(vl.asResource.getURI)
+    val dss = processResultQuery(uri)
+    RdfResource(uri, dss, vl.asResource)
+  }
+
+  protected def processProperty(qs: QuerySolution, param: String): RdfProperty = {
+    val uri = UriFormatter.format(qs.get(param).asResource.getURI)
+    val dss = processResultQuery(uri)
+    val property = ResourceFactory.createProperty(uri.absolute)
+    RdfProperty(uri, dss, property)
+  }
+
+  protected def processResultQuery(uri: Uri) = {
+    val subject = Some(LazyDataStore(uri, loadSubject))
+    val predicate = Some(LazyDataStore(uri, loadPredicate))
+    ResultQuery(subject, predicate)
   }
 
 }
