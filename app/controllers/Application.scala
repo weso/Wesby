@@ -10,8 +10,10 @@ import es.weso.wfLodPortal.sparql._
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
+import es.weso.wfLodPortal.sparql.custom._
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json.Json
 
 object Application extends Controller with TemplateEgine {
 
@@ -41,8 +43,9 @@ object Application extends Controller with TemplateEgine {
   def fallback(uri: String) = Action {
     implicit request =>
       val resultQuery = ModelLoader.loadUri(uri)
-      val subjectModel = resultQuery.subject.jenaModel
-      val predicateModel = resultQuery.predicate.jenaModel
+
+      val subjectModel = resultQuery.subject.get.jenaModel
+      val predicateModel = resultQuery.predicate.get.jenaModel
       val models = List(subjectModel, predicateModel)
 
       val mode = if (uri contains "odb/") "odb" else "webindex"
@@ -73,21 +76,22 @@ object Application extends Controller with TemplateEgine {
   }
 
   def preCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String]) = Action {
-  	request => {
-	  	renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
-	  }
+    implicit request =>
+      import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
+      import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+      import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
+      renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
   }
 
   def compare(mode: String, countries: String, years: String, indicators: String) = Action {
-  	request => {
-	    renderCompare(mode, countries, years, indicators, request.host)
-	  }
+    implicit request =>
+      renderCompare(mode, countries, years, indicators, request.host)
   }
-  
+
   def webindex(version: String) = Action {
     Ok(views.html.webindex())
   }
-  
+
   def odb(version: String) = Action {
     Ok(views.html.odb())
   }

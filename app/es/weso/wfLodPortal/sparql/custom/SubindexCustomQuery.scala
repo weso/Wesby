@@ -5,7 +5,6 @@ import es.weso.wfLodPortal.models.DataStore
 import es.weso.wfLodPortal.models.LazyDataStore
 import es.weso.wfLodPortal.models.Model
 import es.weso.wfLodPortal.models.RdfResource
-import es.weso.wfLodPortal.models.ShortUri
 import es.weso.wfLodPortal.sparql.ModelLoader
 import es.weso.wfLodPortal.utils.CommonURIS.cex
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
@@ -19,13 +18,18 @@ import play.api.libs.json.Reads
 import play.api.libs.json.Writes
 import es.weso.wfLodPortal.models.DataStore
 import es.weso.wfLodPortal.models.InverseModel
-import es.weso.wfLodPortal.models.OptionalResultQuery
-
-case class Subindex(uri: String, label: String, children: List[Component])
-case class Component(uri: String, label: String, children: List[Indicator])
-case class Indicator(uri: String, label: String, code: String)
+import es.weso.wfLodPortal.models.ResultQuery
+import es.weso.wfLodPortal.models.Uri
+import es.weso.wfLodPortal.models.Uri._
+import es.weso.wfLodPortal.utils.UriFormatter
+import es.weso.wfLodPortal.models.ShortUri
+import views.helpers.Utils
 
 object SubindexCustomQuery extends CustomQuery with Configurable {
+
+  case class Subindex(uri: String, label: String, children: List[Component])
+  case class Component(uri: String, label: String, children: List[Indicator])
+  case class Indicator(uri: String, label: String, code: String)
 
   implicit val indicatorReads = Json.reads[Indicator]
   implicit val indicatorWrites = Json.writes[Indicator]
@@ -42,42 +46,41 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
       case "odb" => "http://data.webfoundation.org/odb/v2013/"
     }
 
-    def inner(r: RdfResource, orq: OptionalResultQuery): Option[Subindex] = {
+    def inner(r: RdfResource): Option[Subindex] = {
       val uri = r.uri.absolute
       if (uri.contains(param)) {
-        val label = r.label.getOrElse("Undefined Label")
-        val components = loadComponents(orq.s.get)
+        val label = Utils.label(r.dss)
+        val components = loadComponents(r.dss.subject.get)
         Some(Subindex(uri, label, components))
       } else None
     }
 
     val rs = ModelLoader.loadUri(cex, "SubIndex")
-
-    handleResource[Option[Subindex]](rs.predicate, rdf, "type", inner _).flatten
+    handleResource[Option[Subindex]](rs.predicate.get, rdf, "type", inner _).flatten
   }
 
-  protected def loadComponents(ls: LazyDataStore[Model]): List[Component] = {
-    def inner(r: RdfResource, orq: OptionalResultQuery): Component = {
+  protected def loadComponents(dataStore: Model): List[Component] = {
+    def inner(r: RdfResource): Component = {
       val uri = r.uri.absolute
-      val label = r.label.getOrElse("Undefined Label")
-      val indicators = loadIndicators(orq.s.get)
+      val label = Utils.label(r.dss)
+      val indicators = loadIndicators(r.dataStores.subject.get)
       Component(uri, label, indicators)
     }
-    handleResource[Component](ls.data, cex, "element", inner _)
+    handleResource[Component](dataStore, cex, "element", inner _)
   }
 
-  protected def loadIndicators(ls: LazyDataStore[Model]): List[Indicator] = {
+  protected def loadIndicators(dataStore: Model): List[Indicator] = {
 
-    def inner(r: RdfResource, orq: OptionalResultQuery): Indicator = {
+    def inner(r: RdfResource): Indicator = {
       val uri = r.uri.absolute
-      val label = r.label.getOrElse("Undefined Label")
-      val code = r.uri.short match  {
-                      case Some(s:ShortUri) => s.suffix._2
-                      case None => label
+      val label = Utils.label(r.dss)
+      val code = r.uri.short match {
+        case Some(s: ShortUri) => s.suffix._2
+        case None => label
       }
       Indicator(uri, label, code)
     }
-    handleResource[Indicator](ls.data, cex, "element", inner _)
+    handleResource[Indicator](dataStore, cex, "element", inner _)
   }
 
 }

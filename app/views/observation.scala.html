@@ -2,15 +2,15 @@
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
-
+@import views.helpers.Utils._
+@import views.helpers.Handlers._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
 @image = @{ 
-	val country = rs.subject.get(wfOnto,"ref-area")
-
-	val code = country.get.nodes.head.dss.subject.get.data.get(wfOnto,"has-iso-alpha2-code")
-				.get.nodes.head.node.asInstanceOf[RdfLiteral].value	
+	val code = handleResourceAsString(rs.subject.get, 
+		wfOnto, "ref-area", 
+		{r:RdfResource => iso2(r.dataStores)})
 	
 	val img = code.toLowerCase + ".png" 
 			
@@ -18,85 +18,43 @@
 }
 
 @countryName = @{
-	val country = rs.subject.get(wfOnto,"ref-area")
-	country match {
-		case Some(country) => country.nodes.head.node match {
-            case l: RdfResource => l.label getOrElse ""
-            case _ => ""
-        }
-		case None => ""
-	}
+	handleResourceAsString(rs.subject.get, 
+		wfOnto, "ref-area", 
+		(r:RdfResource)=> label(r.dataStores))
 }
 
 @countryURI = @{
-	val country = rs.subject.get(wfOnto,"ref-area")
-
-	country match {
-		case Some(country) => country.nodes.head.node match {
-            case l: RdfResource => l.uri.relative.toString
-            case _ => ""
-        }
-		case None => ""
-	}
+	handleResourceAsString(rs.subject.get, 
+		wfOnto, "ref-area", 
+		(r:RdfResource)=>r.uri.relative.toString)
 }
 
 @indicatorURI = @{
-	val indicator = rs.subject.get(cex,"indicator")
-
-	indicator match {
-		case Some(indicator) => indicator.nodes.head.node match {
-            case l: RdfResource => {l.uri.relative}
-            case _ => {}
-        }
-		case None => {}
-	}
+	handleResourceAsString(rs.subject.get, 
+		cex, "indicator", 
+		(r:RdfResource)=>r.uri.relative.toString)
 }
 
 @indicatorName = @{
-	val indicator = rs.subject.get(cex,"indicator")
-
-	indicator match {
-		case Some(indicator) => indicator.nodes.head.node match {
-        case l: RdfResource => {l.uri.short.get.suffix._2}
-            case _ => {}
-        }
-		case None => {}
-	}
+	handleResourceAsString(rs.subject.get, 
+		cex, "indicator", 
+		(r:RdfResource)=>r.uri.short.get.suffix._2)
 }
 
 @indicatorDescription = @{
-	val indicator = rs.subject.get(cex,"indicator")
-	
-	indicator match {
-		case Some(indicator) => indicator.nodes.head.node match {
-        case l: RdfResource => l.label getOrElse ""
-            case _ => ""
-        }
-		case None => ""
-	}
+	handleResourceAsString(rs.subject.get, 
+		cex, "indicator", 
+		(r:RdfResource)=> label(r.dataStores))
 }
 
 @value = @{
-	val value = rs.subject.get(cex,"value")
-	
-	value match {
-		case Some(value) => value.nodes.head.node match {
-        case l: RdfLiteral => { BigDecimal(l.value).setScale(2, BigDecimal.RoundingMode.HALF_UP) }
-            case _ => {}
-        }
-		case None => {}
-	}
+	handleLiteralAs[BigDecimal](rs.subject.get,		
+		cex, "value", 
+		(l:RdfLiteral)=>BigDecimal(l.value).setScale(2, BigDecimal.RoundingMode.HALF_UP))
 }
 
 @year = @{
-	val year = rs.subject.get(wfOnto,"ref-year")
-	year match {
-		case Some(year) => year.nodes.head.node match {
-        case l: RdfLiteral => {l.value}
-            case _ => {}
-        }
-		case None => {}
-	}
+	handleLiteralAsValue(rs.subject.get, wfOnto, "ref-year")
 }
 
 @main(None, options("mode")) {
@@ -113,7 +71,6 @@
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Observation</a></h2>	
 	<h3 class="description">@showLabel("", indicatorDescription)</h3>
-	
 	@grill(rs)
 	@sparqlQuery(options)
 }

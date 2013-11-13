@@ -1,4 +1,5 @@
 @(rs: es.weso.wfLodPortal.models.ResultQuery)
+@import views.html.helpers._
 <table class="propertyBox sortable">
 	<thead>
 		<tr>
@@ -11,38 +12,48 @@
 		</tr>
 	</thead>
 	<tbody>
-	@for(n <- rs.subject.list){
+	@rs.subject match {
+	  case Some(subject) =>{
+	    @for(n <- subject.list){
 		<tr>
 			<td class="property">
-				@helpers.anchor(n.property)
+				@anchor(n.property)
 			</td>
 			<td class="value">
 				<ul>
 				@for(a <- n.nodes){
-					<li>@helpers.anchor(a.node)</li>
+					<li>@anchor(a)</li>
 				}
 				</ul>
 			</td>
 		</tr>
+		}
+	  }
+	  case None => {}
 	}
-	@for(m <- rs.predicate.list){
-		<tr>
-			<td class="property">Is @helpers.anchor(m.property) of</td>
-			<td class="value-parent">
-				<table class="children pages">
-					<thead><tr></tr></thead>
-					<tbody>
-						@for(a <- m.nodes){
-							<tr>
-								<td>
-									@helpers.anchor(a.node)
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</td>
-		</tr>
+	@rs.predicate match {
+      case Some(predicate) => {
+		@for(m <- predicate.list){
+			<tr>
+				<td class="property">Is @anchor(m.property) of</td>
+				<td class="value-parent">
+					<table class="children pages">
+						<thead><tr></tr></thead>
+						<tbody>
+							@for(a <- m.nodes){
+								<tr>
+									<td>
+										@anchor(a)
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			}
+	  }
+	  case None => {}
 	}
 	</tbody>
 </table>

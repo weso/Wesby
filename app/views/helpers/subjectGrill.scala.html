@@ -1,7 +1,5 @@
 @(rs: es.weso.wfLodPortal.models.ResultQuery)
-
 @import views.html.helpers._
-
 <table class="propertyBox sortable">
 	<thead>
 		<tr>
@@ -14,19 +12,24 @@
 		</tr>
 	</thead>
 	<tbody>
-	@for(n <- rs.subject.list){
-		<tr>
-			<td class="property">
+	@rs.subject match {
+	  case Some(subject) => {
+	    @for(n <- subject.list){
+		  <tr>
+		  	<td class="property">
 				@anchor(n.property)
 			</td>
 			<td class="value">
 				<ul>
 				@for(a <- n.nodes){
-					<li>@anchor(a.node)</li>
+					<li>@anchor(a)</li>
 				}
 				</ul>
 			</td>
 		</tr>
+		}
+	  }
+	  case None => {}
 	}
 	</tbody>
 </table>

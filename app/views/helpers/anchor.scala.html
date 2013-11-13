@@ -4,8 +4,8 @@
 @import views.html.helpers.utils._
 
 @n match {
-	case r:RdfResource => {@resourceToUri(r)}
-	case p:RdfProperty => {@propertyToUri(p)}
+	case r:RdfResource => {@resource.toUri(r)}
+	case p:RdfProperty => {@property.toUri(p)}
     case l:RdfLiteral => {
         @l.value @l.dataType match {
             case Some(dataType) => {

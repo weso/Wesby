@@ -2,106 +2,14 @@
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
+@import views.helpers.Utils._
+@import views.helpers.Handlers._
+@import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
-
-@iso2var = @{ 
-		val iso2 = rs.subject.get(wfOnto,"has-iso-alpha2-code")
-		iso2 match {
-			case Some(iso2) => iso2.nodes.head.node match {
-	        case l: RdfLiteral => {l.value.toUpperCase}
-	            case _ => ""
-	        }
-			case None => ""
-		}
-}
-
-@iso3var = @{ 
-		val iso3 = rs.subject.get(wfOnto,"has-iso-alpha3-code")
-		iso3 match {
-			case Some(iso3) => iso3.nodes.head.node match {
-	        case l: RdfLiteral => {l.value.toUpperCase}
-	            case _ => ""
-	        }
-			case None => ""
-		}
-}
-	
-@observations = @{ 
-	var observations = scala.collection.mutable.Map[String, scala.collection.mutable.Map[String, Tuple2[String, String]]]()
-	
-	for(observation <- rs.predicate.get(wfOnto, "ref-area").get.nodes) {
-		val data = observation.dss.subject.get.data
-		
-		val uri = observation.node.asInstanceOf[RdfResource].uri.relative
-
-		val indicator = data.get(cex,"indicator").get
-		
-		val indicatorName = if (indicator != None) {
-			indicator.nodes.head.node match {
-				case l: RdfResource => l.uri.short.get.suffix._2
-				case _ => ""
-            }
-        } else ""
- 
-		val year = data.get(wfOnto,"ref-year").get.nodes.head.node.asInstanceOf[RdfLiteral].value
-
-		val value = data.get(cex,"value") match {
-			case Some(value) => value.nodes.head.node match {
-			case l: RdfLiteral => l.value
-			case _ => ""
-			}
-			case None => ""
-		}
-		
-		if (! observations.contains(indicatorName))
-			observations(indicatorName) = scala.collection.mutable.Map[String, Tuple2[String, String]]()
-			
-		val map = observations(indicatorName)
-		
-		map(year) = (uri, value)
-	}
-	
-	observations.toSeq.sortBy(_._1)
-}
-
-@indicators = @{ 
-	var indicators = scala.collection.mutable.Map[String, String]()
-	
-	for(observation <- rs.predicate.get(wfOnto, "ref-area").get.nodes) {
-		val data = observation.dss.subject.get.data
-		val indicator = data.get(cex,"indicator").get
-		
-		val indicatorName = if (indicator != None) {
-			indicator.nodes.head.node match {
-				case l: RdfResource => l.uri.short.get.suffix._2
-				case _ => ""
-            }
-        } else ""
-      
-        val indicatorLabel = if (indicator != None) {
-			indicator.nodes.head.dss.subject.get.data.get(rdfs, "label") match {
-				case Some(value) => value.nodes.head.node match {
-					case l: RdfLiteral => l.value
-					case _ => ""
-				}
-				case _ => ""
-			}       
-		} else ""
-		
-		indicators(indicatorName) = indicatorLabel
-	}
-	
-	indicators.toSeq.sortBy(_._1)
-}
-
-@compareUri = @{
-	"/" + options("mode") + "/compare?selectedCountries=" + iso3var
-}
-
-@defining(indicators) { indicators =>
-	@defining(observations) { observations =>
-		@main(Some(("COMPARE THIS", compareUri)), options("mode")) {
+@defining(loadIndicators(rs)) { indicators =>
+	@defining(loadObservations(rs)) { observations =>
+		@main(Some(("COMPARE THIS",compareUri(options, iso3(rs)))), options("mode")){
 			<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
 			<script src="@routes.Assets.at("javascripts/map.js")"></script>
 			<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
@@ -134,7 +42,7 @@
 			<script>
 			    $(function(){
 			    	// Map
-			    	var code = "@iso2var";
+			    	var code = "@iso2(rs)";
 			    	
 			    	var container = "#country-map";
 			
@@ -274,9 +182,8 @@
 		}
 	}
 }
-
 @image = @{ 
-	val img = toLower(iso2(rs)) + ".png" 
-			
-	routes.Assets.at("images/flags/" + img)
+        val img = toLower(iso2(rs)) + ".png" 
+                        
+        routes.Assets.at("images/flags/" + img)
 }

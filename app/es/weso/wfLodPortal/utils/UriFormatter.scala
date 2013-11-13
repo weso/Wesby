@@ -22,21 +22,21 @@ object UriFormatter extends Configurable {
     prefixes(prefix) = label
   }
 
-  def uRIToLocalURI(uri: String) = {
+  def uriToLocalURI(uri: String) = {
     uri.replace(baseUri, actualUri)
   }
   
-  def uRIToBaseURI(uri:String) = {
+  def uriToBaseURI(uri:String) = {
     uri.replace(actualUri, baseUri)
   }
 
   def format(uri: String): Uri = {
     val index = math.max(uri.lastIndexOf("#"), uri.lastIndexOf("/")) + 1
     val prefix = uri.subSequence(0, index).toString
-    val localUri=  uRIToLocalURI(uri)
+    val localUri=  uriToLocalURI(uri)
     val shortUri = if (prefixes contains prefix) {
       val suffix = uri.substring(index).toString
-      val localPrefix =  uRIToLocalURI(prefix)  
+      val localPrefix =  uriToLocalURI(prefix)  
       Some(ShortUri((localPrefix, prefixes.get(prefix).get), (localUri, suffix)))
     } else None
     Uri(localUri, uri, shortUri)
