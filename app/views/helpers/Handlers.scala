@@ -2,28 +2,11 @@ package views.helpers
 
 import es.weso.wfLodPortal.models.RdfLiteral
 import es.weso.wfLodPortal.models.RdfResource
-import scala.Option.option2Iterable
+import es.weso.wfLodPortal.models.DataStore
 
 object Handlers {
 
-  def handleAsLiteral[T](dataStore: es.weso.wfLodPortal.models.DataStore, prefix: String, suffix: String, method: es.weso.wfLodPortal.models.RdfLiteral => T) = {
-    val indicators = dataStore.get(prefix, suffix) match {
-      case Some(indicators) =>
-        for {
-          node <- indicators.nodes
-        } yield {
-          node match {
-            case r: RdfLiteral =>
-              Some(method(r))
-            case _ => None
-          }
-        }
-      case None => List.empty
-    }
-    indicators.toList.flatten.mkString(" ")
-  }
-
-  def handleAsResource[T](dataStore: es.weso.wfLodPortal.models.DataStore, prefix: String, suffix: String, method: es.weso.wfLodPortal.models.RdfResource => T) = {
+  def handleResourceAs[T](dataStore: DataStore, prefix: String, suffix: String, method: (RdfResource) => T): List[T] = {
     val indicators = dataStore.get(prefix, suffix) match {
       case Some(indicators) =>
         for {
@@ -36,11 +19,36 @@ object Handlers {
         }
       case None => List.empty
     }
-    indicators.toList.flatten.mkString(" ")
+    indicators.toList.flatten
   }
 
-  def handleAsValue(dataStore: es.weso.wfLodPortal.models.DataStore, prefix: String, suffix: String) = {
+  def handleResourceAsString(dataStore: DataStore, prefix: String, suffix: String, method: (RdfResource) => String): String = {
+    handleResourceAs[String](dataStore, prefix, suffix, method).mkString(" ")
+  }
+
+  def handleLiteralAs[T](dataStore: DataStore, prefix: String, suffix: String, method: (RdfLiteral) => T): List[T] = {
+    val indicators = dataStore.get(prefix, suffix) match {
+      case Some(indicators) =>
+        for {
+          node <- indicators.nodes
+        } yield {
+          node.asRdfLiteral match {
+            case Some(l) =>
+              Some(method(l))
+            case _ => None
+          }
+        }
+      case None => List.empty
+    }
+    indicators.toList.flatten
+  }
+
+  def handleLiteralAsString(dataStore: DataStore, prefix: String, suffix: String, method: (RdfLiteral) => String): String = {
+    handleLiteralAs[String](dataStore, prefix, suffix, method).mkString(" ")
+  }
+
+  def handleLiteralAsValue(dataStore: DataStore, prefix: String, suffix: String): String = {
     val inner = (l: RdfLiteral) => l.value
-    handleAsLiteral[String](dataStore, prefix, suffix, inner)
+    handleLiteralAsString(dataStore, prefix, suffix, inner)
   }
 }

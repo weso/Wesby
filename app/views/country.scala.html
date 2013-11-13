@@ -2,88 +2,23 @@
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
+@import views.helpers.Utils._
+@import views.helpers.Handlers._
+@import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
-
-@*
-@observations = @{ 
-    var observations = scala.collection.mutable.Map[String, scala.collection.mutable.Map[String, Tuple2[String, String]]]()
-    rs.getPredicate match {
-      case Some(predicate) =>
-        for (observation <- predicate.get(wfOnto, "ref-area").get.nodes) {
-          observation match {
-            case r: RdfResource =>
-              val data = r.dss.getSubject.get
-
-              val uri = r.uri.relative
-
-              val indicator = data.get(cex, "indicator").get
-
-              val indicatorName = if (indicator != None) {
-                indicator.nodes.head match {
-                  case l: RdfResource => l.uri.short.get.suffix._2
-                  case _ => ""
-                }
-              } else ""
-
-              val year = handleLiteralAsValue(data, wfOnto, "ref-year").toString
-              val value = handleLiteralAsValue(data, cex, "value").toString
-
-              if (!observations.contains(indicatorName)){
-                observations(indicatorName) = scala.collection.mutable.Map[String, Tuple2[String, String]]()
-				}
-              val map = observations(indicatorName)
-
-              map(year) = (uri, value)
-          }
-        }
-
-        observations.toSeq.sortBy(_._1)
-
-      case None => {}
-    }
-}
-
-@indicators = @{ 
-	var indicators = scala.collection.mutable.Map[String, String]()
-	
-	for{
-		predicate <- rs.predicate
-		if(observation.isDefined)
-		node <- predicate.get.get(wfOnto, "ref-area").get.nodes
-		
-	}
-	
-	for(observation <- rs.predicate.get.get(wfOnto, "ref-area").get.nodes) {
-		observation match {
-			case r:RdfResource =>
-			val data = r.dss.getSubject.get
-			val indicator = data.get(cex,"indicator").get
+@image = @{
+	val img = iso2(rs).toLowerCase + ".png" 
 			
-			val indicatorName = if (indicator != None) {
-				indicator.nodes.head match {
-					case l: RdfResource => l.uri.short.get.suffix._2
-					case _ => ""
-	            }
-	        } else ""
-	      
-	      val indicatorData = indicator.nodes.head.as[RdfResource].dss.getSuject.get
-	       val indicatorLabel = handleLiteralAsValue(indicator.nodes.head.dss.subject, wfOnto, "ref-year").toString
-			}
-			
-		indicators(indicatorName) = indicatorLabel
-	}
-	
-	indicators.toSeq.sortBy(_._1)
+	routes.Assets.at("images/flags/" + img)
 }
-
-@defining(indicators) { indicators =>
-	@defining(observations) { observations =>
+@defining(loadIndicators(rs)) { indicators =>
+	@defining(loadObservations(rs)) { observations =>
 		@main(""){
 			<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
 			<script src="@routes.Assets.at("javascripts/map.js")"></script>
 			<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
-			@defining(label(rs)){label =>
+			@defining(label(rs)){ label =>
 			
 			<nav class="breadcrumbs">
 				Data &gt; <a href="/ontology/Country">Country</a> &gt; @label
@@ -99,7 +34,7 @@
 			<span class="help">Select an indicator to view the progression of its observations</span>
 			<div class="dropdown">
 				<select id="observation-selector">
-					@for(obs <- observations) {
+					@for(obs <- indicators) {
 						<option value="@obs._1">@obs._1</option>
 					}
 				</select>
@@ -108,11 +43,11 @@
 			
 			@grill(rs)
 			@sparqlQuery(options)
-			
+						
 			<script>
 			    $(function(){
 			    	// Map
-			    	var code = "@iso2var";
+			    	var code = "@iso2(rs)";
 			    	
 			    	var container = "#country-map";
 			
@@ -252,9 +187,3 @@
 		}
 	}
 }
-
-@image = @{ 
-	val img = toLower(iso2(rs)) + ".png" 
-			
-	routes.Assets.at("images/flags/" + img)
-}*@

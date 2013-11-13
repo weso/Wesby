@@ -2,14 +2,13 @@
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
-
 @import views.helpers.Utils._
 @import views.helpers.Handlers._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
 @image = @{ 
-	val code = handleAsResource[String](rs.subject.get, 
+	val code = handleResourceAsString(rs.subject.get, 
 		wfOnto, "ref-area", 
 		{r:RdfResource => iso2(r.dataStores)})
 	
@@ -19,43 +18,43 @@
 }
 
 @countryName = @{
-	handleAsResource[String](rs.subject.get, 
+	handleResourceAsString(rs.subject.get, 
 		wfOnto, "ref-area", 
 		(r:RdfResource)=> label(r.dataStores))
 }
 
 @countryURI = @{
-	handleAsResource[String](rs.subject.get, 
+	handleResourceAsString(rs.subject.get, 
 		wfOnto, "ref-area", 
 		(r:RdfResource)=>r.uri.relative.toString)
 }
 
 @indicatorURI = @{
-	handleAsResource[String](rs.subject.get, 
+	handleResourceAsString(rs.subject.get, 
 		cex, "indicator", 
 		(r:RdfResource)=>r.uri.relative.toString)
 }
 
 @indicatorName = @{
-	handleAsResource[String](rs.subject.get, 
+	handleResourceAsString(rs.subject.get, 
 		cex, "indicator", 
 		(r:RdfResource)=>r.uri.short.get.suffix._2)
 }
 
 @indicatorDescription = @{
-	handleAsResource[String](rs.subject.get, 
+	handleResourceAsString(rs.subject.get, 
 		cex, "indicator", 
 		(r:RdfResource)=> label(r.dataStores))
 }
 
 @value = @{
-	handleAsLiteral[BigDecimal](rs.subject.get,		
+	handleLiteralAs[BigDecimal](rs.subject.get,		
 		cex, "value", 
 		(l:RdfLiteral)=>BigDecimal(l.value).setScale(2, BigDecimal.RoundingMode.HALF_UP))
 }
 
 @year = @{
-	handleAsValue(rs.subject.get, wfOnto, "ref-year")
+	handleLiteralAsValue(rs.subject.get, wfOnto, "ref-year")
 }
 
 @main("") {

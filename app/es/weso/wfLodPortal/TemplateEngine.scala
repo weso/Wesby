@@ -26,7 +26,7 @@ trait TemplateEgine extends Controller with Configurable {
     val typeResult = resultQuery.subject.get.get(RdfType)
 
     val currentType = resultQuery.subject.get.get(RdfType) match {
-      case Some(result)=> result.nodes.toList match {
+      case Some(result) => result.nodes.toList match {
         case r :: tail => r.rdfNode.asResource.getURI
         case _ => Undefined
       }
@@ -34,8 +34,8 @@ trait TemplateEgine extends Controller with Configurable {
     }
 
     val options = Map(
-        "endpoint" -> conf.getString("sparql.endpoint"), 
-        "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")))
+      "endpoint" -> conf.getString("sparql.endpoint"),
+      "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")))
 
     Ok(
       currentType match {
