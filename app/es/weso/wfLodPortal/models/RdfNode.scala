@@ -5,16 +5,38 @@ import com.hp.hpl.jena.rdf.model.{ Property => JenaProperty, Resource => JenaRes
 sealed abstract class RdfNode {
   val rdfNode: JenaRDFNode
   val r: JenaRDFNode = rdfNode
-}
 
-trait Resource {
-  val dataStores: ResultQuery
-  val dss = dataStores
+  def asRdfAnon: Option[RdfAnon] = {
+    this match {
+      case e: RdfAnon => Some(e)
+      case _ => None
+    }
+  }
+
+  def asRdfResource: Option[RdfResource] = this match {
+    case e: RdfResource => Some(e)
+    case _ => None
+  }
+
+  def asRdfProperty: Option[RdfProperty] = this match {
+    case p: RdfProperty => Some(p)
+    case _ => None
+  }
+
+  def asRdfLiteral: Option[RdfLiteral] = this match {
+    case l: RdfLiteral => Some(l)
+    case _ => None
+  }
 }
 
 case class RdfAnon(
   rdfNode: JenaResource) extends RdfNode {
   val resource = rdfNode
+}
+
+trait Resource {
+  val dataStores: ResultQuery
+  lazy val dss: ResultQuery = dataStores
 }
 
 case class RdfResource(

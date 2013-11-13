@@ -16,7 +16,7 @@ object Utils {
 
   def toLower(text: String) = text.toLowerCase
 
-  def toLowe(html: Html) = html.toString.toLowerCase
+  def toLower(html: Html) = html.toString.toLowerCase
 
   def iso2(resultQuery: ResultQuery): String = {
     resultQuery.subject match {

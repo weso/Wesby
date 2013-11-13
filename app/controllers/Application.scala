@@ -45,7 +45,7 @@ object Application extends Controller with TemplateEgine {
   def fallback(uri: String) = Action {
     implicit request =>
       val resultQuery = ModelLoader.loadUri(uri)
-      
+
       val subjectModel = resultQuery.subject.get.jenaModel
       val predicateModel = resultQuery.predicate.get.jenaModel
       val models = List(subjectModel, predicateModel)
