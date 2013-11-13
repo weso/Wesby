@@ -21,7 +21,7 @@ trait TemplateEgine extends Controller with Configurable {
 
   protected val Undefined = "UNDEFINED"
 
-  def renderAsTemplate(resultQuery: ResultQuery, uri: String) = {
+  def renderAsTemplate(resultQuery: ResultQuery, uri: String, mode: String) = {
     val typeResult = resultQuery.subject.get(RdfType)
 
     val currentType = if (typeResult.isDefined) {
@@ -31,7 +31,9 @@ trait TemplateEgine extends Controller with Configurable {
       } else Undefined
     } else Undefined
 
-    val options = Map("endpoint" -> conf.getString("sparql.endpoint"), "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")))
+    val options = Map("endpoint" -> conf.getString("sparql.endpoint"), 
+    				"query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")),
+    				"mode" -> mode, "uri" -> uri)
 
     Ok(
       currentType match {

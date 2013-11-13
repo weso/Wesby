@@ -49,11 +49,13 @@ object Application extends Controller with TemplateEgine {
       val predicateModel = resultQuery.predicate.jenaModel
       val models = List(subjectModel, predicateModel)
 
+      val mode = if (uri contains "/odb/") "odb" else "webindex"
+
       request.getQueryString("format") match {
         case Some(format) => downloadAs(uri: String, format, models)
         case None =>
           render {
-            case Html() => renderAsTemplate(resultQuery, ModelLoader.fullUri(uri))
+            case Html() => renderAsTemplate(resultQuery, ModelLoader.fullUri(uri), mode)
             case N3() =>
               renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
             case RdfN3() =>
@@ -74,7 +76,7 @@ object Application extends Controller with TemplateEgine {
       }
   }
 
-  def preCompare(mode: String) = Action {
+  def preCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String]) = Action {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
     import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
@@ -82,7 +84,7 @@ object Application extends Controller with TemplateEgine {
     val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode))
     val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode))
     val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode))
-    Ok(views.html.compare(c, y, s))
+    Ok(views.html.compare(c, y, s, selectedCountries, selectedIndicators, mode))
   }
 
   def compare(mode: String, countries: String, years: String, indicators: String) = Action {
@@ -93,7 +95,7 @@ object Application extends Controller with TemplateEgine {
     val i = indicators.split(",")
     val observations = IndicatorCustomQuery.loadObservations(c, y, i)
     val json = Json.toJson[Map[String, Indicator]](observations)
-    Ok(views.html.comparison(json))
+    Ok(views.html.comparison(json, mode))
   }
 
   protected def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {

@@ -3,7 +3,16 @@
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
-@main("") {
+@code = @{ 
+	val code = options("uri").lastIndexOf("/");
+	options("uri").substring(code + 1)
+}
+
+@compareUri = @{
+	"/" + options("mode") + "/compare?selectedIndicators=" + code
+}
+
+@main(Some(("COMPARE THIS", compareUri)), options("mode")) {
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Indicator</a></h2>	
 	@grill(rs)

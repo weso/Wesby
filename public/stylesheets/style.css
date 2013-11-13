@@ -83,6 +83,28 @@ p.title2 span {
 	padding-right: 1em;
 }
 
+a.compare {
+	float: right;
+	margin: 0.5em 0em 0 0;
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	background-color: #000;
+	color: #fff;
+	font-weight: 100;
+	letter-spacing: 0.2em;
+	font-family: "Century Gothic", Arial;
+	border: none;
+	padding: 0.3em;
+	min-width: 10.2em;
+}
+
+a.compare:hover {
+	background-color: #333;
+}
+
 img.W3F-logo {
 	margin-bottom: 0.5em;
 	width: 100%;
@@ -159,7 +181,7 @@ p.description {
 }
 
 /* Buttons */
-
+/*
 div.buttons {
 	overflow: auto;
 }
@@ -178,11 +200,19 @@ div.buttons button {
 	float: right;
 }
 
+div.buttons button:hover {
+	background-color: #444;
+}
+
 div.buttons button.clear {
 	background-color: #444;
 	float: left;
 }
 
+div.buttons button.clear:hover {
+	background-color: #555;
+}
+*/
 /* Selector */
 
 div.hidden-selector {
@@ -470,8 +500,9 @@ div.value p.desc {
 nav.breadcrumbs {
 	font-size: 0.8em;
 	text-transform: uppercase;
-	margin: 0.5em 0;
+	margin: 0 0 1em 0;
 	color: #666;
+	overflow: auto;
 }
 
 /* RESPONSIVE DESIGN */
@@ -519,7 +550,6 @@ nav.breadcrumbs {
 	header {
 		overflow: auto;
 		border-bottom: 0.1em solid #ccc;
-		padding-bottom: 0.5em;
 	}
 	
 	h1 {
@@ -657,7 +687,7 @@ nav.breadcrumbs {
 	}
 	
 	header {
-		padding-bottom: 0.5em;
+
 	}
 }
 
@@ -717,9 +747,17 @@ form.buttons button {
 	float: right;
 }
 
+form.buttons button:hover {
+	background-color: #333;
+}
+
 form.buttons button.clear {
 	background-color: #444;
 	float: left;
+}
+
+form.buttons button.clear:hover {
+	background-color: #666;
 }
 
 /* Selector */

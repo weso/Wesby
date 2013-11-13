@@ -37,10 +37,10 @@ var Comparer = new (function () {
 		help.style.display = "block";
 	}
 	
-	var countrySelector = new Selector(dataCountries, { callback: countryCallback });
+	var countrySelector = new Selector(dataCountries, { callback: countryCallback, selectedItems: selectedCountries });
 	document.getElementById("countrySelector").appendChild(countrySelector.render());
 	
-	var indicatorSelector = new Selector(dataIndicators, { callback: indicatorCallback });
+	var indicatorSelector = new Selector(dataIndicators, { callback: indicatorCallback, selectedItems: selectedIndicators });
 	document.getElementById("indicatorSelector").appendChild(indicatorSelector.render());
 	
 	var yearSelector = new Selector(dataYears, { callback: yearCallback });
@@ -57,13 +57,13 @@ var Comparer = new (function () {
 	}
 	
 	function compare() {
-		var url = document.URL + "/";
-		
+		var url = document.URL.split('?')[0] + "/";
+	
 		url += result.country + "/";
 		url += result.year + "/";
 		url += result.indicator;
-			
-		this.parentNode.action = url;	
+		
+		this.parentNode.action = url;
 	}
 	
 	function setToggleColumn(clickArea, showArea) {

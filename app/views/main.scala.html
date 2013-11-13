@@ -1,4 +1,19 @@
-@(title: String)(content: Html)
+@(compare: Option[Tuple2[String, String]], mode: String)(content: Html)
+
+@compareLabel = @{ 
+		compare match {
+			case Some(c) => c._1
+			case None => "COMPARER"
+		}
+}
+
+@compareUri = @{
+		compare match {
+			case Some(c) => c._2
+			case None => "/" + mode + "/compare"
+		}
+}
+
 <!DOCTYPE html>
 <!--[if IE 8]>
 <html class="no-js lt-ie9" lang="en" >
@@ -26,7 +41,7 @@
 				</div>
 				<div class="rightHeader">
 					<p class="title1"><span>DATA PORTAL</span></p>
-					<p class="title2"><span></span></p>
+					<a class="compare" href="@Html(compareUri)">@compareLabel</a>
 				</div>
 				<div class="border"></div>
 			</header>

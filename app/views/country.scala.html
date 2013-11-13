@@ -10,11 +10,22 @@
 		iso2 match {
 			case Some(iso2) => iso2.nodes.head.node match {
 	        case l: RdfLiteral => {l.value.toUpperCase}
-	            case _ => {}
+	            case _ => ""
 	        }
-			case None => {}
+			case None => ""
 		}
-	}
+}
+
+@iso3var = @{ 
+		val iso3 = rs.subject.get(wfOnto,"has-iso-alpha3-code")
+		iso3 match {
+			case Some(iso3) => iso3.nodes.head.node match {
+	        case l: RdfLiteral => {l.value.toUpperCase}
+	            case _ => ""
+	        }
+			case None => ""
+		}
+}
 	
 @observations = @{ 
 	var observations = scala.collection.mutable.Map[String, scala.collection.mutable.Map[String, Tuple2[String, String]]]()
@@ -84,9 +95,13 @@
 	indicators.toSeq.sortBy(_._1)
 }
 
+@compareUri = @{
+	"/" + options("mode") + "/compare?selectedCountries=" + iso3var
+}
+
 @defining(indicators) { indicators =>
 	@defining(observations) { observations =>
-		@main(""){
+		@main(Some(("COMPARE THIS", compareUri)), options("mode")) {
 			<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
 			<script src="@routes.Assets.at("javascripts/map.js")"></script>
 			<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>

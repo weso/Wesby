@@ -3,7 +3,7 @@
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
-@main("") {
+@main(None, options("mode")) {
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Dataset</a></h2>
 	@grill(rs)
