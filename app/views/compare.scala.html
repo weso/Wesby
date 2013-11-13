@@ -1,7 +1,10 @@
-@(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue)
+@(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String], mode: String)
 
-@main(""){
+@main(None, mode){
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/Selector.min.css")"/>
+	<nav class="breadcrumbs">
+		Data &gt; COMPARER
+	</nav>
 	<div id="help" class="help"></div>
 	<div class="columns">
 		<div class="column">
@@ -34,7 +37,13 @@
 		var dataCountries = @Html(play.api.libs.json.Json.stringify(countries))
 		var dataYears = @Html(play.api.libs.json.Json.stringify(years))
 		var dataIndicators = @Html(play.api.libs.json.Json.stringify(subindexes))
-	
+		
+		var selectedCountries = "@{selectedCountries.getOrElse("")}";
+		selectedCountries = selectedCountries.split(",");
+		
+		var selectedIndicators = "@{selectedIndicators.getOrElse("")}";
+		selectedIndicators = selectedIndicators.split(",");
+		
 		for (var i = 0; i < dataYears.length; i++) {
 			dataYears[i] = { label: dataYears[i], code: dataYears[i] };
 		}

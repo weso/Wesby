@@ -1,6 +1,9 @@
-@(observations:play.api.libs.json.JsValue)
+@(observations: play.api.libs.json.JsValue, mode: String)
 
-@main(""){
+@main(None, mode){
+	<nav class="breadcrumbs">
+		Data &gt; COMPARER
+	</nav>
 	<div id="graphs" class="graphs"></div>
 	<script src="@routes.Assets.at("javascripts/SortedArray.js")"></script>
 	<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
@@ -90,7 +93,6 @@
 		graphSettings.width = graphDiv.offsetWidth;
 		graphSettings.margins = [10, 30, 10, 0];
 		graphSettings.yAxis.title = "";
-		graphSettings.yAxis.margin = 1.5;
 
 		for (var indicator in observations) {
 			var element = observations[indicator];

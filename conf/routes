@@ -14,14 +14,14 @@ HEAD   /favicon.ico                                                             
 GET    /assets/*file                                                               controllers.Assets.at(path="/public", file)
 HEAD   /assets/*file                                                               controllers.Assets.at(path="/public", file)
 
-GET    /webindex/compare                                                           controllers.Application.preCompare(mode="webindex")
-HEAD   /webindex/compare                                                           controllers.Application.preCompare(mode="webindex")
+GET    /webindex/compare                                                           controllers.Application.preCompare(mode="webindex", selectedCountries: Option[String], selectedIndicators: Option[String])
+HEAD   /webindex/compare                                                           controllers.Application.preCompare(mode="webindex", selectedCountries: Option[String], selectedIndicators: Option[String])
 
 GET    /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.compare(mode="webindex", countries, years, indicators)
 HEAD   /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.compare(mode="webindex", countries, years, indicators)
 
-GET    /odb/compare                                                                controllers.Application.preCompare(mode="odb")
-HEAD   /odb/compare                                                                controllers.Application.preCompare(mode="odb")
+GET    /odb/compare                                                                controllers.Application.preCompare(mode="odb", selectedCountries: Option[String], selectedIndicators: Option[String])
+HEAD   /odb/compare                                                                controllers.Application.preCompare(mode="odb", selectedCountries: Option[String], selectedIndicators: Option[String])
 
 GET    /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years, indicators)
 HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years,  indicators)
