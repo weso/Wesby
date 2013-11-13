@@ -26,7 +26,7 @@
 
 @main(None, options("mode")) {
 	<nav class="breadcrumbs">
-		Data &gt; Country
+		@data(options) &gt; Country
 	</nav>
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	

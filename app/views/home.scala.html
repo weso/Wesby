@@ -1,0 +1,18 @@
+@(version: String)
+
+@main(None, "") {
+	<h1 class="main">DATA PORTAL</h1>
+	<p class="main">Select a repository</p>
+	<div class="repository">
+		<a href="/webindex/@version" class="repository"><img alt="Web Index" src="@routes.Assets.at("images/webindex.png")" /></a>
+		<p>
+		Designed and produced by the World Wide Web Foundation, the Web Index is the world’s first multi-dimensional measure of the Web’s growth, utility and impact on people and nations. It covers 61 developed and developing countries, incorporating indicators that assess the political, economic and social impact of the Web, as well as indicators of Web connectivity and infrastructure.
+		</p>
+	</div>
+	<div class="repository">
+		<a href="/odb/@version" class="repository"><img alt="ODB" src="@routes.Assets.at("images/odb.png")" /></a>
+		<p>
+		The Open Data Barometer takes a multidimensional look at the spread of Open Government Data (OGD) policy and practice across the world. Combining peer-reviewed expert survey data and secondary data sources, the Barometer explores countries readiness to secure benefits from open data, the publication of key datasets, and evidence of emerging impacts from OGD.
+		</p>
+	</div>
+}
