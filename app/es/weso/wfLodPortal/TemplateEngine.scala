@@ -7,6 +7,9 @@ import models.ResultQuery
 import es.weso.wfLodPortal.utils.CommonURIS._
 import es.weso.wfLodPortal.sparql._
 
+import play.api.libs.json.Json
+import es.weso.wfLodPortal.sparql.custom._
+
 trait TemplateEgine extends Controller with Configurable {
   conf.append(new PropertiesConfiguration("conf/templates.properties"))
 
@@ -33,7 +36,7 @@ trait TemplateEgine extends Controller with Configurable {
 
     val options = Map("endpoint" -> conf.getString("sparql.endpoint"), 
     				"query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")),
-    				"mode" -> mode, "uri" -> uri)
+    				"mode" -> mode, "uri" -> uri, "host" -> conf.getString("sparql.actualuri"), "version" -> conf.getString("application.version"))
 
     Ok(
       currentType match {
@@ -45,6 +48,37 @@ trait TemplateEgine extends Controller with Configurable {
         case _ => views.html.fallback(resultQuery, options)
 
       })
+  }
+  
+  def renderHome() = {
+  	val version = this.conf.getString("application.version")
+  	Ok(views.html.home(version))
+  }
+  
+  def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String) = {
+    import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
+    import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+    import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
+
+    val version = this.conf.getString("application.version")
+
+    val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode))
+    val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode))
+    val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode))
+    Ok(views.html.compare(c, y, s, selectedCountries, selectedIndicators, mode, host, version))
+  }
+
+  def renderCompare(mode: String, countries: String, years: String, indicators: String, host: String) = {
+    import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery._
+    
+    val version = this.conf.getString("application.version")
+    
+    val c = countries.split(",")
+    val y = years.split(",")
+    val i = indicators.split(",")
+    val observations = IndicatorCustomQuery.loadObservations(c, y, i)
+    val json = Json.toJson[Map[String, Indicator]](observations)
+    Ok(views.html.comparison(json, mode, host, version))
   }
 
 }

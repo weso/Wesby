@@ -14,6 +14,12 @@ HEAD   /favicon.ico                                                             
 GET    /assets/*file                                                               controllers.Assets.at(path="/public", file)
 HEAD   /assets/*file                                                               controllers.Assets.at(path="/public", file)
 
+GET /webindex/:version															   controllers.Application.webindex(version)
+HEAD /webindex/:version															   controllers.Application.webindex(version)
+
+GET /odb/:version																   controllers.Application.odb(version)
+HEAD /odb/:version																   controllers.Application.odb(version)
+
 GET    /webindex/compare                                                           controllers.Application.preCompare(mode="webindex", selectedCountries: Option[String], selectedIndicators: Option[String])
 HEAD   /webindex/compare                                                           controllers.Application.preCompare(mode="webindex", selectedCountries: Option[String], selectedIndicators: Option[String])
 

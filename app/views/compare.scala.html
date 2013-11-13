@@ -1,9 +1,17 @@
-@(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String], mode: String)
+@(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String], mode: String, host: String, version: String)
+
+@href = @{
+	host + "/" + mode + "/" + version
+}
+
+@label = @{
+	if (mode == "odb") "ODB"; else "WEB INDEX"
+}
 
 @main(None, mode){
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/Selector.min.css")"/>
 	<nav class="breadcrumbs">
-		Data &gt; COMPARER
+		<a href="http://@href" title="Data">@label</a> &gt; COMPARER
 	</nav>
 	<div id="help" class="help"></div>
 	<div class="columns">

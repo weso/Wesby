@@ -851,3 +851,45 @@ p.indicator-description {
 	font-size: 1.3em;
 	margin-bottom: 1em;
 }
+
+/* Home */
+
+h1.main {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #116699;
+	font-weight: 200;
+}
+
+p.main {
+	font-size: 1.3em;
+	color: #888;
+	font-style: italic;
+	font-weight: 200;
+	margin-top: 1.5em;
+	margin-bottom: 2em;
+}
+
+div.repository a {
+	text-align: center;
+	text-decoration: none;
+}
+
+div.repository a img {
+	
+}
+
+div.repository {
+	padding: 0 2%;
+	margin-bottom: 2em;
+	overflow: auto;
+	float: left;
+	width: 46%;
+}
+
+div.repository p {
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1.2em;
+	font-style: italic;
+	color: #666;
+	text-align: justify;
+}
