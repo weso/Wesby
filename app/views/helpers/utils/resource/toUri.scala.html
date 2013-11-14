@@ -1,8 +1,9 @@
 @(n: es.weso.wfLodPortal.models.RdfResource)
 @import es.weso.wfLodPortal.models._
 @import views.helpers.Utils._
+@import views.helpers.wf.Utils._
 @import views.html.helpers.utils._
-@label(n.dss).toString.trim match {
+@cachedLabel(n.dss).toString.trim match {
   case label if !label.isEmpty =>  {<a class="breakable" href="@n.uri.relative">@showLabel(n.uri.absolute, label)</a>}
   case _ => {
     @n.uri.short match {

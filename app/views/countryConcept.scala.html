@@ -7,6 +7,7 @@
 @import views.html.helpers.utils._
 @import views.helpers.Handlers._
 @import views.helpers.Utils._
+@import views.helpers.wf.Utils._
 
 @loadCountries = @{ 
   var countries = scala.collection.mutable.Map[String,Tuple2[String, String]]()
@@ -14,7 +15,7 @@
   for(country <- rs.predicate.get.get(rdf, "type").get.nodes) {
     country.asRdfResource match {
       case Some(r) =>
-        val countryLabel:String= label(r.dss)
+        val countryLabel:String= cachedLabel(r)
         val uri = r.uri.relative
 		countries(countryLabel) = (iso2(r.dss), uri)
 	  case None => {}

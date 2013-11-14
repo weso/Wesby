@@ -13,5 +13,5 @@ trait Cacheable {
     val rs = Cache.getOrElse(key, expiration)(ResultSetFormatter.asXMLString(method(queryStr)))
     ResultSetFactory.fromXML(rs)
   }
-  
+
 }

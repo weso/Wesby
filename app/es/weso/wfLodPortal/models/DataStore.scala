@@ -1,5 +1,6 @@
 package es.weso.wfLodPortal.models
 
+import scala.collection.mutable.Map
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 
@@ -7,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 
 trait DataStore {
 
-  protected val map: HashMap[String, Property] = HashMap.empty
+  protected val map: Map[String, Property] = HashMap.empty
 
   protected def addToDataStore(p: RdfProperty, n: RdfNode) {
     val m = map.getOrElse(p.uri.relative, Property(p))
@@ -52,14 +53,16 @@ case class InverseModel(
 
 case class Property(val property: RdfProperty) {
   val nodes: ListBuffer[RdfNode] = ListBuffer.empty[RdfNode]
-  val p = property
-  val ns = nodes
+  def p = property
+  def ns = nodes
 }
 
 case class LazyDataStore[T](val uri: Uri, val method: (String) => T) {
-  private lazy val dataStore = method(uri.absolute)
+  protected lazy val dataStore = method(uri.absolute)
+  
   def data = dataStore
   def d = dataStore
-  val u = uri
-  val m = method
+  def u = uri
+  def m = method
+  
 }

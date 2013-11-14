@@ -7,7 +7,12 @@ import es.weso.wfLodPortal.utils.CommonURIS._
 import es.weso.wfLodPortal.models._
 import views.html.helpers._
 import views.html.helpers.utils._
-object Utils {
+import play.api.cache.Cache
+import play.api.Play.current
+import es.weso.wfLodPortal.Configurable
+
+object Utils extends Configurable {
+  val cacheExpiration = conf.getInt("sparql.expiration")
 
   def loadObservations(rs: ResultQuery) = {
     import scala.collection.mutable.Map
@@ -41,6 +46,7 @@ object Utils {
 
     observations.toSeq.sortBy(_._1)
   }
+
   def loadIndicators(rs: ResultQuery): Seq[(String, String)] = {
     import scala.collection.mutable.Map
     def inner(r: RdfResource) = {
@@ -63,6 +69,21 @@ object Utils {
     handleResourceAs[(String, String)](rs.predicate.get,
       wfOnto, "ref-area", inner).toMap.toSeq.sortBy(_._1)
 
+  }
+
+  def cachedLabel(r: RdfProperty): String = {
+    val key = r.uri.absolute.hashCode.toString
+    Cache.getOrElse(key, cacheExpiration)(label(r.dss))
+  }
+
+  def cachedLabel(r: RdfResource): String = {
+    val key = r.uri.absolute.hashCode.toString
+    Cache.getOrElse(key, cacheExpiration)(label(r.dss))
+  }
+
+  def cachedLabel(rs: ResultQuery): String = {
+    val key = rs.pred.get.uri.absolute.hashCode.toString
+    Cache.getOrElse(key, cacheExpiration)(label(rs))
   }
 
   def compareUri(options: Map[String, String], iso3: String) = {

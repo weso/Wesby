@@ -1,19 +1,4 @@
 @(compare: Option[Tuple2[String, String]], mode: String)(content: Html)
-
-@compareLabel = @{ 
-		compare match {
-			case Some(c) => c._1
-			case None => "COMPARER"
-		}
-}
-
-@compareUri = @{
-		compare match {
-			case Some(c) => c._2
-			case None => "/" + mode + "/compare"
-		}
-}
-
 <!DOCTYPE html>
 <!--[if IE 8]>
 <html class="no-js lt-ie9" lang="en" >
@@ -55,3 +40,16 @@
 	</body>
 	<script src="@routes.Assets.at("javascripts/richTable.js")"></script>
 </html>
+@compareLabel = @{ 
+		compare match {
+			case Some(c) => c._1
+			case None => "COMPARER"
+		}
+}
+
+@compareUri = @{
+		compare match {
+			case Some(c) => c._2
+			case None => "/" + mode + "/compare"
+		}
+}

@@ -1,6 +1,7 @@
 @(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
 
 @import views.helpers.Utils._
+@import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
@@ -14,7 +15,7 @@
 }
 
 @main(Some(("COMPARE THIS", compareUri)), options("mode")) {
-	<h1>@label(rs)</h1>
+	<h1>@cachedLabel(rs)</h1>
 	<h2><a href="@rdfType(rs)">Indicator</a></h2>	
 	@grill(rs)
 	@sparqlQuery(options)
