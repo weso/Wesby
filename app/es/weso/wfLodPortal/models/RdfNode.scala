@@ -4,7 +4,8 @@ import com.hp.hpl.jena.rdf.model.{ Property => JenaProperty, Resource => JenaRes
 
 sealed abstract class RdfNode {
   val rdfNode: JenaRDFNode
-  val r: JenaRDFNode = rdfNode
+
+  def r: JenaRDFNode = rdfNode
 
   def asRdfAnon: Option[RdfAnon] = {
     this match {
@@ -27,16 +28,24 @@ sealed abstract class RdfNode {
     case l: RdfLiteral => Some(l)
     case _ => None
   }
+
 }
 
 case class RdfAnon(
   rdfNode: JenaResource) extends RdfNode {
-  val resource = rdfNode
+
+  def resource = rdfNode
+
+  override def toString: String = {
+    new StringBuilder("A[id:'").append(rdfNode.getId()).append("']").toString
+  }
 }
 
 trait Resource {
   val dataStores: ResultQuery
-  lazy val dss: ResultQuery = dataStores
+
+  def dss: ResultQuery = dataStores
+
 }
 
 case class RdfResource(
@@ -44,8 +53,8 @@ case class RdfResource(
   dataStores: ResultQuery,
   rdfNode: JenaResource) extends RdfNode with Resource {
 
-  val u = uri
-  val resource = rdfNode
+  def u = uri
+  def resource = rdfNode
 
   override def toString: String = {
     new StringBuilder("R[uri:'").append(uri).append("']").toString
@@ -57,8 +66,8 @@ case class RdfProperty(
   dataStores: ResultQuery,
   rdfNode: JenaProperty) extends RdfNode with Resource {
 
-  val u = uri
-  val property: JenaProperty = rdfNode
+  def u = uri
+  def property: JenaProperty = rdfNode
 
   override def toString: String = {
     new StringBuilder("P[uri:'").append(uri).append("']").toString

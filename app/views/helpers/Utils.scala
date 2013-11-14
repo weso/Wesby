@@ -1,10 +1,14 @@
 package views.helpers
 
 import es.weso.wfLodPortal.models.RdfLiteral
+import es.weso.wfLodPortal.models.RdfNode
+import es.weso.wfLodPortal.models.RdfResource
 import es.weso.wfLodPortal.models.ResultQuery
-import es.weso.wfLodPortal.utils.CommonURIS._
-import es.weso.wfLodPortal.models._
+import es.weso.wfLodPortal.utils.CommonURIS.rdf
+import es.weso.wfLodPortal.utils.CommonURIS.rdfs
+import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
 import play.api.templates.Html
+import views.helpers.wf.Utils.cachedLabel
 
 object Utils {
 
@@ -81,7 +85,7 @@ object Utils {
         subject.get(rdf, "type") match {
           case Some(typeResult) => {
             typeResult.nodes.head match {
-              case r: RdfResource => { label(r.dataStores) }
+              case r: RdfResource => { cachedLabel(r.dataStores) }
               case _ => Empty
             }
           }

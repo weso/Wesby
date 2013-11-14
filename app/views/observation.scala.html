@@ -4,6 +4,7 @@
 @import es.weso.wfLodPortal.models._
 @import views.helpers.Utils._
 @import views.helpers.Handlers._
+@import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
@@ -20,7 +21,7 @@
 @countryName = @{
 	handleResourceAsString(rs.subject.get, 
 		wfOnto, "ref-area", 
-		(r:RdfResource)=> label(r.dataStores))
+		(r:RdfResource)=> cachedLabel(r))
 }
 
 @countryURI = @{
@@ -44,7 +45,7 @@
 @indicatorDescription = @{
 	handleResourceAsString(rs.subject.get, 
 		cex, "indicator", 
-		(r:RdfResource)=> label(r.dataStores))
+		(r:RdfResource)=> cachedLabel(r))
 }
 
 @value = @{
