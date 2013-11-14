@@ -1,9 +1,12 @@
 package es.weso.wfLodPortal.sparql.custom
 
+import scala.Option.option2Iterable
+
 import es.weso.wfLodPortal.Configurable
-import es.weso.wfLodPortal.models.LazyDataStore
 import es.weso.wfLodPortal.models.Model
 import es.weso.wfLodPortal.models.RdfResource
+import es.weso.wfLodPortal.sparql.Handlers.handleFirstLiteralAsValue
+import es.weso.wfLodPortal.sparql.Handlers.handleResourceAs
 import es.weso.wfLodPortal.sparql.ModelLoader
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
 import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
@@ -14,13 +17,7 @@ import play.api.libs.json.__
 import play.api.libs.json.Json
 import play.api.libs.json.Reads
 import play.api.libs.json.Writes
-import es.weso.wfLodPortal.models.ResultQuery
-import es.weso.wfLodPortal.models.Uri
-import es.weso.wfLodPortal.models.Uri._
-import es.weso.wfLodPortal.utils.UriFormatter
-import es.weso.wfLodPortal.models.ResultQuery
 import views.helpers.Utils
-import play.api.Logger
 
 object RegionCustomQueries extends CustomQuery with Configurable {
 
@@ -36,10 +33,7 @@ object RegionCustomQueries extends CustomQuery with Configurable {
   implicit val regionWrites = Json.writes[Region]
 
   def loadRegions(mode: String): List[Region] = {
-    val param = mode match {
-      case "webindex" => "http://data.webfoundation.org/webindex/v2013/"
-      case "odb" => "http://data.webfoundation.org/odb/v2013/"
-    }
+    val param = checkMode(mode)
 
     def inner(r: RdfResource): Option[Region] = {
       val uri = r.uri.absolute
@@ -51,7 +45,7 @@ object RegionCustomQueries extends CustomQuery with Configurable {
     }
 
     val rs = ModelLoader.loadUri(wfOnto, "Region")
-    handleResource[Option[Region]](rs.predicate.get, rdf, "type", inner _).flatten
+    handleResourceAs[Option[Region]](rs.predicate.get, rdf, "type", inner _).flatten
   }
 
   protected def loadCountries(subject: Model): List[Country] = {
@@ -60,12 +54,12 @@ object RegionCustomQueries extends CustomQuery with Configurable {
       val uri = r.uri.absolute
       val name = Utils.label(r.dss)
       val dataStore = r.dss.subject.get
-      val iso2 = firstNodeAsLiteral(dataStore, wfOnto, "has-iso-alpha2-code")
-      val iso3 = firstNodeAsLiteral(dataStore, wfOnto, "has-iso-alpha3-code")
+      val iso2 = handleFirstLiteralAsValue(dataStore, wfOnto, "has-iso-alpha2-code")
+      val iso3 = handleFirstLiteralAsValue(dataStore, wfOnto, "has-iso-alpha3-code")
       Country(uri, name, iso2, iso3)
     }
 
-    handleResource[Country](subject, wfOnto, "has-country", inner _)
+    handleResourceAs[Country](subject, wfOnto, "has-country", inner _)
   }
 
 }

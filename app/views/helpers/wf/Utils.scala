@@ -1,15 +1,17 @@
 package views.helpers.wf
 
-import es.weso.wfLodPortal.models._
-import views.helpers.Utils._
-import views.helpers.Handlers._
-import es.weso.wfLodPortal.utils.CommonURIS._
-import es.weso.wfLodPortal.models._
-import views.html.helpers._
-import views.html.helpers.utils._
-import play.api.cache.Cache
-import play.api.Play.current
 import es.weso.wfLodPortal.Configurable
+import es.weso.wfLodPortal.models.RdfProperty
+import es.weso.wfLodPortal.models.RdfResource
+import es.weso.wfLodPortal.models.ResultQuery
+import es.weso.wfLodPortal.sparql.Handlers.handleLiteralAsValue
+import es.weso.wfLodPortal.sparql.Handlers.handleResourceAs
+import es.weso.wfLodPortal.sparql.Handlers.handleResourceAsString
+import es.weso.wfLodPortal.utils.CommonURIS.cex
+import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
+import play.api.Play.current
+import play.api.cache.Cache
+import views.helpers.Utils.label
 
 object Utils extends Configurable {
   val cacheExpiration = conf.getInt("sparql.expiration")
