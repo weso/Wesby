@@ -4,6 +4,8 @@ import es.weso.wfLodPortal.models.RdfLiteral
 import es.weso.wfLodPortal.models.RdfNode
 import es.weso.wfLodPortal.models.RdfResource
 import es.weso.wfLodPortal.models.ResultQuery
+import es.weso.wfLodPortal.sparql.Handlers.handleFirstLiteralAsValue
+import es.weso.wfLodPortal.sparql.Handlers.handleResourceAsString
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
 import es.weso.wfLodPortal.utils.CommonURIS.rdfs
 import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
@@ -23,31 +25,28 @@ object Utils {
   def toLower(html: Html) = html.toString.toLowerCase
 
   def iso2(resultQuery: ResultQuery): String = {
-    resultQuery.subject match {
-      case Some(subject) =>
-        subject.get(wfOnto, "has-iso-alpha2-code") match {
-          case Some(iso2) => iso2.nodes.head match {
-            case l: RdfLiteral => { l.value }
-            case _ => Empty
-          }
-          case None => Empty
-        }
-      case None => Empty
-    }
+    handleFirstLiteralAsValue(resultQuery.subject.get,
+      wfOnto, "has-iso-alpha2-code")
   }
 
   def iso3(resultQuery: ResultQuery): String = {
-    resultQuery.subject match {
-      case Some(subject) =>
-        subject.get(wfOnto, "has-iso-alpha3-code") match {
-          case Some(iso3) => iso3.nodes.head match {
-            case l: RdfLiteral => { l.value }
-            case _ => Empty
-          }
-          case None => Empty
-        }
-      case None => Empty
-    }
+    handleFirstLiteralAsValue(resultQuery.subject.get,
+      wfOnto, "has-iso-alpha3-code")
+  }
+
+  def rdfType(resultQuery: ResultQuery): String = {
+    val result = handleResourceAsString(resultQuery.subject.get,
+      rdf, "type",
+      (r: RdfResource) => { r.uri.relative })
+    if (result.isEmpty)
+      "Unknown rdf:type"
+    else result
+  }
+
+  def rdfTypeLabel(resultQuery: ResultQuery): String = {
+    handleResourceAsString(resultQuery.subject.get,
+      rdf, "type",
+      (r: RdfResource) => cachedLabel(r.dataStores))
   }
 
   def label(resultQuery: ResultQuery): String = {
@@ -60,40 +59,6 @@ object Utils {
       case None => Empty
     }
     label
-  }
-
-  def rdfType(resultQuery: ResultQuery): String = {
-    resultQuery.subject match {
-      case Some(subject) => {
-        subject.get(rdf, "type") match {
-          case Some(typeResult) => {
-            typeResult.nodes.head match {
-              case r: RdfResource => { r.uri.relative }
-              case _ => { "Unknown rdf:type" }
-            }
-          }
-          case _ => { "Unknown rdf:type" }
-        }
-      }
-      case _ => { "Unknown rdf:type" }
-    }
-  }
-
-  def rdfTypeLabel(resultQuery: ResultQuery): String = {
-    resultQuery.subject match {
-      case Some(subject) => {
-        subject.get(rdf, "type") match {
-          case Some(typeResult) => {
-            typeResult.nodes.head match {
-              case r: RdfResource => { cachedLabel(r.dataStores) }
-              case _ => Empty
-            }
-          }
-          case None => Empty
-        }
-      }
-      case None => Empty
-    }
   }
 
   def showLabel(uri: String, label: String): String = {

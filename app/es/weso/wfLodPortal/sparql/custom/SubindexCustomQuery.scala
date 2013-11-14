@@ -1,14 +1,15 @@
 package es.weso.wfLodPortal.sparql.custom
 
+import scala.Option.option2Iterable
+
 import es.weso.wfLodPortal.Configurable
-import es.weso.wfLodPortal.models.DataStore
-import es.weso.wfLodPortal.models.LazyDataStore
 import es.weso.wfLodPortal.models.Model
 import es.weso.wfLodPortal.models.RdfResource
+import es.weso.wfLodPortal.models.ShortUri
+import es.weso.wfLodPortal.sparql.Handlers.handleResourceAs
 import es.weso.wfLodPortal.sparql.ModelLoader
 import es.weso.wfLodPortal.utils.CommonURIS.cex
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
-import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
 import play.api.libs.functional.syntax.functionalCanBuildApplicative
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.functional.syntax.unlift
@@ -16,13 +17,6 @@ import play.api.libs.json.__
 import play.api.libs.json.Json
 import play.api.libs.json.Reads
 import play.api.libs.json.Writes
-import es.weso.wfLodPortal.models.DataStore
-import es.weso.wfLodPortal.models.InverseModel
-import es.weso.wfLodPortal.models.ResultQuery
-import es.weso.wfLodPortal.models.Uri
-import es.weso.wfLodPortal.models.Uri._
-import es.weso.wfLodPortal.utils.UriFormatter
-import es.weso.wfLodPortal.models.ShortUri
 import views.helpers.Utils
 
 object SubindexCustomQuery extends CustomQuery with Configurable {
@@ -41,10 +35,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
   implicit val subindexWrites = Json.writes[Subindex]
 
   def loadSubindexes(mode: String): List[Subindex] = {
-    val param = mode match {
-      case "webindex" => "http://data.webfoundation.org/webindex/v2013/"
-      case "odb" => "http://data.webfoundation.org/odb/v2013/"
-    }
+    val param = checkMode(mode)
 
     def inner(r: RdfResource): Option[Subindex] = {
       val uri = r.uri.absolute
@@ -56,7 +47,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
     }
 
     val rs = ModelLoader.loadUri(cex, "SubIndex")
-    handleResource[Option[Subindex]](rs.predicate.get, rdf, "type", inner _).flatten
+    handleResourceAs[Option[Subindex]](rs.predicate.get, rdf, "type", inner _).flatten
   }
 
   protected def loadComponents(dataStore: Model): List[Component] = {
@@ -66,7 +57,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
       val indicators = loadIndicators(r.dataStores.subject.get)
       Component(uri, label, indicators)
     }
-    handleResource[Component](dataStore, cex, "element", inner _)
+    handleResourceAs[Component](dataStore, cex, "element", inner _)
   }
 
   protected def loadIndicators(dataStore: Model): List[Indicator] = {
@@ -80,7 +71,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
       }
       Indicator(uri, label, code)
     }
-    handleResource[Indicator](dataStore, cex, "element", inner _)
+    handleResourceAs[Indicator](dataStore, cex, "element", inner _)
   }
 
 }

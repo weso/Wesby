@@ -1,9 +1,8 @@
 @(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
-
-@import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
+@import es.weso.wfLodPortal.sparql.Handlers._
+@import es.weso.wfLodPortal.utils.CommonURIS._
 @import views.helpers.Utils._
-@import views.helpers.Handlers._
 @import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
@@ -35,7 +34,6 @@
 				</select>
 			</div>
 			<div id="graphs"></div>
-			
 			@grill(rs)
 			@sparqlQuery(options)
 			
