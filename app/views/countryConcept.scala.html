@@ -1,4 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
+@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
@@ -24,7 +24,7 @@
 	countries.toList.sorted
 }
 
-@main(None, options("mode")) {
+@main(None, options("mode").toString) {
 	@defining(loadCountries){ countries =>
 	<nav class="breadcrumbs">
 		@data(options) &gt; Country

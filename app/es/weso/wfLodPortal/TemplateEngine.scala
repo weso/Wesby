@@ -6,10 +6,10 @@ import org.apache.commons.configuration.PropertiesConfiguration
 import models.ResultQuery
 import es.weso.wfLodPortal.utils.CommonURIS._
 import es.weso.wfLodPortal.sparql._
-import es.weso.wfLodPortal.models.RdfResource
 
 import play.api.libs.json.Json
 import es.weso.wfLodPortal.sparql.custom._
+
 trait TemplateEgine extends Controller with Configurable {
   conf.append(new PropertiesConfiguration("conf/templates.properties"))
 
@@ -34,44 +34,67 @@ trait TemplateEgine extends Controller with Configurable {
       } else Undefined
     } else Undefined
 
-    val options = Map("endpoint" -> conf.getString("sparql.endpoint"),
-      "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")),
-      "mode" -> mode, "uri" -> uri, "host" -> conf.getString("sparql.actualuri"), "version" -> conf.getString("application.version"))
+    val options = scala.collection.mutable.Map[String,Object]("endpoint" -> conf.getString("sparql.endpoint"), 
+    				"query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")),
+    				"mode" -> mode, "uri" -> uri, "host" -> conf.getString("sparql.actualuri"), "version" -> conf.getString("application.version"))
 
-    Ok(
       currentType match {
-        case e if currentType == country => views.html.country(resultQuery, options)
-        case e if currentType == indicator => views.html.indicator(resultQuery, options)
-        case e if currentType == observation => views.html.observation(resultQuery, options)
-        case e if currentType == dataset => views.html.dataset(resultQuery, options)
-        case e if currentType == countryConcept => views.html.countryConcept(resultQuery, options)
-        case _ => views.html.fallback(resultQuery, options)
+        case e if currentType == country => renderCountry(uri, mode, resultQuery, options)
+        case e if currentType == indicator => Ok(views.html.indicator(resultQuery, options))
+        case e if currentType == observation => Ok(views.html.observation(resultQuery, options))
+        case e if currentType == dataset => Ok(views.html.dataset(resultQuery, options))
+        case e if currentType == countryConcept => Ok(views.html.countryConcept(resultQuery, options))
+        case _ => Ok(views.html.fallback(resultQuery, options))
 
-      })
+      }
   }
-
+  
+  def renderCountry(uri: String, mode: String, resultQuery: ResultQuery, options: scala.collection.mutable.Map[String, Object]) = {
+  	val countries = RankingCustomQuery.loadRanking(mode)
+  	options("ranking.allCountries") = countries
+  	
+  	val hierarchy = IndexValueCustomQuery.loadHierarchy(uri, mode)
+  	options("query.hierarchy") = hierarchy
+	
+  	Ok(views.html.country(resultQuery, options))
+  }
+  
   def renderHome() = {
-    val version = this.conf.getString("application.version")
-    Ok(views.html.home(version))
+  	val version = this.conf.getString("application.version")
+  	Ok(views.html.home(version))
   }
-
-  def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String): SimpleResult = {
+  
+  def renderRoot(mode: String, host:String) = {
+    import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
+    import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+  	
+  	val version = this.conf.getString("application.version")
+  	val title = if (mode == "odb") "OPEN DATA BAROMETER"; else "WEB INDEX"
+  	
+    val c = RegionCustomQueries.loadRegions(mode)
+    val s = SubindexCustomQuery.loadSubindexes(mode)
+  	
+  	Ok(views.html.root(version, mode, title, host, c, s))
+  }
+  
+  def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String) = {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
     import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
+
+    val version = this.conf.getString("application.version")
+
     val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode))
     val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode))
     val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode))
-    val version = this.conf.getString("application.version")
-
     Ok(views.html.compare(c, y, s, selectedCountries, selectedIndicators, mode, host, version))
   }
 
   def renderCompare(mode: String, countries: String, years: String, indicators: String, host: String) = {
     import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery._
-
+    
     val version = this.conf.getString("application.version")
-
+    
     val c = countries.split(",")
     val y = years.split(",")
     val i = indicators.split(",")

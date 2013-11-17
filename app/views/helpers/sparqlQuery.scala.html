@@ -1,4 +1,4 @@
-@(viewOptions: Map[String,String])
+@(viewOptions: scala.collection.mutable.Map[String,Object])
 
 @import helper._
 
@@ -8,8 +8,16 @@
 <script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
 <div class="sparql">
 	<h4>Data source</h4>
-	<textarea id="query">@{viewOptions("query").replace("\\n", "\n").replace("\\t", "\t")}</textarea>
+	<textarea id="query">@{viewOptions("query").toString.replace("\\n", "\n").replace("\\t", "\t")}</textarea>
 	<button id="test-query">Test query</button>
+</div>
+<div class="format-links">
+	<h3>Download as</h3>
+	<a href="@{viewOptions("uri")}?format=n3" title="Download as N3"><span>N3</span></a>
+	<a href="@{viewOptions("uri")}?format=turtle" title="Download as Turtle"><span>Turtle</span></a>
+	<a href="@{viewOptions("uri")}?format=rdfxml" title="Download as RDF/XML"><span>RDF/XML</span></a>
+	<a href="@{viewOptions("uri")}?format=rdfjson" title="Download as RDF/JSON"><span>RDF/JSON</span></a>
+	<a href="@{viewOptions("uri")}?format=n-triples" title="Download as N-Triples"><span>N-Triples</span></a>
 </div>
 <script>
 	// Button
@@ -17,7 +25,7 @@
 	
 	button.onclick = function() {
 		var query = editor.doc.getValue();
-		window.location.href = "@{viewOptions("endpoint")}?default-graph-uri=&query=" + encodeURIComponent(query);
+		window.location.href = "@{viewOptions("endpoint").toString}?default-graph-uri=&query=" + encodeURIComponent(query);
 	};
 	
 	// Codemirror (Pretty code)

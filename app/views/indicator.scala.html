@@ -1,19 +1,23 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
+@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])
 
 @import views.helpers.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
 @code = @{ 
-	val code = options("uri").lastIndexOf("/");
-	options("uri").substring(code + 1)
+	val code = options("uri").toString.lastIndexOf("/");
+	options("uri").toString.substring(code + 1)
 }
 
 @compareUri = @{
-	"/" + options("mode") + "/compare?selectedIndicators=" + code
+	"/" + options("mode").toString + "/compare?selectedIndicators=" + code
 }
 
-@main(Some(("COMPARE THIS", compareUri)), options("mode")) {
+@main(Some(("COMPARE THIS", compareUri)), options("mode").toString) {
+	<nav class="breadcrumbs">
+		@data(options) &gt; @label(rs)
+	</nav>
+
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Indicator</a></h2>	
 	@grill(rs)

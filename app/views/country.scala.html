@@ -1,4 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
+@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
@@ -7,181 +7,362 @@
 @import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
-@defining(loadIndicators(rs)) { indicators =>
-	@defining(loadObservations(rs)) { observations =>
-		@main(Some(("COMPARE THIS",compareUri(options, iso3(rs)))), options("mode")){
-			<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
-			<script src="@routes.Assets.at("javascripts/map.js")"></script>
-			<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
-			@defining(label(rs)){label =>
-			
-			<nav class="breadcrumbs">
-				@data(options) &gt; <a href="/ontology/Country">Country</a> &gt; @label
-			</nav>	
-			<div class="country-map" id="country-map" 
-				title="Map for @label obtained from jVectorMap.com and this from naturalearthdata.com">
-			</div>  
-			<img alt="Country flag for @label obtained from flagpedia.net" class="flag" src="@image" />
-			
-			<h1>@label</h1>
-			<h2><a href="@rdfType(rs)">Country</a></h2>
-			
-			<span class="help">Select an indicator to view the progression of its observations</span>
-			<div class="dropdown">
-				<select id="observation-selector">
-					@for(obs <- observations) {
-						<option value="@obs._1">@obs._1</option>
-					}
-				</select>
-			</div>
-			<div id="graphs"></div>
-			
-			@grill(rs)
-			@sparqlQuery(options)
-			
-			<script>
-			    $(function(){
-			    	// Map
-			    	var code = "@iso2(rs)";
-			    	
-			    	var container = "#country-map";
-			
-			    	var map = new jvm.WorldMap({
-			    			container: $(container), 
-			    			map: "world_merc_en",
-			    			backgroundColor: "#DCEBF0",
-			    			regionStyle: {
-			    				initial: {
-				    				fill: "#ccc"	
-			    				},
-						    	selected: {
-						            fill: "#555"
-						        }
-						    },
-						    regionsSelectable: false,
-						    onRegionOver: function (e, label, code) { e.preventDefault(); return false; },
-						    onRegionLabelShow: function (e, code) { e.preventDefault(); return false; }
-			    		});
-			   
-			    	map.setFocus(code, null, null);
-			    	
-			    	var selectedRegions = new Array(code);
-			    	map.setSelectedRegions(selectedRegions);
-			    	
-			    	// Observation graphs
-			    	
-			    	var observations = [];
-			    	var observationList = [];
-			    	var indicators = [];
-			    	
-			    	@for(indicator <- indicators) {
-			    		indicators["@indicator._1"] = "@indicator._2";
-			    	}	
-			    	
-			    	@for(obs <- observations) {	    		
-			    		observationList.push("@obs._1");
-			    		
-			    		var values = [];
-			    		
-			    		var serie = {
-				    		name: "@obs._1",	
-				    		values: [],
-				    		urls: []
-			    		};
-			    		
-			    		@for(year <- obs._2.toSeq.sortBy(_._1)) {
-			    			if ("@year._2._2" != "") {
-				    			serie.values.push(parseFloat(@year._2._2));
-				    			serie.urls.push("@year._2._1");
-				    			values.push("@year._1");
-				    		}
-			    		}
-			    		
-			    		observations["@obs._1"] = {
-			    			serie: serie,
-			    			values: values
-			    		};
-					}
-					
-					var length = observationList.length;
-					var graphs = document.getElementById("graphs");
-					var width = graphs.offsetWidth;
-					
-					for (var i = 0; i < length; i++) {
-						var indicator = observationList[i];
-						var observation = observations[indicator];
-				
-						var graphOptions = {
-							width: width,
-							height: 400,
-							margins: [10, 0, 10, 0],
-							backgroundColour: "none",
-							serieColours: ["#CC2222", "#FA5882", "#2BBBD8", "#102E37"],
-							groupMargin: 4,
-							barMargin: 8,
-							valueOnItem: {
-								show: !0,
-								margin: 5,
-								"font-family": "Helvetica",
-								"font-colour": "#aaa",
-								"font-size": "16px"
-							},
-							xAxis: {
-								title: "Years",
-								colour: "none",
-								margin: 10,
-								tickColour: "none",
-								values: observation.values,
-								"font-family": "Helvetica",
-								"font-colour": "#666",
-								"font-size": "16px"
-							},
-							yAxis: {
-								title: "",
-								colour: "none",
-								margin: 0,
-								tickColour: "#ddd",
-								"font-family": "Helvetica",
-								"font-colour": "#aaa",
-								"font-size": "16px",
-								"from-zero": false
-							},
-							series: [ observation.serie ],
-							legend: {
-								show: false,
-							}
-						};
+@import es.weso.wfLodPortal.sparql.custom.RankingCustomQuery._
+@import scala.collection.mutable.ListBuffer
+
+@defining(loadHierarchyValues(options)) { hierarchyValues =>
+	@defining(iso3(rs)) { iso3 =>
+		@defining(loadCountryRanking(options, iso3)) { countryRanking =>
+			@defining(loadIndicators(rs)) { indicators =>
+				@defining(loadObservations(rs)) { observations =>
+					@main(Some(("COMPARE THIS",compareUri(options, iso3))), options("mode").toString){
+						<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
+						<script src="@routes.Assets.at("javascripts/map.js")"></script>
+						<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
+						<script src="@routes.Assets.at("javascripts/rainbowvis.js")"></script>
+						@defining(label(rs)){label =>
 						
-						var div = document.createElement("div");
-						var shown = i == 0 ? "shown " : "hidden ";
-						div.className = shown + indicator;
+						<nav class="breadcrumbs">
+							@data(options) &gt; <a href="/ontology/Country">Country</a> &gt; @label
+						</nav>	
+						<div class="country-map" id="country-map" 
+							title="Map for @label obtained from jVectorMap.com and this from naturalearthdata.com">
+						</div>  
+						<img alt="Country flag for @label obtained from flagpedia.net" class="flag" src="@image" />
 						
-						var h4 = document.createElement("h4");
-						h4.className = "indicator-description";
-						div.appendChild(h4);
+						<h1>@label</h1>
+						<h2><a href="@rdfType(rs)">Country</a></h2>
 						
-						h4.innerHTML = indicators[indicator];
+						<div id="ranking-col1" class="ranking-col1">
+							<table class="ranking">
+								<thead>
+									<tr>
+										<th class="label">COMPONENT</th>
+										<th class="rank">RANK</th>
+										<th class="score">SCORE</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="index">
+										<td class="label">
+											<div class="legend-circle" style="background-color:@hierarchyValues.colour1"></div>
+											@hierarchyValues.name
+										</td>
+										<td class="rank">@hierarchyValues.rank</td>
+										<td class="score">@hierarchyValues.score</td>
+									</tr>	
+			
+									@for(subindex <- hierarchyValues.children) {
+										<tr class="subindex">
+											<td class="label">
+												<div class="legend-circle" style="background-color:@subindex._2.colour1"></div>
+												@subindex._2.name
+											</td>
+											<td class="rank">@subindex._2.rank</td>
+											<td class="score">@subindex._2.score</td>
+										</tr>
+										@for(component <- subindex._2.children) {
+											<tr class="component">
+												<td class="label">
+													<div class="legend-circle" style="background-color:@subindex._2.colour2"></div>
+													@component._2.name
+												</td>
+												<td class="rank">@component._2.rank</td>
+												<td class="score">@component._2.score</td>
+											</tr>
+										}
+									}
+								</tbody>
+							</table>
+						</div>
 						
-						graphs.appendChild(div);
+						<div id="rankingGraph"class="ranking-col2"></div>
 						
-						var graph = jGraf.lineChart(graphOptions);
-						div.appendChild(graph.render());
+						<h3>World Index Ranking</h3>
+						<div id="countryRanking" class="country-ranking"></div>
 						
-						// Select event
-						document.getElementById("observation-selector").onchange = function() {
-							$("div#graphs div.shown").removeClass("shown").addClass("hidden");
+						<span class="help">Select an indicator to view the progression of its observations</span>
+						<div class="dropdown">
+							<select id="observation-selector">
+								@for(obs <- observations) {
+									<option value="@obs._1">@obs._1</option>
+								}
+							</select>
+						</div>
+						<div id="graphs"></div>
+						
+						@grill(rs)
+						@sparqlQuery(options)
+						
+						<script>
+							var graphOptions = {
+								width: 400,
+								height: 400,
+								margins: [10, 0, 10, 0],
+								backgroundColour: "none",
+								serieColours: ["#CC2222"],
+								groupMargin: 0,
+								barMargin: 8,
+								valueOnItem: {
+									show: true,
+									margin: 5,
+									"font-family": "Helvetica",
+									"font-colour": "#aaa",
+									"font-size": "16px"
+								},
+								xAxis: {
+									title: "Years",
+									colour: "none",
+									margin: 10,
+									tickColour: "none",
+									values: [],
+									"font-family": "Helvetica",
+									"font-colour": "#666",
+									"font-size": "16px"
+								},
+								yAxis: {
+									title: "",
+									colour: "none",
+									margin: 0,
+									tickColour: "#ddd",
+									"font-family": "Helvetica",
+									"font-colour": "#aaa",
+									"font-size": "16px",
+									"from-zero": false
+								},
+								series: [ ],
+								legend: {
+									show: false,
+								}
+							};					
+						
+						    $(function(){
+						    	// Map
+						    	var code = "@iso2(rs)";
+						    	
+						    	var container = "#country-map";
+						
+						    	var map = new jvm.WorldMap({
+						    			container: $(container), 
+						    			map: "world_merc_en",
+						    			backgroundColor: "#DCEBF0",
+						    			regionStyle: {
+						    				initial: {
+							    				fill: "#ccc"	
+						    				},
+									    	selected: {
+									            fill: "#555"
+									        }
+									    },
+									    regionsSelectable: false,
+									    onRegionOver: function (e, label, code) { e.preventDefault(); return false; },
+									    onRegionLabelShow: function (e, code) { e.preventDefault(); return false; }
+						    		});
+						   
+						    	map.setFocus(code, null, null);
+						    	
+						    	var selectedRegions = new Array(code);
+						    	map.setSelectedRegions(selectedRegions);
+						    	
+						    	// Observation graphs
+						    	
+						    	var observations = [];
+						    	var observationList = [];
+						    	var indicators = [];
+						    	
+						    	@for(indicator <- indicators) {
+						    		indicators["@indicator._1"] = "@indicator._2";
+						    	}	
+						    	
+						    	@for(obs <- observations) {	    		
+						    		observationList.push("@obs._1");
+						    		
+						    		var values = [];
+						    		
+						    		var serie = {
+							    		name: "@obs._1",	
+							    		values: [],
+							    		urls: []
+						    		};
+						    		
+						    		@for(year <- obs._2.toSeq.sortBy(_._1)) {
+						    			if ("@year._2._2" != "") {
+							    			serie.values.push(parseFloat(@year._2._2));
+							    			serie.urls.push("@year._2._1");
+							    			values.push("@year._1");
+							    		}
+						    		}
+						    		
+						    		observations["@obs._1"] = {
+						    			serie: serie,
+						    			values: values
+						    		};
+								}
+								
+								var length = observationList.length;
+								var graphs = document.getElementById("graphs");
+	
+								graphOptions.width = graphs.offsetWidth;
+								graphOptions.height = 400;
+								graphOptions.valueOnItem.show = true;
+								graphOptions.serieColours = ["#CC2222"];
+								graphOptions.yAxis.margin = 0;
+								graphOptions.xAxis.title = "Years";
+								graphOptions.xAxis.margin = 10;
+								
+								for (var i = 0; i < length; i++) {
+									var indicator = observationList[i];
+									var observation = observations[indicator];
 							
-							var indicator = this.options[this.selectedIndex].value;
-							$("div#graphs div." + indicator).removeClass("hidden").addClass("shown");
-						};
+									graphOptions.xAxis.values = observation.values;
+									graphOptions.series = [ observation.serie ];
+	
+									var div = document.createElement("div");
+									var shown = i == 0 ? "shown " : "hidden ";
+									div.className = shown + indicator;
+									
+									var h4 = document.createElement("h4");
+									h4.className = "indicator-description";
+									div.appendChild(h4);
+									
+									h4.innerHTML = indicators[indicator];
+									
+									graphs.appendChild(div);
+									
+									var graph = jGraf.lineChart(graphOptions);
+									div.appendChild(graph.render());
+									
+									// Select event
+									document.getElementById("observation-selector").onchange = function() {
+										$("div#graphs div.shown").removeClass("shown").addClass("hidden");
+										
+										var indicator = this.options[this.selectedIndex].value;
+										$("div#graphs div." + indicator).removeClass("hidden").addClass("shown");
+									};
+								}
+						    });
+						    
+						    // Country ranking graph
+						 
+						    var series = [];
+						    var colours = [];
+						    var thisCountryIso3 = "@{iso3}";
+						    
+						    var rainbow = new Rainbow();
+						    //rainbow.setSpectrum("#78B31E", "#EEAA11", "#CC2222");
+						    rainbow.setSpectrum("#223355", "#327365", "#53944f", "#7ab33f", "#f0f066");
+						    rainbow.setNumberRange(0, @{countryRanking("series").asInstanceOf[ListBuffer[Country]].length} - 1);
+						    
+						    var i = 0;
+						    
+						    @for(country <- countryRanking("series").asInstanceOf[ListBuffer[Country]]) {
+						    	var iso3 = "@{country.iso3}";
+						    	
+							    series.push({
+							    	name: "@{country.name}",
+							    	urls: [ "@{country.uri}" ],
+							    	values: [ @{country.value} ]
+							    });
+							    
+							    colours.push(iso3 == thisCountryIso3 ? "#333" : rainbow.colorAt(i));
+							    
+							    i++;
+						    }
+						    
+						    var countryRanking = document.getElementById("countryRanking");
+						    graphOptions.width = countryRanking.offsetWidth;
+						    graphOptions.height = 200;
+						    graphOptions.valueOnItem.show = false;
+						    
+						    graphOptions.xAxis.values = [ "" ];
+						    graphOptions.xAxis.title = "";
+						    graphOptions.xAxis.margin = 0;
+						    graphOptions.yAxis.margin = 3;
+							graphOptions.series = series;
+							graphOptions.serieColours = colours;
+							
+							var graph = jGraf.barChart(graphOptions);
+							countryRanking.appendChild(graph.render());
+							
+							// Index graph
+							
+							var series = [];
+							var colours = [];
+							
+							var name = "@hierarchyValues.name";
+							var score = @{hierarchyValues.score};
+							var uri = "@hierarchyValues.uri";
+							var colour1 = "@hierarchyValues.colour1";
+							
+							if (score == NaN)
+								score = 0;
+							
+							series.push({
+								name: name,
+								values: [ score ],
+								urls: [ uri ],
+							});
+							
+							colours.push(colour1);
+							
+							@for(subindex <- hierarchyValues.children) {
+								var name = "@subindex._2.name";
+								var score = @{subindex._2.score};
+								var uri = "@subindex._2.uri";
+								var colour1 = "@subindex._2.colour1";
+								var colour2 = "@subindex._2.colour2";
+								
+								if (score == NaN)
+									score = 0;
+
+								series.push({
+									name: name,
+									values: [ score ],
+									urls: [ uri ]
+								});
+								
+								colours.push(colour1);
+								
+								@for(component <- subindex._2.children) {
+									var name = "@component._2.name";
+									var score = @{component._2.score};
+									var uri = "@component._2.uri";
+									
+									if (score == NaN)
+										score = 0;
+	
+									series.push({
+										name: name,
+										values: [ score ],
+										urls: [ uri ]
+									});
+									
+									colours.push(colour2);
+								}
+							}
+							
+							var rankingGraph = document.getElementById("rankingGraph");
+							var col1 = document.getElementById("ranking-col1");
+							
+							graphOptions.width = rankingGraph.offsetWidth;
+							graphOptions.height = col1.offsetHeight;
+							graphOptions.margins = [2, 0, 4, 5];
+							graphOptions.valueOnItem.show = true;
+							graphOptions.series = series;
+							graphOptions.serieColours = colours;
+							graphOptions.valueOnItem["font-size"] = "14px";
+							
+							var graph = jGraf.barChart(graphOptions);
+							rankingGraph.appendChild(graph.render());
+						</script>
+						}
 					}
-			    });
-			    
-			</script>
+				}
 			}
 		}
 	}
 }
+
 @image = @{ 
         val img = toLower(iso2(rs)) + ".png" 
                         

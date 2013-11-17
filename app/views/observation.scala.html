@@ -1,4 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
+@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])
 
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
@@ -57,7 +57,7 @@
 	handleLiteralAsValue(rs.subject.get, wfOnto, "ref-year")
 }
 
-@main(None, options("mode")) {
+@main(None, options("mode").toString) {
 	<nav class="breadcrumbs">
 		@data(options) &gt; <a href="/ontology/Country">Country</a> &gt; 
 		<a href="@countryURI">@showLabel(countryURI, countryName)</a> &gt; @label(rs)

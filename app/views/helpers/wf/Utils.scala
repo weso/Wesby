@@ -7,6 +7,8 @@ import es.weso.wfLodPortal.utils.CommonURIS._
 import es.weso.wfLodPortal.models._
 import views.html.helpers._
 import views.html.helpers.utils._
+import es.weso.wfLodPortal.sparql.custom.IndexValueCustomQuery.Index
+
 object Utils {
 
   def loadObservations(rs: ResultQuery) = {
@@ -17,7 +19,7 @@ object Utils {
       val uri = r.uri.relative
 
       val data = r.dss.subject.get
-      val indicator = data.get(cex, "indicator").get
+      val indicator = data.get(cex, "indicator").getOrElse("")
 
       val name = handleResourceAsString(data, cex,
         "indicator", (r: RdfResource) => r.uri.short match {
@@ -45,7 +47,7 @@ object Utils {
     import scala.collection.mutable.Map
     def inner(r: RdfResource) = {
       val data = r.dss.subject.get
-      val indicator = data.get(cex, "indicator").get
+      val indicator = data.get(cex, "indicator").getOrElse("")
 
       val name = handleResourceAsString(data,
         cex, "indicator",
@@ -65,7 +67,17 @@ object Utils {
 
   }
 
-  def compareUri(options: Map[String, String], iso3: String) = {
+  def compareUri(options: scala.collection.mutable.Map[String,Object], iso3: String) = {
     "/" + options("mode") + "/compare?selectedCountries=" + iso3
+  }
+  
+  def loadCountryRanking(options: scala.collection.mutable.Map[String,Object], iso3: String): scala.collection.immutable.Map[String, Object] = {
+  	val ranking = options("ranking.allCountries")
+  	ranking.asInstanceOf[scala.collection.immutable.Map[String, Object]]
+  }
+  
+  def loadHierarchyValues(options: scala.collection.mutable.Map[String,Object]): Index = {
+  	val ranking = options("query.hierarchy")
+  	ranking.asInstanceOf[Index]
   }
 }

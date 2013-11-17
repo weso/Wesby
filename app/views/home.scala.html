@@ -1,18 +1,90 @@
 @(version: String)
 
 @main(None, "") {
-	<h1 class="main">DATA PORTAL</h1>
+	<h1 class="main">WORLD WIDE WEB FOUNDATION</h1>
+	<h2 class="main">DATA PORTAL 2013</h2>
+	
+	<h3>Principles and Methodology</h3>
+	<ul class="methodology">
+		<li><a href="http://www.w3.org/DesignIssues/LinkedData.html">Linked Data Design Issues</a></li>
+		<li><a href="http://linkeddatabook.com/editions/1.0/">Linked Data: Evolving the Web into a Global Data Space</a></li>
+		<li><a href="http://patterns.dataincubator.org/book/">Linked Data Patterns</a></li>
+		<li><a href="http://www.w3.org/TR/swbp-vocab-pub/">W3C-Best Practice Recipes for Publishing RDF Vocabularies</a></li>
+		<li><a href="http://www.w3.org/2011/gld/wiki/Linked_Data_Cookbook">W3C-Linked Data Cookbook</a></li>
+		<li><a href="http://www.w3.org/TR/gov-data/">W3C-Publishing Open Government Data</a></li>
+		<li><a href="http://lod2.eu/WikiArticle/TechnologyStack.html">LOD2 Stack</a></li>
+		<li><a href="http://www.w3.org/Submission/2012/02/">Toward a Basic Profile for Linked Data (W3C version)</a></li>
+		<li><a href="http://www.semantic-web.at/LOD-TheEssentials.pdf">Linked Open Data: The Essentials</a></li>
+		<li><a href="http://jn.wspc.com.sg/ijseke/22/2203/S0218194012400086.html">Towards a Pan-European E-Procurement platform to Aggregate, Publish and Search Public Procurement Notices powered by Linked Open Data: The MOLDEAS Approach.</a></li>
+		<li><a href="http://www.w3.org/TR/cooluris/">W3C-Cool URIs for the Semantic Web</a></li>
+		<li><a href="http://sw.deri.org/~aidanh/docs/bnodes.pdf">On Blank Nodes</a></li>
+	</ul>
+	
+	<h3>Vocabulary Selection</h3>
+	<p>
+		In order to reuse definitions of existing vocabularies and ontologies we have selected the following ones to be applied in the promotion of the Web Index to the Linked Data initiative.
+	</p>
+	<table class="vocabulary">
+	<thead>
+	<tr>
+		<th>Vocabulary</th>
+		<th>Use</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a href="http://www.w3.org/TR/skos-reference/">SKOS-Simple Knowledge Organization System</a></td>
+			<td>Definition of concepts (Index, Component, Indicator, etc.) and their relationships to represent the Web Index data</td>
+		</tr>
+		<tr>
+			<td><a href="http://www.w3.org/TR/vocab-data-cube/">RDF Data Cube Vocabulary</a></td>
+			<td>Publishing statistical data about indicators.</td>
+		</tr>
+		<tr>
+			<td><a href="http://www.w3.org/TR/vocab-org/">W3C-Organizations Ontology</a></td>
+			<td>Publishing information about providers.</td>
+		</tr>
+		<tr>
+			<td><a href="http://www.foaf-project.org/">The Friend of a Friend (FOAF) project</a></td>
+			<td>Publishing information about people.</td>
+		</tr>
+		<tr>
+			<td><a href="http://www.w3.org/TR/owl-time/">W3C-Time Ontology</a></td>
+			<td>Modelling time intervals.</td>
+		</tr>
+		<tr>
+			<td><a href="http://vocab.deri.ie/void/">Vocabulary of Interlinked Datasets (VoID)</a></td>
+			<td>Express metadata about RDF datasets.</td>
+		</tr>
+		<tr>
+			<td><a href="http://dublincore.org/documents/dcmi-terms/">DCMI Metadata Terms</a></td>
+			<td>Express metadata about RDF resources, etc.</td>
+		</tr>
+	
+		<tr>
+			<td><a href="http://linkedgeodata.org/ontology/">Linked Geo Data Ontology</a></td>
+			<td>Reuse of country and region definitions</td>
+		</tr>
+		<tr>
+			<td><a href="http://dublincore.org/documents/dcmi-terms/">Semantic Web stack vocabularies and ontologies</a></td>
+			<td><a href="http://www.w3.org/TR/rdf-schema/">RDFS</a>, <a href="http://www.w3.org/TR/owl2-overview/">OWL2</a>, <a href="http://www.w3.org/XML/Schema">XML-Schema</a>, etc.</td>
+		</tr>
+		</tbody>
+	</table>
+	
 	<p class="main">Select a repository</p>
 	<div class="repository">
 		<a href="/webindex/@version" class="repository"><img alt="Web Index" src="@routes.Assets.at("images/webindex.png")" /></a>
 		<p>
 		Designed and produced by the World Wide Web Foundation, the Web Index is the world’s first multi-dimensional measure of the Web’s growth, utility and impact on people and nations. It covers 61 developed and developing countries, incorporating indicators that assess the political, economic and social impact of the Web, as well as indicators of Web connectivity and infrastructure.
 		</p>
+		<a href="/webindex/@version" title="View Web Index Repository" class="button webindex">VIEW</a>
 	</div>
 	<div class="repository">
 		<a href="/odb/@version" class="repository"><img alt="ODB" src="@routes.Assets.at("images/odb.png")" /></a>
 		<p>
 		The Open Data Barometer takes a multidimensional look at the spread of Open Government Data (OGD) policy and practice across the world. Combining peer-reviewed expert survey data and secondary data sources, the Barometer explores countries readiness to secure benefits from open data, the publication of key datasets, and evidence of emerging impacts from OGD.
 		</p>
+		<a href="/odb/@version" title="View Open Data Barometer Repository" class="button odb">VIEW</a>
 	</div>
 }
