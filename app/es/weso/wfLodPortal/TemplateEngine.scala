@@ -52,9 +52,11 @@ trait TemplateEgine extends Controller with Configurable {
   def renderCountry(uri: String, mode: String, resultQuery: ResultQuery, 
       options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader) = {
     val countries = RankingCustomQuery.loadRanking(mode)
+    println("C "+countries)
     options("ranking.allCountries") = countries
 
     val hierarchy = IndexValueCustomQuery.loadHierarchy(uri, mode)
+    
     options("query.hierarchy") = hierarchy
 
     Ok(views.html.country(resultQuery, options))

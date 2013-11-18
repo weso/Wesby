@@ -18,7 +18,7 @@ import es.weso.wfLodPortal.utils.UriFormatter
 import es.weso.wfLodPortal.models.Uri
 
 object RankingCustomQuery extends Configurable {
-  case class Country(uri: String, val name: String, iso2: String, iso3: String, value: String)
+  case class Country(uri: Uri, val name: String, iso2: String, iso3: String, value: String)
 
   val queryRanking = conf.getString("query.ranking.allCountries")
 
@@ -31,17 +31,17 @@ object RankingCustomQuery extends Configurable {
     val countries = new ListBuffer[Country]()
     
     val values = new ListBuffer[String]()
-
+    println(mode)
     while (rs.hasNext) {
       val qs = rs.next
-      val uri = qs.getResource("?country").getURI.toString
+      val uri = qs.getResource("?country").getURI
       val iso2 = qs.getLiteral("?iso2").getString
       val iso3 = qs.getLiteral("?iso3").getString
       val label = qs.getLiteral("?name").getString
       val value = qs.getLiteral("?value").getString
 
-      val country = Country(uri, label, iso2, iso3, value)
-      
+      val country = Country(UriFormatter.format(uri), label, iso2, iso3, value)
+
       countries += country
       values += label
     }
