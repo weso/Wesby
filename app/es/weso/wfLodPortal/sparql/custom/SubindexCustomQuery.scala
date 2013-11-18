@@ -1,7 +1,6 @@
 package es.weso.wfLodPortal.sparql.custom
 
 import scala.Option.option2Iterable
-
 import es.weso.wfLodPortal.Configurable
 import es.weso.wfLodPortal.models.Model
 import es.weso.wfLodPortal.models.RdfResource
@@ -10,6 +9,8 @@ import es.weso.wfLodPortal.sparql.Handlers.handleResourceAs
 import es.weso.wfLodPortal.sparql.ModelLoader
 import es.weso.wfLodPortal.utils.CommonURIS.cex
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
+import es.weso.wfLodPortal.models.Uri
+import es.weso.wfLodPortal.models.Uri._
 import play.api.libs.functional.syntax.functionalCanBuildApplicative
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.functional.syntax.unlift
@@ -21,9 +22,9 @@ import views.helpers.Utils
 
 object SubindexCustomQuery extends CustomQuery with Configurable {
 
-  case class Subindex(uri: String, label: String, children: List[Component])
-  case class Component(uri: String, label: String, children: List[Indicator])
-  case class Indicator(uri: String, label: String, code: String)
+  case class Subindex(uri: Uri, label: String, children: List[Component])
+  case class Component(uri: Uri, label: String, children: List[Indicator])
+  case class Indicator(uri: Uri, label: String, code: String)
 
   implicit val indicatorReads = Json.reads[Indicator]
   implicit val indicatorWrites = Json.writes[Indicator]
@@ -38,8 +39,8 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
     val param = checkMode(mode)
 
     def inner(r: RdfResource): Option[Subindex] = {
-      val uri = r.uri.absolute
-      if (uri.contains(param)) {
+      val uri = r.uri
+      if (uri.absolute.contains(param)) {
         val label = Utils.label(r.dss)
         val components = loadComponents(r.dss.subject.get)
         Some(Subindex(uri, label, components))
@@ -52,7 +53,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
 
   protected def loadComponents(dataStore: Model): List[Component] = {
     def inner(r: RdfResource): Component = {
-      val uri = r.uri.absolute
+      val uri = r.uri
       val label = Utils.label(r.dss)
       val indicators = loadIndicators(r.dataStores.subject.get)
       Component(uri, label, indicators)
@@ -63,7 +64,7 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
   protected def loadIndicators(dataStore: Model): List[Indicator] = {
 
     def inner(r: RdfResource): Indicator = {
-      val uri = r.uri.absolute
+      val uri = r.uri
       val label = Utils.label(r.dss)
       val code = r.uri.short match {
         case Some(s: ShortUri) => s.suffix._2

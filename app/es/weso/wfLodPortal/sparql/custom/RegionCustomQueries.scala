@@ -10,6 +10,8 @@ import es.weso.wfLodPortal.sparql.Handlers.handleResourceAs
 import es.weso.wfLodPortal.sparql.ModelLoader
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
 import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
+import es.weso.wfLodPortal.models.Uri
+import es.weso.wfLodPortal.models.Uri._
 import play.api.libs.functional.syntax.functionalCanBuildApplicative
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.functional.syntax.unlift
@@ -21,8 +23,8 @@ import views.helpers.Utils
 
 object RegionCustomQueries extends CustomQuery with Configurable {
 
-  case class Region(uri: String, label: String, children: List[Country])
-  case class Country(uri: String, label: String, code2: String, code: String)
+  case class Region(uri: Uri, label: String, children: List[Country])
+  case class Country(uri: Uri, label: String, code2: String, code: String)
 
   val queryCountries = conf.getString("query.subject")
 
@@ -36,8 +38,8 @@ object RegionCustomQueries extends CustomQuery with Configurable {
     val param = checkMode(mode)
 
     def inner(r: RdfResource): Option[Region] = {
-      val uri = r.uri.absolute
-      if (uri.contains(param)) {
+      val uri = r.uri
+      if (uri.absolute.contains(param)) {
         val label = Utils.label(r.dss)
         val countries = loadCountries(r.dss.subject.get)
         Some(Region(uri, label, countries))
@@ -51,7 +53,7 @@ object RegionCustomQueries extends CustomQuery with Configurable {
   protected def loadCountries(subject: Model): List[Country] = {
 
     def inner(r: RdfResource): Country = {
-      val uri = r.uri.absolute
+      val uri = r.uri
       val name = Utils.label(r.dss)
       val dataStore = r.dss.subject.get
       val iso2 = handleFirstLiteralAsValue(dataStore, wfOnto, "has-iso-alpha2-code")
