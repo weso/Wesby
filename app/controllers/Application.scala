@@ -54,21 +54,21 @@ object Application extends Controller with TemplateEgine {
           render {
             case Html() => renderAsTemplate(resultQuery, ModelLoader.fullUri(uri), mode)
             case N3() =>
-              renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
+              Redirect(request.path + "?format=n3")
             case RdfN3() =>
-              renderModelsAs(models, ("N3", "utf-8", RdfN3.mimeType))
+              Redirect(request.path + "?format=n3")
             case Turtle() =>
-              renderModelsAs(models, ("TURTLE", "utf-8", Turtle.mimeType))
+              Redirect(request.path + "?format=turtle")
             case XTurtle() =>
-              renderModelsAs(models, ("TURTLE", "utf-8", XTurtle.mimeType))
+              Redirect(request.path + "?format=turtle")
             case RdfXML() =>
-              renderModelsAs(models, ("RDF/XML", "utf-8", RdfXML.mimeType))
+              Redirect(request.path + "?format=rdfxml")
             case Xml() =>
-              renderModelsAs(models, ("RDF/XML", "utf-8", Xml.mimeType))
+              Redirect(request.path + "?format=rdfxml")
             case RdfJSON() =>
-              renderModelsAs(models, ("RDF/JSON", "utf-8", RdfJSON.mimeType))
+              Redirect(request.path + "?format=rdfjson")
             case PlainText() =>
-              renderModelsAs(models, ("N-Triples", "utf-8", PlainText.mimeType))
+              Redirect(request.path + "?format=n-triples")
           }
       }
   }
