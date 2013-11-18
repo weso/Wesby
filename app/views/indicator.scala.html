@@ -6,8 +6,8 @@
 @import views.html.helpers.utils._
 
 @code = @{ 
-	val code = options("uri").toString.lastIndexOf("/");
-	options("uri").toString.substring(code + 1)
+	val code = request.path.lastIndexOf("/");
+	request.path.substring(code + 1)
 }
 
 @compareUri = @{
