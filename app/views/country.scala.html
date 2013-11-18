@@ -260,7 +260,7 @@
 						    	
 							    series.push({
 							    	name: "@{country.name}",
-							    	urls: [ "@{country.uri}" ],
+							    	urls: [ "@{country.uri.relative}" ],
 							    	values: [ @{country.value} ]
 							    });
 							    
@@ -291,7 +291,7 @@
 							
 							var name = "@hierarchyValues.name";
 							var score = @{hierarchyValues.score};
-							var uri = "@hierarchyValues.uri";
+							var uri = "@hierarchyValues.uri.relative";
 							var colour1 = "@hierarchyValues.colour1";
 							
 							if (score == NaN)
@@ -308,7 +308,7 @@
 							@for(subindex <- hierarchyValues.children) {
 								var name = "@subindex._2.name";
 								var score = @{subindex._2.score};
-								var uri = "@subindex._2.uri";
+								var uri = "@subindex._2.uri.relative";
 								var colour1 = "@subindex._2.colour1";
 								var colour2 = "@subindex._2.colour2";
 								
@@ -326,7 +326,7 @@
 								@for(component <- subindex._2.children) {
 									var name = "@component._2.name";
 									var score = @{component._2.score};
-									var uri = "@component._2.uri";
+									var uri = "@component._2.uri.relative";
 									
 									if (score == NaN)
 										score = 0;
