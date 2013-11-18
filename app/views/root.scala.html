@@ -38,7 +38,7 @@
 									<ul>
 										@for(indicator <- component.children.sortWith(_.label < _.label)) {
 											<li>
-												<a href="@indicator.uri" title="Go to @indicator.label">@indicator.label</a>
+												<a href="@indicator.uri.relative" title="Go to @indicator.label">@indicator.label</a>
 											</li>
 										}
 									</ul>
