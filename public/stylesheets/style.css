@@ -30,6 +30,11 @@ h2 {
 	font-size: 0.9em;
 }
 
+h3 {
+	font-weight: normal;
+	color: #888;
+}
+
 /* Type */
 
 span.type {
@@ -138,12 +143,104 @@ div.sparql button {
 	float: right;
 }
 
-footer {
-	background-color: #222;
-	color: #fff;
-	padding: 0.5em 1em;
+div.format-links {
+	clear: both;
+	overflow: auto;
 	margin-top: 1em;
+	margin-bottom: 2em;
+}
+
+div.format-links h3 {
 	font-size: 0.9em;
+}
+
+div.format-links a {
+	width: 20%;
+	float: left;
+	text-align: center;
+	font-size: 0.9em;
+}
+
+footer {
+	overflow: auto;
+	margin-top: 1em;
+	background-color: #EEAA11;
+	font-size: 0.9em;
+}
+
+footer div.quarter {
+	width: 20%;
+	float: left;
+	min-height: 9em;
+	padding: 1em 0;
+	color: #fff;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+footer div.first {
+	background-color: #222;
+}
+
+footer div.second {
+	background-color: #116699;
+}
+
+footer div.third {
+	background-color: #88CC22;
+}
+
+footer div.forth {
+	background-color: #CC2222;
+}
+
+footer div.fifth {
+	background-color: #EEAA11;
+	text-align: center;
+}
+
+footer div.fifth a.valid {
+	display: inline-block;
+	font-size: 0.8em;
+	width: 3.4em;
+	height: 2.4em;
+	padding-top: 1em;
+	border-radius: 1.8em;
+	border: 0.1em solid #fff;
+	color: #fff;
+	margin: 0.2em 1em;
+	text-decoration: none;
+}
+
+footer div.fifth img {
+	display: block;
+	margin: 0.4em auto 0.4em auto;
+}
+
+footer div.footer {
+	clear: both;
+	background-color: #111;
+	color: #fff;
+	padding: 0.8em 1em 0.8em 2em;
+	font-size: 0.8em;
+}
+
+footer ul {
+	margin-top: 0.5em;
+	padding-left: 2em;
+}
+
+footer li {
+	list-style: none;
+	margin-bottom: 0.4em;
+}
+
+footer div.quarter a {
+	text-decoration: none;
+	color: #fff;
+}
+
+footer div.quarter li a.title {
+	font-weight: bold;
 }
 
 /* Help */
@@ -391,6 +488,81 @@ h4.indicator-description {
 	color: #116699;
 }
 
+table.ranking {
+	width: 100%;
+	color: #555;
+	margin-bottom: 2em;
+	border-collapse: collapse;
+}
+
+table.ranking th {
+	font-weight: normal;
+	font-size: 0.9em;
+	color: #888;
+	text-align: center;
+	border-bottom: 0.1em solid #888;
+	padding-bottom: 0.4em;
+}
+
+table.ranking td {
+	padding: 0.4em;
+}
+
+table.ranking th.label, table.ranking td.label {
+	width: 70%;
+	text-align: left;
+}
+
+table.ranking th.rank, table.ranking td.rank {
+	width: 15%;
+	text-align: right;
+}
+
+table.ranking th.score, table.ranking td.score {
+	width: 15%;
+	text-align: right;
+}
+
+table.ranking tr.index td {
+	background-color: #333;
+	color: #fff;
+}
+
+table.ranking tr.subindex td {
+	background-color: #ccc;
+}
+
+table.ranking div.legend-circle {
+	width: 0.8em;
+	height: 0.8em;
+	border-radius: 0.4em;
+	display: inline-block;
+	margin: 0 0.5em;
+}
+
+table.ranking tr.index div.legend-circle {
+	border: 0.1em solid #fff;
+	width: 0.6em;
+	height: 0.6em;
+}
+
+div.country-ranking {
+	margin-top: 0;
+	margin-bottom: 2em;
+}
+
+div.ranking-col1 {
+	float: left;
+	width: 50%;
+	margin-bottom: 0.5em;
+}
+
+div.ranking-col2 {
+	float: left;
+	width: 50%;
+	margin-bottom: 0.5em;
+}
+
 /* Country concept */
 
 div.country-concept-map {
@@ -503,6 +675,43 @@ nav.breadcrumbs {
 	margin: 0 0 1em 0;
 	color: #666;
 	overflow: auto;
+}
+
+/* Root */
+
+div.byElements {
+	overflow: auto;
+	margin-top: 1em;
+}
+
+div.byElements div {
+	width: 50%;
+	float: left;
+}
+
+div.byElements h2 {
+	margin: 0 0 1em 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: normal;
+	color: #666;
+}
+
+div.byElements h2 a {
+	color: #666;
+}
+
+div.byElements ul {
+	margin: 0;
+}
+
+div.byElements > div > ul {
+	padding: 0;
+	margin: 0 0 2em 2em;
+}
+
+div.byElements li {
+	list-style: none;
+	margin: 0.5em 0;
 }
 
 /* RESPONSIVE DESIGN */
@@ -854,17 +1063,44 @@ p.indicator-description {
 
 /* Home */
 
-h1.main {
+h1.main, h2.main {
 	font-family: 'Source Sans Pro', sans-serif;
 	color: #116699;
 	font-weight: 200;
 }
 
+ul.methodology {
+	margin: 0;
+	padding: 0;
+}
+
+ul.methodology li {
+	list-style: none;
+	padding: 0.5em 0;
+}
+
+table.vocabulary {
+	border-collapse: collapse;
+}
+
+table.vocabulary th {
+	font-weight: normal;
+	color: #555;
+	text-align: left;
+	border-bottom: 0.1em solid #ccc;
+}
+
+table.vocabulary td {
+	border: none;
+	padding: 0.5em 0;
+}
+
 p.main {
-	font-size: 1.3em;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 1.5em;
 	color: #888;
 	font-style: italic;
-	font-weight: 200;
+	font-weight: 400;
 	margin-top: 1.5em;
 	margin-bottom: 2em;
 }
@@ -892,4 +1128,25 @@ div.repository p {
 	font-style: italic;
 	color: #666;
 	text-align: justify;
+}
+
+div.repository a.button {
+	margin: 0.5em auto;
+	display: block;
+	text-decoration: none;
+	text-align: center;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	background-color: #333;
+	color: #fff;
+	font-weight: 100;
+	letter-spacing: 0.2em;
+	font-family: "Century Gothic", Arial;
+	border: none;
+	padding: 0.3em;
+	min-width: 10.2em;
+}
+
+div.repository a.button:hover {
+	background-color: #555;
 }

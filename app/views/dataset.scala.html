@@ -1,11 +1,11 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: Map[String, String])
+@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])
 
 @import views.helpers.Utils._
 @import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
-@main(None, options("mode")) {
+@main(None, options("mode").toString) {
 	<h1>@cachedLabel(rs)</h1>
 	<h2><a href="@rdfType(rs)">Dataset</a></h2>
 	@grill(rs)

@@ -1,21 +1,21 @@
 package views.helpers.wf
 
+import scala.collection._
+
 import es.weso.wfLodPortal.Configurable
-import es.weso.wfLodPortal.models.RdfProperty
-import es.weso.wfLodPortal.models.RdfResource
-import es.weso.wfLodPortal.models.ResultQuery
-import es.weso.wfLodPortal.sparql.Handlers.handleLiteralAsValue
-import es.weso.wfLodPortal.sparql.Handlers.handleResourceAs
-import es.weso.wfLodPortal.sparql.Handlers.handleResourceAsString
-import es.weso.wfLodPortal.utils.CommonURIS.cex
-import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
-import play.api.Play.current
+import es.weso.wfLodPortal.models._
+import es.weso.wfLodPortal.models._
+import es.weso.wfLodPortal.sparql.Handlers._
+import es.weso.wfLodPortal.sparql.custom.IndexValueCustomQuery.Index
+import es.weso.wfLodPortal.utils.CommonURIS._
 import play.api.cache.Cache
+import play.api.Play.current
 import views.helpers.Utils.label
 
 object Utils extends Configurable {
+  
   val cacheExpiration = conf.getInt("sparql.expiration")
-
+  
   def loadObservations(rs: ResultQuery) = {
     import scala.collection.mutable.Map
     val observations: Map[String, Map[String, (String, String)]] = Map.empty
@@ -88,7 +88,17 @@ object Utils extends Configurable {
     Cache.getOrElse(key, cacheExpiration)(label(rs))
   }
 
-  def compareUri(options: Map[String, String], iso3: String) = {
-    "/" + options("mode") + "/compare?selectedCountries=" + iso3
+  def compareUri(options: mutable.Map[String, Object], iso3: String) = {
+    "/" + options("mode").toString + "/compare?selectedCountries=" + iso3
+  }
+
+  def loadCountryRanking(options: scala.collection.mutable.Map[String, Object], iso3: String): scala.collection.immutable.Map[String, Object] = {
+    val ranking = options("ranking.allCountries")
+    ranking.asInstanceOf[scala.collection.immutable.Map[String, Object]]
+  }
+
+  def loadHierarchyValues(options: scala.collection.mutable.Map[String, Object]): Index = {
+    val ranking = options("query.hierarchy")
+    ranking.asInstanceOf[Index]
   }
 }

@@ -3,7 +3,7 @@ package es.weso.wfLodPortal.sparql.custom
 import scala.Array.canBuildFrom
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
-import scala.collection.mutable.{Map => MutableMap}
+import scala.collection.mutable.{ Map => MutableMap }
 
 import com.hp.hpl.jena.query.QuerySolution
 
@@ -50,14 +50,14 @@ object IndicatorCustomQuery extends Configurable {
       val description = qs.getLiteral("?definition").getString
 
       val indicator = map.getOrElse(code, Indicator(uri, code, description, ListBuffer.empty))
-      
+
       if (description.length > indicator.description.length)
-      	indicator.description = description
+        indicator.description = description
 
       indicator.observations += loadObservation(qs, indicator)
       map += code -> indicator
     }
-    Map()++map
+    Map() ++ map
   }
 
   protected def loadObservation(qs: QuerySolution, indicator: Indicator) = {

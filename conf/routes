@@ -20,17 +20,17 @@ HEAD   /webindex/compare                                                        
 GET    /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.compare(mode="webindex", countries, years, indicators)
 HEAD   /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.Application.compare(mode="webindex", countries, years, indicators)
 
-GET    /webindex/:version                                                          controllers.Application.webindex(version)
-HEAD   /webindex/:version                                                          controllers.Application.webindex(version)
-
 GET    /odb/compare                                                                controllers.Application.preCompare(mode="odb", selectedCountries: Option[String], selectedIndicators: Option[String])
 HEAD   /odb/compare                                                                controllers.Application.preCompare(mode="odb", selectedCountries: Option[String], selectedIndicators: Option[String])
 
 GET    /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years, indicators)
 HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years,  indicators)
 
-GET    /odb/:version                                                               controllers.Application.odb(version)
-HEAD   /odb/:version                                                               controllers.Application.odb(version)
+GET /webindex/:version															   controllers.Application.root(mode="webindex", version)
+HEAD /webindex/:version															   controllers.Application.root(mode="webindex", version)
+
+GET /odb/:version																   controllers.Application.root(mode="odb", version)
+HEAD /odb/:version																   controllers.Application.root(mode="odb", version)
 
 GET    /*path                                                                      controllers.Application.fallback(path: String)
 HEAD   /*path                                                                      controllers.Application.fallback(path: String)
