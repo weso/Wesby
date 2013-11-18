@@ -1,4 +1,4 @@
-@(observations: play.api.libs.json.JsValue, mode: String, host: String, version: String)
+@(observations: play.api.libs.json.JsValue, mode: String, host: String, version: String)(implicit request: RequestHeader)
 
 @href = @{
 	host + "/" + mode + "/" + version

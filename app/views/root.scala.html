@@ -1,4 +1,4 @@
-@(version: String, mode: String, title: String, host: String, regions: List[es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.Region], subindexes: List[es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex])
+@(version: String, mode: String, title: String, host: String, regions: List[es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.Region], subindexes: List[es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex])(implicit request: RequestHeader)
 
 @breadcrumb = @{ if (mode == "odb") "ODB"; else "WEB INDEX" }
 

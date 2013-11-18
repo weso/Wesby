@@ -1,4 +1,4 @@
-@(viewOptions: scala.collection.mutable.Map[String,Object])
+@(viewOptions: scala.collection.mutable.Map[String,Object])(implicit request:RequestHeader)
 
 @import helper._
 
@@ -13,11 +13,11 @@
 </div>
 <div class="format-links">
 	<h3>Download as</h3>
-	<a href="@{viewOptions("uri")}?format=n3" title="Download as N3"><span>N3</span></a>
-	<a href="@{viewOptions("uri")}?format=turtle" title="Download as Turtle"><span>Turtle</span></a>
-	<a href="@{viewOptions("uri")}?format=rdfxml" title="Download as RDF/XML"><span>RDF/XML</span></a>
-	<a href="@{viewOptions("uri")}?format=rdfjson" title="Download as RDF/JSON"><span>RDF/JSON</span></a>
-	<a href="@{viewOptions("uri")}?format=n-triples" title="Download as N-Triples"><span>N-Triples</span></a>
+	<a href="@{request.path}?format=n3" title="Download as N3"><span>N3</span></a>
+	<a href="@{request.path}?format=turtle" title="Download as Turtle"><span>Turtle</span></a>
+	<a href="@{request.path}?format=rdfxml" title="Download as RDF/XML"><span>RDF/XML</span></a>
+	<a href="@{request.path}?format=rdfjson" title="Download as RDF/JSON"><span>RDF/JSON</span></a>
+	<a href="@{request.path}?format=n-triples" title="Download as N-Triples"><span>N-Triples</span></a>
 </div>
 <script>
 	// Button

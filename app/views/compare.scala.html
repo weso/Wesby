@@ -1,4 +1,4 @@
-@(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String], mode: String, host: String, version: String)
+@(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String], mode: String, host: String, version: String)(implicit request: RequestHeader)
 
 @href = @{
 	host + "/" + mode + "/" + version
