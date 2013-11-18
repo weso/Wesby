@@ -31,7 +31,7 @@ object RankingCustomQuery extends Configurable {
     val countries = new ListBuffer[Country]()
     
     val values = new ListBuffer[String]()
-    println(mode)
+
     while (rs.hasNext) {
       val qs = rs.next
       val uri = qs.getResource("?country").getURI
