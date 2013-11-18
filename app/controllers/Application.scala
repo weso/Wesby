@@ -10,8 +10,8 @@ import es.weso.wfLodPortal.sparql._
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
-
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.mvc.RequestHeader
 
 object Application extends Controller with TemplateEgine {
 
@@ -35,7 +35,8 @@ object Application extends Controller with TemplateEgine {
   charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 
   def index = Action {
-    renderHome()
+    implicit request =>
+      renderHome()
   }
 
   def fallback(uri: String) = Action {
@@ -73,24 +74,27 @@ object Application extends Controller with TemplateEgine {
   }
 
   def preCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String]) = Action {
-  	request => {
-	  	renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
-	  }
+    implicit request =>
+      {
+        renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
+      }
   }
 
   def compare(mode: String, countries: String, years: String, indicators: String) = Action {
-  	request => {
-	    renderCompare(mode, countries, years, indicators, request.host)
-	  }
-  }
-  
-  def root(mode: String, version: String) = Action {
-  	request => {
-    	renderRoot(mode, request.host)
-    }
+    implicit request =>
+      {
+        renderCompare(mode, countries, years, indicators, request.host)
+      }
   }
 
-  protected def downloadAs(uri: String, format: String, models: Seq[JenaModel]) = {
+  def root(mode: String, version: String) = Action {
+    implicit request =>
+      {
+        renderRoot(mode, request.host)
+      }
+  }
+
+  protected def downloadAs(uri: String, format: String, models: Seq[JenaModel])(implicit request: RequestHeader) = {
     format match {
       case "n3" =>
         renderModelsAs(models, ("N3", "utf-8", N3.mimeType))
@@ -106,7 +110,7 @@ object Application extends Controller with TemplateEgine {
     }
   }
 
-  protected def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String)) = {
+  protected def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String))(implicit request: RequestHeader) = {
     val out = new ByteArrayOutputStream
     val mergedModel: JenaModel = ModelFactory.createDefaultModel
 

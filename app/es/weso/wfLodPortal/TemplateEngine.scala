@@ -24,7 +24,7 @@ trait TemplateEgine extends Controller with Configurable {
 
   protected val Undefined = "UNDEFINED"
 
-  def renderAsTemplate(resultQuery: ResultQuery, uri: String, mode: String) = {
+  def renderAsTemplate(resultQuery: ResultQuery, uri: String, mode: String)(implicit request: RequestHeader) = {
     val typeResult = resultQuery.subject.get.get(RdfType)
 
     val currentType = if (typeResult.isDefined) {
@@ -34,9 +34,9 @@ trait TemplateEgine extends Controller with Configurable {
       } else Undefined
     } else Undefined
 
-    val options = scala.collection.mutable.Map[String,Object]("endpoint" -> conf.getString("sparql.endpoint"),
+    val options = scala.collection.mutable.Map[String, Object]("endpoint" -> conf.getString("sparql.endpoint"),
       "query" -> QueryEngine.applyFilters(conf.getString("query.show.fallback"), Seq("<" + uri + ">")),
-      "mode" -> mode, "uri" -> uri, "host" -> conf.getString("sparql.actualuri"), "version" -> conf.getString("application.version"))
+      "mode" -> mode, "host" -> conf.getString("sparql.actualuri"), "version" -> conf.getString("application.version"))
 
     currentType match {
       case e if currentType == country => renderCountry(uri, mode, resultQuery, options)
@@ -49,7 +49,8 @@ trait TemplateEgine extends Controller with Configurable {
     }
   }
 
-  def renderCountry(uri: String, mode: String, resultQuery: ResultQuery, options: scala.collection.mutable.Map[String, Object]) = {
+  def renderCountry(uri: String, mode: String, resultQuery: ResultQuery, 
+      options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader) = {
     val countries = RankingCustomQuery.loadRanking(mode)
     options("ranking.allCountries") = countries
 
@@ -59,12 +60,12 @@ trait TemplateEgine extends Controller with Configurable {
     Ok(views.html.country(resultQuery, options))
   }
 
-  def renderHome() = {
+  def renderHome()(implicit request: RequestHeader) = {
     val version = this.conf.getString("application.version")
     Ok(views.html.home(version))
   }
 
-  def renderRoot(mode: String, host: String) = {
+  def renderRoot(mode: String, host: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
 
@@ -77,7 +78,7 @@ trait TemplateEgine extends Controller with Configurable {
     Ok(views.html.root(version, mode, title, host, c, s))
   }
 
-  def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String) = {
+  def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
     import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
@@ -90,7 +91,7 @@ trait TemplateEgine extends Controller with Configurable {
     Ok(views.html.compare(c, y, s, selectedCountries, selectedIndicators, mode, host, version))
   }
 
-  def renderCompare(mode: String, countries: String, years: String, indicators: String, host: String) = {
+  def renderCompare(mode: String, countries: String, years: String, indicators: String, host: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery._
 
     val version = this.conf.getString("application.version")
