@@ -73,7 +73,7 @@ object Application extends Controller with TemplateEgine {
       }
   }
 
-  def preCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String]) = Action {
+  def preCompare(mode: String, selectedCountries: Option[String] = None, selectedIndicators: Option[String] = None) = Action {
     implicit request =>
       {
         renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
