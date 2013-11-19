@@ -13,9 +13,9 @@ import play.api.Play.current
 import views.helpers.Utils.label
 
 object Utils extends Configurable {
-  
+
   val cacheExpiration = conf.getInt("sparql.expiration")
-  
+
   def loadObservations(rs: ResultQuery) = {
     import scala.collection.mutable.Map
     val observations: Map[String, Map[String, (String, String)]] = Map.empty
@@ -24,7 +24,6 @@ object Utils extends Configurable {
       val uri = r.uri.relative
 
       val data = r.dss.subject.get
-      val indicator = data.get(cex, "indicator").get
 
       val name = handleResourceAsString(data, cex,
         "indicator", (r: RdfResource) => r.uri.short match {
@@ -53,7 +52,6 @@ object Utils extends Configurable {
     import scala.collection.mutable.Map
     def inner(r: RdfResource) = {
       val data = r.dss.subject.get
-      val indicator = data.get(cex, "indicator").get
 
       val name = handleResourceAsString(data,
         cex, "indicator",
