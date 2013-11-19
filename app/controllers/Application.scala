@@ -35,8 +35,7 @@ object Application extends Controller with TemplateEgine {
   charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 
   def index = Action {
-    implicit request =>
-      renderHome()
+    implicit request => renderHome
   }
 
   def fallback(uri: String) = Action {
@@ -75,23 +74,20 @@ object Application extends Controller with TemplateEgine {
 
   def preCompare(mode: String, selectedCountries: Option[String] = None, selectedIndicators: Option[String] = None) = Action {
     implicit request =>
-      {
-        renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
-      }
+      renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
   }
 
   def compare(mode: String, countries: String, years: String, indicators: String) = Action {
     implicit request =>
-      {
-        renderCompare(mode, countries, years, indicators, request.host)
-      }
+      renderCompare(mode, countries, years, indicators, request.host)
   }
 
   def root(mode: String, version: String) = Action {
-    implicit request =>
-      {
-        renderRoot(mode, request.host)
-      }
+    implicit request => renderRoot(mode, version)
+  }
+
+  def redirect(to: String) = Action {
+    Redirect(to)
   }
 
   protected def downloadAs(uri: String, format: String, models: Seq[JenaModel])(implicit request: RequestHeader) = {

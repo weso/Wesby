@@ -34,8 +34,8 @@ object RegionCustomQueries extends CustomQuery with Configurable {
   implicit val regionReads = Json.reads[Region]
   implicit val regionWrites = Json.writes[Region]
 
-  def loadRegions(mode: String): List[Region] = {
-    val param = checkMode(mode)
+  def loadRegions(mode: String, version: String): List[Region] = {
+    val param = checkMode(mode, version)
 
     def inner(r: RdfResource): Option[Region] = {
       val uri = r.uri
