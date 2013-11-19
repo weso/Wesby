@@ -45,7 +45,8 @@ object Utils extends Configurable {
 
     handleResourceAs[Unit](rs.predicate.get, wfOnto, "ref-area", inner)
 
-    observations.toSeq.sortBy(_._1)
+    observations.filterNot(_._2.size <= 1).toSeq.sortBy(_._1)
+
   }
 
   def loadIndicators(rs: ResultQuery): Seq[(String, String)] = {
