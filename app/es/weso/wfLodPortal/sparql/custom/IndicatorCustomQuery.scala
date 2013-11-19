@@ -36,9 +36,26 @@ object IndicatorCustomQuery extends Configurable {
   implicit val indicatorWrites = Json.writes[Indicator]
 
   def loadObservations(regions: Array[String], years: Array[String], indicators: Array[String]) = {
-    val regionFilter = regions.map("(?iso3 = \"" + _ + "\"^^xsd:string)").mkString(" || ")
-    val yearFilter = years.map("(?year = " + _ + ")").mkString(" || ")
-    val indicatorFilter = indicators.map("(?indicatorCode  = \"" + _ + "\"^^xsd:string)").mkString(" || ")
+
+    val regionFilter = regions.map {
+      new StringBuilder("(?iso3 = \"")
+        .append(_)
+        .append("\"^^xsd:string)")
+    }.mkString(" || ")
+
+    val yearFilter = years.map {
+      new StringBuilder("(?year = ")
+        .append(_)
+        .append(")")
+    }.mkString(" || ")
+
+    val indicatorFilter = indicators.map {
+      indicator =>
+        new StringBuilder("(?indicatorCode  = \"")
+          .append(indicator.replace("_", " "))
+          .append("\"^^xsd:string)")
+    }.mkString(" || ")
+
     val rs = QueryEngine.performQuery(queryCountries, List(indicatorFilter, yearFilter, regionFilter))
 
     val map: MutableMap[String, Indicator] = HashMap.empty
@@ -51,8 +68,9 @@ object IndicatorCustomQuery extends Configurable {
 
       val indicator = map.getOrElse(code, Indicator(uri, code, description, ListBuffer.empty))
 
-      if (description.length > indicator.description.length)
+      if (description.length > indicator.description.length) {
         indicator.description = description
+      }
 
       indicator.observations += loadObservation(qs, indicator)
       map += code -> indicator
