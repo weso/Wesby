@@ -15,9 +15,9 @@ import es.weso.wfLodPortal.utils.CommonURIS.time
 
 object YearsCustomQuery extends CustomQuery with Configurable {
 
-  def loadYears(mode: String): List[Int] = {
+  def loadYears(mode: String, version: String): List[Int] = {
 
-    val param = checkMode(mode)
+    val param = checkMode(mode, version)
 
     def inner(r: RdfResource): Option[List[Int]] = {
       val uri = r.uri.absolute

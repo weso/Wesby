@@ -35,8 +35,8 @@ object SubindexCustomQuery extends CustomQuery with Configurable {
   implicit val subindexReads = Json.reads[Subindex]
   implicit val subindexWrites = Json.writes[Subindex]
 
-  def loadSubindexes(mode: String): List[Subindex] = {
-    val param = checkMode(mode)
+  def loadSubindexes(mode: String, version: String): List[Subindex] = {
+    val param = checkMode(mode, version)
 
     def inner(r: RdfResource): Option[Subindex] = {
       val uri = r.uri

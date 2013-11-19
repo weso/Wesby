@@ -26,11 +26,14 @@ HEAD   /odb/compare                                                             
 GET    /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years, indicators)
 HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.Application.compare(mode="odb", countries, years,  indicators)
 
-GET /webindex/:version															   controllers.Application.root(mode="webindex", version)
-HEAD /webindex/:version															   controllers.Application.root(mode="webindex", version)
+GET    /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
+GET    /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
 
-GET /odb/:version																   controllers.Application.root(mode="odb", version)
-HEAD /odb/:version																   controllers.Application.root(mode="odb", version)
+GET    /webindex/v:version                                                         controllers.Application.root(mode="webindex", version)
+HEAD   /webindex/v:version                                                         controllers.Application.root(mode="webindex", version)
+
+GET    /odb/:version                                                               controllers.Application.root(mode="odb", version)
+HEAD   /odb/:version                                                               controllers.Application.root(mode="odb", version)
 
 GET    /*path                                                                      controllers.Application.fallback(path: String)
 HEAD   /*path                                                                      controllers.Application.fallback(path: String)

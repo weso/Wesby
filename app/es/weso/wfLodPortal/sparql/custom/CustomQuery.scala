@@ -1,10 +1,15 @@
 package es.weso.wfLodPortal.sparql.custom
 
 import es.weso.wfLodPortal.Configurable
+import play.api.Logger
 
-trait CustomQuery extends Configurable{
-  def checkMode(param: String) = param match {
-    case "webindex" => "http://data.webfoundation.org/webindex/v2013/"
-    case "odb" => "http://data.webfoundation.org/odb/v2013/"
+trait CustomQuery extends Configurable {
+
+  val baseUri = conf.getString("sparql.baseuri")
+
+  def checkMode(param: String, version: String) = {
+    new StringBuilder(baseUri)
+      .append(param).append("/v")
+      .append(version).append("/").toString
   }
 }

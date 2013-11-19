@@ -19,6 +19,8 @@ trait TemplateEgine extends Controller with Configurable {
   protected val dataset = conf.getString("dataset.template")
   protected val countryConcept = conf.getString("countryConcept.template")
 
+  protected val currentVersion = conf.getString("application.version")
+
   protected val RdfType = p(rdf, "type")
   protected val RdfLabel = p(rdfs, "label")
 
@@ -49,14 +51,14 @@ trait TemplateEgine extends Controller with Configurable {
     }
   }
 
-  def renderCountry(uri: String, mode: String, resultQuery: ResultQuery, 
-      options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader) = {
+  def renderCountry(uri: String, mode: String, resultQuery: ResultQuery,
+    options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader) = {
     val countries = RankingCustomQuery.loadRanking(mode)
 
     options("ranking.allCountries") = countries
 
     val hierarchy = IndexValueCustomQuery.loadHierarchy(uri, mode)
-    
+
     options("query.hierarchy") = hierarchy
 
     Ok(views.html.country(resultQuery, options))
@@ -67,17 +69,16 @@ trait TemplateEgine extends Controller with Configurable {
     Ok(views.html.home(version))
   }
 
-  def renderRoot(mode: String, host: String)(implicit request: RequestHeader) = {
+  def renderRoot(mode: String, version: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
 
-    val version = this.conf.getString("application.version")
     val title = if (mode == "odb") "OPEN DATA BAROMETER"; else "WEB INDEX"
 
-    val c = RegionCustomQueries.loadRegions(mode)
-    val s = SubindexCustomQuery.loadSubindexes(mode)
+    val c = RegionCustomQueries.loadRegions(mode, version)
+    val s = SubindexCustomQuery.loadSubindexes(mode, version)
 
-    Ok(views.html.root(version, mode, title, host, c, s))
+    Ok(views.html.root(version, mode, title, request.host, c, s))
   }
 
   def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String)(implicit request: RequestHeader) = {
@@ -85,25 +86,21 @@ trait TemplateEgine extends Controller with Configurable {
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
     import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
 
-    val version = this.conf.getString("application.version")
-
-    val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode))
-    val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode))
-    val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode))
-    Ok(views.html.compare(c, y, s, selectedCountries, selectedIndicators, mode, host, version))
+    val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode, currentVersion))
+    val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode, currentVersion))
+    val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode, currentVersion))
+    Ok(views.html.compare(c, y, s, selectedCountries, selectedIndicators, mode, host, currentVersion))
   }
 
   def renderCompare(mode: String, countries: String, years: String, indicators: String, host: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery._
-
-    val version = this.conf.getString("application.version")
 
     val c = countries.split(",")
     val y = years.split(",")
     val i = indicators.split(",")
     val observations = IndicatorCustomQuery.loadObservations(c, y, i)
     val json = Json.toJson[Map[String, Indicator]](observations)
-    Ok(views.html.comparison(json, mode, host, version))
+    Ok(views.html.comparison(json, mode, host, currentVersion))
   }
 
 }
