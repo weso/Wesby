@@ -38,7 +38,7 @@
 			<footer>
 				<div class="quarter first">
 					<ul>
-						<li><a href="" title="About" class="title">ABOUT</a></li>
+						<li><a href="#" title="About" class="title">ABOUT</a></li>
 						<li><a href="http://webfoundation.org" title="Go to World Wide Web Foundation">Foundation</a></li>
 						<li><a href="http://thewebindex.org" title="Go to thewebindex.org">Web Index 2013</a></li>
 						<li><a href="http://www.opendataresearch.org/project/2013/odb" title="Go to Open Data Barometer">Open Data Barometer</a></li>
@@ -46,23 +46,24 @@
 				</div>
 				<div class="quarter second">
 					<ul>
-						<li><a href="" title="Repositories" class="title">REPOSITORIES</a></li>
-						<li><a href="" title="Web Index">Web Index</a></li>
-						<li><a href="" title="Open Data Barometer">Open Data Barometer</a></li>
+						<li><a href="#" title="Repositories" class="title">DOWNLOADS</a></li>
+						<li><a href="#" title="Web Index">The Web Index Dump File</a></li>
+						<li><a href="#" title="Open Data Barometer">ODB Dump File</a></li>
 					</ul>
 				</div>
 				<div class="quarter third">
 					<ul>
-						<li><a href="" title="Web Index Repository" class="title">WEB INDEX</a></li>
-						<li><a href="" title="Web Index Countries">Countries</a></li>
-						<li><a href="" title="Web Index Indicators">Indicators</a></li>
+						<li><a href="http://thewebindex.org" title="Web Index Repository" class="title">THE WEB INDEX</a></li>
+						<li><a href="@routes.Application.root("webindex", "2013")" title="Go to the Web Index 2013 landing page">The Web Index 2013</a></li>
+						<li><a href="@routes.Application.root("webindex", "2012")" title="Go to the Web Index 2012 landing page">The Web Index 2012</a></li>
+						<li><a href="@routes.Application.preCompare("webindex",None,None)" title="Web Index Countries">Comparator</a></li>
 					</ul>
 				</div>
 				<div class="quarter forth">
 					<ul>
-						<li><a href="" title="Open Data Barometer Repository" class="title">OPEN DATA BAROMETER</a></li>
-						<li><a href="" title="Open Data Barometer Countries">Countries</a></li>
-						<li><a href="" title="Open Data Barometer Indicators">Indicators</a></li>
+						<li><a href="http://www.opendataresearch.org/project/2013/odb" title="Open Data Barometer Repository" class="title">OPEN DATA BAROMETER</a></li>
+						<li><a href="@routes.Application.root("webindex", "2013")" title="Open Data Barometer Indicators">ODB 2013</a></li>
+						<li><a href="@routes.Application.preCompare("odb",None,None)" title="Open Data Barometer Countries">Comparator</a></li>
 					</ul>
 				</div>
 				<div class="quarter fifth">
