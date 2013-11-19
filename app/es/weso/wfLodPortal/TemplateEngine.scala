@@ -1,14 +1,31 @@
 package es.weso.wfLodPortal
 
-import play.api._
-import play.api.mvc._
-import org.apache.commons.configuration.PropertiesConfiguration
-import models.ResultQuery
-import es.weso.wfLodPortal.utils.CommonURIS._
-import es.weso.wfLodPortal.sparql._
+import scala.collection.mutable.ListBuffer
 
+import org.apache.commons.configuration.PropertiesConfiguration
+
+import es.weso.wfLodPortal.sparql.QueryEngine
+import es.weso.wfLodPortal.sparql.custom.IndexValueCustomQuery
+import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery
+import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery.Indicator
+import es.weso.wfLodPortal.sparql.custom.IndicatorCustomQuery.indicatorWrites
+import es.weso.wfLodPortal.sparql.custom.RankingCustomQuery
+import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries
+import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.Region
+import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.regionWrites
+import es.weso.wfLodPortal.sparql.custom.RootQueries
+import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery
+import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex
+import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.subindexWrites
+import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery
+import es.weso.wfLodPortal.utils.CommonURIS.p
+import es.weso.wfLodPortal.utils.CommonURIS.rdf
+import es.weso.wfLodPortal.utils.CommonURIS.rdfs
+import models.ResultQuery
 import play.api.libs.json.Json
-import es.weso.wfLodPortal.sparql.custom._
+import play.api.mvc.Controller
+import play.api.mvc.RequestHeader
+
 trait TemplateEgine extends Controller with Configurable {
 
   conf.append(new PropertiesConfiguration("conf/templates.properties"))
@@ -72,13 +89,15 @@ trait TemplateEgine extends Controller with Configurable {
   def renderRoot(mode: String, version: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+    import es.weso.wfLodPortal.sparql.custom.RootQueries._
 
     val title = if (mode == "odb") "OPEN DATA BAROMETER"; else "WEB INDEX"
 
     val c = RegionCustomQueries.loadRegions(mode, version)
     val s = SubindexCustomQuery.loadSubindexes(mode, version)
+    val queries: ListBuffer[scala.collection.mutable.Map[String, Object]] = RootQueries.loadQueries
 
-    Ok(views.html.root(version, mode, title, request.host, c, s))
+    Ok(views.html.root(version, mode, title, request.host, c, s, queries))
   }
 
   def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String)(implicit request: RequestHeader) = {
@@ -89,6 +108,7 @@ trait TemplateEgine extends Controller with Configurable {
     val c = Json.toJson[List[Region]](RegionCustomQueries.loadRegions(mode, currentVersion))
     val y = Json.toJson[List[Int]](YearsCustomQuery.loadYears(mode, currentVersion))
     val s = Json.toJson[List[Subindex]](SubindexCustomQuery.loadSubindexes(mode, currentVersion))
+
     Ok(views.html.compare(c, y, s, selectedCountries, selectedIndicators, mode, host, currentVersion))
   }
 
@@ -100,6 +120,7 @@ trait TemplateEgine extends Controller with Configurable {
     val i = indicators.split(",")
     val observations = IndicatorCustomQuery.loadObservations(c, y, i)
     val json = Json.toJson[Map[String, Indicator]](observations)
+    
     Ok(views.html.comparison(json, mode, host, currentVersion))
   }
 

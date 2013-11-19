@@ -37,9 +37,14 @@
 }
 
 @indicatorName = @{
-	handleResourceAsString(rs.subject.get, 
+	val str = handleResourceAsString(rs.subject.get, 
 		cex, "indicator", 
-		(r:RdfResource)=>r.uri.short.get.suffix._2)
+		(r:RdfResource)=>r.uri.short.get.suffix._2.replace("_", " "))
+	
+	if (str.length > 8) {
+		str.substring(0, 8).trim() + "..."
+	}
+	else str
 }
 
 @indicatorDescription = @{
@@ -60,14 +65,16 @@
 
 @main(None, options("mode").toString) {
 	<nav class="breadcrumbs">
-		@data(options) &gt; <a href="/ontology/Country">Country</a> &gt; 
+		@hostLink(request) &gt; @data(options) &gt; <a href="/ontology/Country">Country</a> &gt; 
 		<a href="@countryURI">@showLabel(countryURI, countryName)</a> &gt; @label(rs)
 	</nav>
 	
 	<a href="@countryURI"><img alt="Country flag for @countryName obtained from flagpedia.net" class="flag" src="@image" /></a>
 	<div class="year"><span>@year</span></div>
 	<a href="@indicatorURI" class="indicator"><span>@indicatorName</span></a>
-	<div class="value"><p class="value">@value</p><p class="desc">VALUE</p></div>
+	@if(! value.isEmpty) {
+		<div class="value"><p class="value">@value</p><p class="desc">VALUE</p></div>
+	}
 
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Observation</a></h2>	

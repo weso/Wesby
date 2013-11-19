@@ -23,7 +23,7 @@
 						@defining(cachedLabel(rs)){label =>
 						
 						<nav class="breadcrumbs">
-							@data(options) &gt; <a href="/ontology/Country">Country</a> &gt; @label
+							@hostLink(request) &gt; @data(options) &gt; <a href="/ontology/Country">Country</a> &gt; @label
 						</nav>	
 						<div class="country-map" id="country-map" 
 							title="Map for @label obtained from jVectorMap.com and this from naturalearthdata.com">
@@ -78,7 +78,7 @@
 						
 						<div id="rankingGraph"class="ranking-col2"></div>
 						
-						<h3>World Index Ranking</h3>
+						<h3 class="clear">World Index Ranking</h3>
 						<div id="countryRanking" class="country-ranking"></div>
 						
 						<span class="help">Select an indicator to view the progression of its observations</span>
@@ -211,7 +211,7 @@
 								graphOptions.serieColours = ["#CC2222"];
 								graphOptions.yAxis.margin = 0;
 								graphOptions.xAxis.title = "Years";
-								graphOptions.xAxis.margin = 10;
+								graphOptions.xAxis.margin = 8;
 								
 								for (var i = 0; i < length; i++) {
 									var indicator = observationList[i];

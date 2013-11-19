@@ -35,6 +35,10 @@ h3 {
 	color: #888;
 }
 
+.clear {
+	clear: both;
+}
+
 /* Type */
 
 span.type {
@@ -117,6 +121,10 @@ img.W3F-logo {
 }
 
 /* Footer */
+
+div.sparql {
+	clear: both;
+}
 
 div.sparql h4 {
 	font-family: 'Source Sans Pro', sans-serif;
@@ -480,7 +488,7 @@ div.shown {
 }
 
 h4.indicator-description {
-	margin: 0.5em 0 0 0;
+	margin: 0.5em 0 0.5em 0;
 	font-family: 'Source Sans Pro', sans-serif;
 	font-weight: 200;
 	font-style: italic;
@@ -611,12 +619,16 @@ h3.description {
 	color: #333;
 	font-weight: 200;
 	font-size: 1.6em;
-	font-style: italic;
 	margin-bottom: 1em;
 }
 
-div.year span, a.indicator span {
-	font-size: 1.3em;
+a.indicator span {
+	font-size: 1em;
+	word-break: break-all;
+}
+
+div.year span {
+	font-size: 1.2em;
 }
 
 a.indicator {
@@ -657,7 +669,7 @@ div.value p {
 }
 
 div.value p.value {
-	font-size: 1.3em;
+	font-size: 0.9em;
 }
 
 div.value p.desc {
@@ -679,6 +691,10 @@ nav.breadcrumbs {
 
 /* Root */
 
+img.root-logo {
+	float: right;
+}
+
 div.byElements {
 	overflow: auto;
 	margin-top: 1em;
@@ -689,7 +705,7 @@ div.byElements div {
 	float: left;
 }
 
-div.byElements h2 {
+div.byElements h2, p.root-section {
 	margin: 0 0 1em 0;
 	font-family: 'Source Sans Pro', sans-serif;
 	font-weight: normal;
@@ -698,6 +714,11 @@ div.byElements h2 {
 
 div.byElements h2 a {
 	color: #666;
+}
+
+p.root-section {
+	font-size: 1.2em;
+	border-bottom: 0.1em solid #ddd;
 }
 
 div.byElements ul {
@@ -712,6 +733,36 @@ div.byElements > div > ul {
 div.byElements li {
 	list-style: none;
 	margin: 0.5em 0;
+}
+
+ul.closed {
+	display: none;
+}
+
+span.plus-minus {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: pointer;
+	font-size: 1.2em;
+}
+
+p.query-description {
+	font-size: 1.2em;
+	color: #666;
+	margin-bottom: 0.5em;
+	clear: both;
+}
+
+p.main-description {
+	text-align: justify;
+	color: #333;
+	font-family: "Century Gothic", Arial;
+	font-style: italic;
+	margin-bottom: 1.5em;
 }
 
 /* RESPONSIVE DESIGN */
@@ -867,8 +918,8 @@ div.byElements li {
 	
 	div.value {
 		width: 4.5em;
-		height: 3.5em;
-		padding-top: 1em;
+		height: 3.3em;
+		padding-top: 1.2em;
 		border-radius: 2.75em;
 	}
 	
@@ -1063,15 +1114,42 @@ p.indicator-description {
 
 /* Home */
 
+div.home {
+	padding: 0 2%;
+}
+
 h1.main, h2.main {
 	font-family: 'Source Sans Pro', sans-serif;
 	color: #116699;
 	font-weight: 200;
 }
 
+h2.main {
+	margin-bottom: 1.5em;
+}
+
+h3.section {
+	margin-top: 2em;
+}
+
+p.intro {
+	text-align: justify;
+	color: #333;
+	font-family: "Century Gothic", Arial;
+	margin-bottom: 1.5em;
+}
+
+p.more-info {
+	text-transform: uppercase;
+	color: #888;
+	border-bottom: 0.1em solid #ddd;
+	margin-top: 1.5em;
+	margin-bottom: 2em;
+}
+
 ul.methodology {
 	margin: 0;
-	padding: 0;
+	padding: 0 2%;
 }
 
 ul.methodology li {
@@ -1079,8 +1157,16 @@ ul.methodology li {
 	padding: 0.5em 0;
 }
 
+p.home-description {
+	margin-left: 2%;
+	margin-right: 2%;
+	color: #666;
+}
+
 table.vocabulary {
 	border-collapse: collapse;
+	margin: 0 2% 2em 2%;
+	color: #666;
 }
 
 table.vocabulary th {
@@ -1097,12 +1183,12 @@ table.vocabulary td {
 
 p.main {
 	font-family: 'Source Sans Pro', sans-serif;
-	font-size: 1.5em;
+	font-size: 1.4em;
 	color: #888;
 	font-style: italic;
 	font-weight: 400;
 	margin-top: 1.5em;
-	margin-bottom: 2em;
+	margin-bottom: 1em;
 }
 
 div.repository a {
@@ -1115,11 +1201,18 @@ div.repository a img {
 }
 
 div.repository {
-	padding: 0 2%;
 	margin-bottom: 2em;
 	overflow: auto;
 	float: left;
 	width: 46%;
+}
+
+div.first {
+	padding-right: 3%;
+}
+
+div.second {
+	padding-left: 3%;
 }
 
 div.repository p {
@@ -1143,7 +1236,7 @@ div.repository a.button {
 	letter-spacing: 0.2em;
 	font-family: "Century Gothic", Arial;
 	border: none;
-	padding: 0.3em;
+	padding: 0.5em 0.3em;
 	min-width: 10.2em;
 }
 

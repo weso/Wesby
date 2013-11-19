@@ -16,7 +16,7 @@
 
 @main(Some(("COMPARE THIS", compareUri)), options("mode").toString) {
 	<nav class="breadcrumbs">
-		@data(options) &gt; @label(rs)
+		@hostLink(request) &gt; @data(options) &gt; @label(rs)
 	</nav>	
 	<h1>@cachedLabel(rs)</h1>
 	<h2><a href="@rdfType(rs)">Indicator</a></h2>	
