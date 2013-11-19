@@ -37,7 +37,7 @@ object RankingCustomQuery extends Configurable {
       val uri = qs.getResource("?country").getURI
       val iso2 = qs.getLiteral("?iso2").getString
       val iso3 = qs.getLiteral("?iso3").getString
-      val label = qs.getLiteral("?name").getString
+      val label = qs.getLiteral("?label").getString
       val value = qs.getLiteral("?value").getString
 
       val country = Country(UriFormatter.format(uri), label, iso2, iso3, value)

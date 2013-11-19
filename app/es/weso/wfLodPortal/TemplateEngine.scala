@@ -2,6 +2,7 @@ package es.weso.wfLodPortal
 
 import play.api._
 import play.api.mvc._
+import scala.collection.mutable.ListBuffer
 import org.apache.commons.configuration.PropertiesConfiguration
 import models.ResultQuery
 import es.weso.wfLodPortal.utils.CommonURIS._
@@ -70,6 +71,7 @@ trait TemplateEgine extends Controller with Configurable {
   def renderRoot(mode: String, host: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+    import es.weso.wfLodPortal.sparql.custom.RootQueries._
 
     val version = this.conf.getString("application.version")
     val title = if (mode == "odb") "OPEN DATA BAROMETER"; else "WEB INDEX"
@@ -77,7 +79,9 @@ trait TemplateEgine extends Controller with Configurable {
     val c = RegionCustomQueries.loadRegions(mode)
     val s = SubindexCustomQuery.loadSubindexes(mode)
 
-    Ok(views.html.root(version, mode, title, host, c, s))
+    val queries:ListBuffer[scala.collection.mutable.Map[String,Object]] = RootQueries.loadQueries
+
+    Ok(views.html.root(version, mode, title, host, c, s, queries))
   }
 
   def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String], host: String)(implicit request: RequestHeader) = {

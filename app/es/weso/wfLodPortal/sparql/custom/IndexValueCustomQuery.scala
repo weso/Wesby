@@ -19,7 +19,7 @@ object IndexValueCustomQuery extends Configurable {
 
   val queryHierarchy = conf.getString("query.hierarchy")
   var queryValues = conf.getString("query.hierarchy.values")
-  val queryRanking = conf.getString("query,hierarchy.ranking")
+  val queryRanking = conf.getString("query.hierarchy.ranking")
 
   def loadHierarchy(uri: String, mode: String) = {
     val rs = QueryEngine.performQuery(queryHierarchy, Seq(mode))

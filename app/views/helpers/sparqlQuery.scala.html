@@ -2,14 +2,10 @@
 
 @import helper._
 
-<link rel="stylesheet" href="@routes.Assets.at("stylesheets/codemirror.css")"/>
-<script src="@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
-<script src="@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
-<script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
+
 <div class="sparql">
-	<h4>Data source</h4>
-	<textarea id="query">@{viewOptions("query").toString.replace("\\n", "\n").replace("\\t", "\t")}</textarea>
-	<button id="test-query">Test query</button>
+	<h4>Data Source</h4>
+	@runSparqlQuery(viewOptions)
 </div>
 <div class="format-links">
 	<h3>Download as</h3>
@@ -19,21 +15,3 @@
 	<a href="@{request.path}?format=rdfjson" title="Download as RDF/JSON"><span>RDF/JSON</span></a>
 	<a href="@{request.path}?format=n-triples" title="Download as N-Triples"><span>N-Triples</span></a>
 </div>
-<script>
-	// Button
-	var button = document.getElementById("test-query");
-	
-	button.onclick = function() {
-		var query = editor.doc.getValue();
-		window.location.href = "@{viewOptions("endpoint").toString}?default-graph-uri=&query=" + encodeURIComponent(query);
-	};
-	
-	// Codemirror (Pretty code)
-	
-	var editor = CodeMirror.fromTextArea(document.getElementById("query"), {
-    	mode: "application/x-sparql-query",
-        tabMode: "indent",
-        lineNumbers: true,
-        matchBrackets: true
-    });
-</script>

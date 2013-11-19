@@ -1,5 +1,7 @@
 @(observations: play.api.libs.json.JsValue, mode: String, host: String, version: String)(implicit request: RequestHeader)
 
+@import views.html.helpers._
+
 @href = @{
 	host + "/" + mode + "/" + version
 }
@@ -10,7 +12,7 @@
 
 @main(None, mode){
 	<nav class="breadcrumbs">
-		<a href="http://@href" title="Data">@label</a> &gt; COMPARER
+		@hostLink(request) &gt; <a href="http://@href" title="Data">@label</a> &gt; COMPARER
 	</nav>
 	<div id="graphs" class="graphs"></div>
 	<script src="@routes.Assets.at("javascripts/SortedArray.js")"></script>

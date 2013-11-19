@@ -1,53 +1,33 @@
-@(version: String, mode: String, title: String, host: String, regions: List[es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.Region], subindexes: List[es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex])(implicit request: RequestHeader)
+@(version: String, mode: String, title: String, host: String, regions: List[es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.Region], subindexes: List[es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex], queries:scala.collection.mutable.ListBuffer[scala.collection.mutable.Map[String,Object]])(implicit request: RequestHeader)
+
+@import views.html.helpers._
 
 @breadcrumb = @{ if (mode == "odb") "ODB"; else "WEB INDEX" }
 
 @main(None, mode) {
+	<img class="root-logo" alt="Web Index" src="@routes.Assets.at("images/webindex.png")" />
 	<nav class="breadcrumbs">
-		@breadcrumb
+		@hostLink(request) &gt; @breadcrumb
 	</nav>
 	<h1 class="main">@title</h1>
-	<div class="byElements">
-		<div class="byCountry">
-			<h2>by <a href="http://@{host}/ontology/Country" title="Go to Country">Country</a></h2>
-			<ul>
-				@for(region <- regions.sortWith(_.label < _.label)) {
-					<li>
-						<a href="@region.uri.relative" title="Go to @region.label">@region.label</a>
-						<ul>
-							@for(country <- region.children.sortWith(_.label < _.label)) {
-								<li>
-									<a href="@country.uri.relative" title="Go to @country.label">@country.label</a>
-								</li>
-							}
-						</ul>
-					</li>
-				}
-			</ul>
+	
+	<p class="main-description">
+		This is the summary of the promotion of the Web Index to the Linked Data initiative applying the <a href="http://www.w3.org/DesignIssues/LinkedData.html" title="Go to Linked Data Article by Sir Tim Berners-Lee">design issues</a> outlined by <a href="http://www.w3.org/People/Berners-Lee/" title="Go to Sir Tim Berners-Lee Contact Page">Sir Tim Berners-Lee</a> to publish a new 5 star dataset containing all observations gathered by the <a href="http://webfoundation.org/" title="Go to World Wide Web Foundation Website">World Wide Web Foundation</a> and other international organizations.
+	</p>
+	<p class="root-section">
+		Browse Information
+	</p>
+	
+	@browseBy(host, regions, subindexes)
+	
+	<p class="root-section">
+		Examples
+	</p>
+	
+	@for(query <- queries) {
+		<p class="query-description">@query("description")</p>
+		<div class="sparql">
+			@runSparqlQuery(query)
 		</div>
-		<div class="byComponent">
-			<h2>by Component</h2>
-			<ul>
-				@for(subindex <- subindexes.sortWith(_.label < _.label)) {
-					<li>
-						<a href="@subindex.uri.relative" title="Go to @subindex.label">@subindex.label</a>
-						<ul>
-							@for(component <- subindex.children.sortWith(_.label < _.label)) {
-								<li>
-									<a href="@component.uri.relative" title="Go to @component.label">@component.label</a>
-									<ul>
-										@for(indicator <- component.children.sortWith(_.label < _.label)) {
-											<li>
-												<a href="@indicator.uri.relative" title="Go to @indicator.label">@indicator.label</a>
-											</li>
-										}
-									</ul>
-								</li>
-							}
-						</ul>
-					</li>
-				}
-			</ul>
-		</div>
-	</div>
+	}
 }

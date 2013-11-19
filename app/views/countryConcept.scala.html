@@ -27,7 +27,7 @@
 @main(None, options("mode").toString) {
 	@defining(loadCountries){ countries =>
 	<nav class="breadcrumbs">
-		@data(options) &gt; Country
+		@hostLink(request) &gt; @data(options) &gt; Country
 	</nav>
 	<h1>@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	

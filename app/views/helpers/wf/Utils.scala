@@ -24,7 +24,6 @@ object Utils extends Configurable {
       val uri = r.uri.relative
 
       val data = r.dss.subject.get
-      val indicator = data.get(cex, "indicator").get
 
       val name = handleResourceAsString(data, cex,
         "indicator", (r: RdfResource) => r.uri.short match {
@@ -53,7 +52,6 @@ object Utils extends Configurable {
     import scala.collection.mutable.Map
     def inner(r: RdfResource) = {
       val data = r.dss.subject.get
-      val indicator = data.get(cex, "indicator").get
 
       val name = handleResourceAsString(data,
         cex, "indicator",

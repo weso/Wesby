@@ -6,6 +6,9 @@
 @import views.html.helpers.utils._
 
 @main(None, options("mode").toString) {
+	<nav class="breadcrumbs">
+		@hostLink(request) &gt; @data(options)
+	</nav>
 	<h1>@cachedLabel(rs)</h1>
 	<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	
 	@grill(rs)
