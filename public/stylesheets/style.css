@@ -595,12 +595,47 @@ div.ranking-col2 {
 
 /* Country concept */
 
+div.tabs {
+	text-align: center;
+	border-bottom: 0.1em solid #d5d5d5;
+	margin-bottom: 2.5em;
+}
+
+div.tabs a.tab {
+	display: inline-block;
+	width: 8em;
+	height: 2em;
+	padding-top: 0.5em;
+	border: 0.1em solid #d5d5d5;
+	background-color: #d5d5d5;
+	color: #888;
+	margin: 0 0.5em -0.1em 0.5em;
+	text-decoration: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: pointer;
+}
+
+div.tabs a.selected {
+	border-top: 0.1em solid #d5d5d5;
+	border-right: 0.1em solid #d5d5d5;
+	border-left: 0.1em solid #d5d5d5;
+	border-bottom: 0.1em solid #fff;
+	background-color: #fff;
+	color: #0071a4;
+}
+
 div.country-concept-map {
 	height: 30em;
 }
 
 nav.country-list {
 	margin-top: 1em;
+	margin-bottom: 2em;
 	width: 100%;
 }
 
