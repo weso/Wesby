@@ -27,7 +27,7 @@ object RootQueries extends Configurable {
     for {
       query <- queries
     } yield {
-      (conf.getString(query._1), conf.getString(query._2), endpoint)
+      (conf.getString(query._2), conf.getString(query._1), endpoint)
     }
   }
 }
