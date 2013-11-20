@@ -27,32 +27,71 @@
 }
 
 @main(None, options("mode").toString) {
-	@for(mode<-List("webindex","odb")){
-		@defining(loadCountries(mode)){ countries =>
-		<nav class="breadcrumbs">
-			@hostLink(request) &gt; @data(options) &gt; Country
-		</nav>
-		<h1>@label(rs)</h1>
-		<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	
-		
-		<div id="countryName-@mode" class="country-name"></div>
-		<div id="world-map-@mode" class="country-concept-map"></div>
-		<nav class="country-list">
-			@for(country <- countries) {
-				<a class="country" href="@country._2._2" code="@country._2._1">@country._1</a>
-			}
-		</nav>
-		
-		@subjectGrill(rs)
-		@sparqlQuery(options)
+	<nav class="breadcrumbs">
+		@hostLink(request) &gt; Country
+	</nav>
+	<h1>@label(rs)</h1>
+	<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	
 	
-		<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
-		<script src="@routes.Assets.at("javascripts/map.js")"></script>	
-		<script>
-			var countryCodes = {};
-			var countries = {};
-			
-			@for(country <- countries) {	
+	<div class="tabs">
+		<a id="wi-button" class="tab selected">Web Index</a>
+		<a id="odb-button" class="tab">ODB</a>
+	</div>
+	
+	@for(mode<-List("webindex","odb")){
+		<div id="div-@mode">
+			<div id="countryName-@mode" class="country-name"></div>
+			<div id="world-map-@mode" class="country-concept-map"></div>
+			<nav class="country-list">
+				@for(country <- loadCountries(mode)) {
+					<a class="country" href="@country._2._2" code="@country._2._1">@country._1</a>
+					}
+			</nav>
+		</div>
+	}
+	
+	@subjectGrill(rs)
+	@sparqlQuery(options)
+
+	<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
+	<script src="@routes.Assets.at("javascripts/map.js")"></script>	
+	<script>
+		var wiDiv = document.getElementById("div-webindex");
+		var odbDiv = document.getElementById("div-odb");
+	
+		var wiButton = document.getElementById("wi-button");
+		wiButton.selected = true;
+		wiButton.myDiv = wiDiv;
+		wiButton.otherDiv = odbDiv;
+		
+		var odbButton = document.getElementById("odb-button");
+		odbButton.selected = false;
+		odbButton.myDiv = odbDiv;
+		odbButton.otherDiv = wiDiv;
+		
+		wiButton.otherButton = odbButton;
+		odbButton.otherButton = wiButton;
+		
+		function buttonHandler() {
+			if (this.selected == false) {
+				this.selected = true;
+				this.otherButton.selected = false;
+				
+				this.myDiv.style.display = "block";
+				this.otherDiv.style.display = "none";
+				this.className = "tab selected";
+				this.otherButton.className = "tab";
+			}
+		}
+		
+		odbButton.onclick = buttonHandler;
+		wiButton.onclick = buttonHandler;
+	
+		@for(mode<-List("webindex","odb")){
+		var countryCodes = {};
+		var countries = {};
+		
+		@for(country <- loadCountries(mode)) {	
 				countryCodes["@country._2._1"] = {
 													uri: "@country._2._2",
 													name: "@country._1"
@@ -88,7 +127,8 @@
 					    window.location.href = uri;
 			    }
 			});
-		</script>
 		}
-	}
+		
+		odbDiv.style.display = "none";
+	</script>
 }
