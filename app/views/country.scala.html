@@ -45,30 +45,60 @@
 								<tbody>
 									<tr class="index">
 										<td class="label">
-											<div class="legend-circle" style="background-color:@hierarchyValues.colour1"></div>
-											@hierarchyValues.name
+											<a href="@hierarchyValues.uri.relative" title"Go to @hierarchyValues.name">
+												<div class="legend-circle" style="background-color:@hierarchyValues.colour1"></div>
+												@hierarchyValues.name
+											</a>
 										</td>
-										<td class="rank">@hierarchyValues.rank</td>
-										<td class="score">@hierarchyValues.score</td>
+										<td class="rank">
+											<a href="@hierarchyValues.uri.relative" title"Go to @hierarchyValues.name">
+												@hierarchyValues.rank
+											</a>
+										</td>
+										<td class="score">
+											<a href="@hierarchyValues.uri.relative" title"Go to @hierarchyValues.name">
+												@hierarchyValues.score
+											</a>
+										</td>
 									</tr>	
 			
 									@for(subindex <- hierarchyValues.children) {
 										<tr class="subindex">
 											<td class="label">
-												<div class="legend-circle" style="background-color:@subindex._2.colour1"></div>
-												@subindex._2.name
+												<a href="@subindex._2.uri.relative" title"Go to @subindex._2.name">
+													<div class="legend-circle" style="background-color:@subindex._2.colour1"></div>
+													@subindex._2.name
+												</a>
 											</td>
-											<td class="rank">@subindex._2.rank</td>
-											<td class="score">@subindex._2.score</td>
+											<td class="rank">
+												<a href="@subindex._2.uri.relative" title"Go to @subindex._2.name">
+													@subindex._2.rank
+												</a>	
+											</td>
+											<td class="score">
+												<a href="@subindex._2.uri.relative" title"Go to @subindex._2.name">
+													@subindex._2.score
+												</a>
+											</td>
 										</tr>
 										@for(component <- subindex._2.children) {
 											<tr class="component">
 												<td class="label">
-													<div class="legend-circle" style="background-color:@subindex._2.colour2"></div>
-													@component._2.name
+													<a href="@component._2.uri.relative" title"Go to @component._2.name">
+														<div class="legend-circle" style="background-color:@subindex._2.colour2"></div>
+														@component._2.name
+													</a>
 												</td>
-												<td class="rank">@component._2.rank</td>
-												<td class="score">@component._2.score</td>
+												<td class="rank">
+													<a href="@component._2.uri.relative" title"Go to @component._2.name">
+														@component._2.rank
+													</a>		
+												</td>
+												<td class="score">
+													<a href="@component._2.uri.relative" title"Go to @component._2.name">
+														@component._2.score
+													</a>	
+												</td>
 											</tr>
 										}
 									}

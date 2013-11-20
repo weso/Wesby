@@ -510,10 +510,16 @@ table.ranking th {
 	text-align: center;
 	border-bottom: 0.1em solid #888;
 	padding-bottom: 0.4em;
+	background-color: #fff;
 }
 
 table.ranking td {
 	padding: 0.4em;
+}
+
+table.ranking td a {
+	display: block;
+	text-decoration: none;
 }
 
 table.ranking th.label, table.ranking td.label {
@@ -531,13 +537,29 @@ table.ranking th.score, table.ranking td.score {
 	text-align: right;
 }
 
-table.ranking tr.index td {
+table.ranking tr.index {
 	background-color: #333;
 	color: #fff;
 }
 
-table.ranking tr.subindex td {
+table.ranking tr.index td a {
+	color: #fff;
+}
+
+table.ranking tr.subindex {
 	background-color: #ccc;
+}
+
+table.ranking tr.subindex a, table.ranking tr.component a {
+	color: #555;
+}
+
+table.ranking tr:hover, table.ranking tr.subindex:hover, table.ranking tr.index:hover {
+	background-color: #2c9ad9 !important;
+}
+
+table.ranking tr.subindex:hover a, table.ranking tr.component:hover a {
+	color: #fff;
 }
 
 table.ranking div.legend-circle {
