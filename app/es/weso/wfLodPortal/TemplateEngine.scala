@@ -78,10 +78,10 @@ trait TemplateEgine extends Controller with Configurable {
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
     import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
 
-    implicit val regions = Json.toJson[List[Region]](loadRegions(mode, currentVersion))
-    implicit val years = Json.toJson[List[Int]](loadYears(mode, currentVersion))
-    implicit val subindexes = Json.toJson[List[Subindex]](loadSubindexes(mode, currentVersion))
-
+    val regions = Json.toJson[List[Region]](loadRegions(mode, currentVersion))
+    val years = Json.toJson[List[Int]](loadYears(mode, currentVersion))
+    val subindexes = Json.toJson[List[Subindex]](loadSubindexes(mode, currentVersion))
+    
     Ok(views.html.custom.compare(currentVersion, mode)(request, regions, years, subindexes, selectedCountries, selectedIndicators))
   }
 
