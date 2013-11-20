@@ -24,7 +24,7 @@ object Uri {
   implicit val uriWrites: Writes[Uri] = (
     (__ \ "relative").write[String] and
     (__ \ "absolute").write[String] and
-    (__ \ "short").write[Option[ShortUri]])(unlift(Uri.unapply))  
+    (__ \ "short").write[Option[ShortUri]])(unlift(Uri.unapply))
 }
 
 case class ShortUri(val prefix: (String, String), val suffix: (String, String)) {
@@ -39,7 +39,7 @@ object ShortUri {
 
   implicit val tupleWrites = (
     (__ \ "_1").write[String] and
-    (__ \ "_2").write[String] tupled)
+      (__ \ "_2").write[String] tupled)
 
   implicit val shortUriReads: Reads[ShortUri] = Json.reads[ShortUri]
   implicit val shortUriWrites: Writes[ShortUri] = Json.writes[ShortUri]

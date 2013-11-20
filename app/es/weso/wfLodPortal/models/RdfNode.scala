@@ -1,6 +1,8 @@
 package es.weso.wfLodPortal.models
 
-import com.hp.hpl.jena.rdf.model.{ Property => JenaProperty, Resource => JenaResource, RDFNode => JenaRDFNode }
+import com.hp.hpl.jena.rdf.model.{ Property => JenaProperty }
+import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
+import com.hp.hpl.jena.rdf.model.{ Resource => JenaResource }
 
 sealed abstract class RdfNode {
   val rdfNode: JenaRDFNode

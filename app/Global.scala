@@ -1,19 +1,16 @@
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
 
+import es.weso.wfLodPortal.Configurable
 import play.api.GlobalSettings
+import play.api.Logger
+import play.api.libs.ws.Response
 import play.api.libs.ws.WS
 import play.api.mvc.WithFilters
 import play.filters.gzip.GzipFilter
-import es.weso.wfLodPortal.Configurable
-import play.api.Logger
-import org.apache.commons.configuration.PropertiesConfiguration
-import scala.concurrent.Future
-import play.api.libs.ws.Response
-import scala.util.Try
-import scala.util.Success
-import scala.util.Failure
 
 object Global extends WithFilters(new GzipFilter) with GlobalSettings with Configurable {
 
@@ -44,7 +41,7 @@ object Global extends WithFilters(new GzipFilter) with GlobalSettings with Confi
   def loaded(response: Try[Response]) = {
     response match {
       case Success(v) =>
-        Logger.info("Uri: '"+v.ahcResponse.getUri+"' Cached: " + v.statusText)
+        Logger.info("Uri: '" + v.ahcResponse.getUri + "' Cached: " + v.statusText)
       case Failure(e) => Logger.warn("Uri Fail Caching: " + e.getMessage)
     }
   }
