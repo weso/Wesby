@@ -18,7 +18,7 @@ import es.weso.wfLodPortal.utils.UriFormatter
 import es.weso.wfLodPortal.models.Uri
 
 object RankingCustomQuery extends Configurable {
-  case class Country(uri: Uri, val name: String, iso2: String, iso3: String, value: String)
+  case class Country(uri: Uri, val name: String, iso2: String, iso3: String, var value: Double)
 
   val queryRanking = conf.getString("query.ranking.allCountries")
 
@@ -31,6 +31,9 @@ object RankingCustomQuery extends Configurable {
     val countries = new ListBuffer[Country]()
     
     val values = new ListBuffer[String]()
+    
+    var min:Double = 0
+    var max:Double = 0
 
     while (rs.hasNext) {
       val qs = rs.next
@@ -38,13 +41,33 @@ object RankingCustomQuery extends Configurable {
       val iso2 = qs.getLiteral("?iso2").getString
       val iso3 = qs.getLiteral("?iso3").getString
       val label = qs.getLiteral("?label").getString
-      val value = qs.getLiteral("?value").getString
+      val _value = qs.getLiteral("?value").getString
+      
+      val value = try {
+      	_value.toDouble
+      }
+      catch {
+      	case _ => 0
+      }
+
+      if (value < min)
+      	min = value
+      	
+      if (value > max)
+      	max = value
 
       val country = Country(UriFormatter.format(uri), label, iso2, iso3, value)
 
       countries += country
       values += label
     }
-    Map("series" -> countries, "values" -> values)
+    
+    val difference = max - min
+    
+    for (country <- countries) {
+    	country.value = (country.value - min) * 100 / difference
+    }
+    
+    Map("series" -> countries, "values" -> values, "max" -> max, "min" -> min)
   }
 }
