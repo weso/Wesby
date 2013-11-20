@@ -252,7 +252,7 @@
 						    var thisCountryIso3 = "@{iso3}";
 						    
 						    var rainbow = new Rainbow();
-						    //rainbow.setSpectrum("#78B31E", "#EEAA11", "#CC2222");
+						    
 						    rainbow.setSpectrum("#223355", "#327365", "#53944f", "#7ab33f", "#f0f066");
 						    rainbow.setNumberRange(0, @{countryRanking("series").asInstanceOf[ListBuffer[Country]].length} - 1);
 						    
@@ -277,6 +277,7 @@
 						    graphOptions.height = 200;
 						    graphOptions.valueOnItem.show = false;
 						    
+						    graphOptions.margins = [10, 0, 10, 1];
 						    graphOptions.xAxis.values = [ "" ];
 						    graphOptions.xAxis.title = "";
 						    graphOptions.xAxis.margin = 0;
