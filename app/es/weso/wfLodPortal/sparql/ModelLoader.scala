@@ -32,10 +32,6 @@ object ModelLoader extends Configurable {
   val Subject = "?s"
   val Verb = "?v"
   val Predicate = "?p"
-    
-  def fullUri(uri: String) = {
-    baseUri + uri
-  }
 
   def loadUri(uri: String) = {
     val fullUri: Uri = UriFormatter.format(baseUri + uri)

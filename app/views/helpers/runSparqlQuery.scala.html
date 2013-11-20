@@ -1,16 +1,13 @@
-@(viewOptions: scala.collection.mutable.Map[String,Object])(implicit request:RequestHeader)
-
-@import helper._
+@(endpoint:String, query:String)(implicit request:RequestHeader)
 @import scala.util.Random
-
+@import views.html.helpers._
 @randomString = @{Random.alphanumeric.take(10).mkString}
-
 @defining(randomString) { randomString =>
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/codemirror.css")"/>
 	<script src="@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
 	<script src="@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
 	<script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
-	<textarea id="query-@randomString">@{viewOptions("query").toString.replace("\\n", "\n").replace("\\t", "\t")}</textarea>
+	<textarea id="query-@randomString">@{query.replace("\\n", "\n").replace("\\t", "\t")}</textarea>
 	<button id="test-query-@randomString">Test query</button>
 	<script>
 		// Button
@@ -18,7 +15,7 @@
 		
 		button.onclick = function() {
 			var query = editor.doc.getValue();
-			window.location.href = "@{viewOptions("endpoint").toString}?default-graph-uri=&query=" + encodeURIComponent(query);
+			window.location.href = "@{endpoint}?default-graph-uri=&query=" + encodeURIComponent(query);
 		};
 		
 		// Codemirror (Pretty code)

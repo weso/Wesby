@@ -1,4 +1,4 @@
-@(version: String, mode: String, title: String, host: String, regions: List[es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.Region], subindexes: List[es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex], queries:scala.collection.mutable.ListBuffer[scala.collection.mutable.Map[String,Object]])(implicit request: RequestHeader)
+@(version: String, mode: String)(implicit request: RequestHeader, regions: List[es.weso.wfLodPortal.sparql.custom.RegionCustomQueries.Region], subindexes: List[es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex], queries: List[(String, String, String)])
 
 @import views.html.helpers._
 
@@ -9,7 +9,7 @@
 	<nav class="breadcrumbs">
 		@hostLink(request) &gt; @breadcrumb
 	</nav>
-	<h1 class="main">@title</h1>
+	<h1 class="main">@if(mode == "odb"){OPEN DATA BAROMETER}else{WEB INDEX}</h1>
 	
 	<p class="main-description">
 		This is the summary of the promotion of the Web Index to the Linked Data initiative applying the <a href="http://www.w3.org/DesignIssues/LinkedData.html" title="Go to Linked Data Article by Sir Tim Berners-Lee">design issues</a> outlined by <a href="http://www.w3.org/People/Berners-Lee/" title="Go to Sir Tim Berners-Lee Contact Page">Sir Tim Berners-Lee</a> to publish a new 5 star dataset containing all observations gathered by the <a href="http://webfoundation.org/" title="Go to World Wide Web Foundation Website">World Wide Web Foundation</a> and other international organizations.
@@ -18,16 +18,16 @@
 		Browse Information
 	</p>
 	
-	@browseBy(host, regions, subindexes)
+	@browseBy(request.host, regions, subindexes)
 	
 	<p class="root-section">
 		Examples
 	</p>
 	
 	@for(query <- queries) {
-		<p class="query-description">@query("description")</p>
+		<p class="query-description">@query._1</p>
 		<div class="sparql">
-			@runSparqlQuery(query)
+			@runSparqlQuery(query._3, query._2)
 		</div>
 	}
 }

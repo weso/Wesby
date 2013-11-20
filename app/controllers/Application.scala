@@ -35,7 +35,7 @@ object Application extends Controller with TemplateEgine {
   charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 
   def index = Action {
-    implicit request => renderHome
+    implicit request => Ok(views.html.custom.home(currentVersion))
   }
 
   def fallback(uri: String) = Action {
@@ -45,13 +45,11 @@ object Application extends Controller with TemplateEgine {
       val predicateModel = resultQuery.predicate.get.jenaModel
       val models = List(subjectModel, predicateModel)
 
-      val mode = if (uri contains "odb/") "odb" else "webindex"
-
       request.getQueryString("format") match {
-        case Some(format) => downloadAs(uri: String, format, models)
+        case Some(format) => downloadAs(uri, format, models)
         case None =>
           render {
-            case Html() => renderAsTemplate(resultQuery, ModelLoader.fullUri(uri), mode)
+            case Html() => renderAsTemplate(resultQuery, uri)
             case N3() =>
               Redirect(request.path + "?format=n3")
             case RdfN3() =>
@@ -74,12 +72,12 @@ object Application extends Controller with TemplateEgine {
 
   def preCompare(mode: String, selectedCountries: Option[String] = None, selectedIndicators: Option[String] = None) = Action {
     implicit request =>
-      renderPreCompare(mode, selectedCountries, selectedIndicators, request.host)
+      renderPreCompare(mode, selectedCountries, selectedIndicators)
   }
 
   def compare(mode: String, countries: String, years: String, indicators: String) = Action {
     implicit request =>
-      renderCompare(mode, countries, years, indicators, request.host)
+      renderCompare(mode, countries, years, indicators)
   }
 
   def root(mode: String, version: String) = Action {

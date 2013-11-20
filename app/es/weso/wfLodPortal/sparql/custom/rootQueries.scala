@@ -16,23 +16,18 @@ import es.weso.wfLodPortal.models.Uri
 
 object RootQueries extends Configurable {
   val queries = List(
-  	("root.webindex.ranking", "root.webindex.ranking.description"),
-  	("root.webindex.allIndicators", "root.webindex.allIndicators.description"),
-  	("root.webindex.allIndicatorsByComponentAndIndex", "root.webindex.allIndicatorsByComponentAndIndex.description"),
-  	("root.webindex.allCountries", "root.webindex.allCountries.description")
-  )
+    ("root.webindex.ranking", "root.webindex.ranking.description"),
+    ("root.webindex.allIndicators", "root.webindex.allIndicators.description"),
+    ("root.webindex.allIndicatorsByComponentAndIndex", "root.webindex.allIndicatorsByComponentAndIndex.description"),
+    ("root.webindex.allCountries", "root.webindex.allCountries.description"))
 
-  def loadQueries() = {
-  	val list = new ListBuffer[scala.collection.mutable.Map[String,Object]]()
-  
-  	for(query <- queries) { 
-  		val options:scala.collection.mutable.Map[String,Object] = HashMap.empty
-  		options("query") = conf.getString(query._1)
-  		options("description") = conf.getString(query._2) 
-  		options("endpoint") = conf.getString("sparql.endpoint")
-  		
-  		list += options
-  	}
-  	list
+  val endpoint = conf.getString("sparql.endpoint")
+
+  def loadQueries(): List[(String, String, String)] = {
+    for {
+      query <- queries
+    } yield {
+      (conf.getString(query._1), conf.getString(query._2), endpoint)
+    }
   }
 }

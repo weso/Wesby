@@ -1,11 +1,8 @@
-@(viewOptions: scala.collection.mutable.Map[String,Object])(implicit request:RequestHeader)
-
-@import helper._
-
-
+@(options: es.weso.wfLodPortal.models.Options)(implicit request: RequestHeader)
+@import views.html.helpers._
 <div class="sparql">
 	<h4>Data Source</h4>
-	@runSparqlQuery(viewOptions)
+	@runSparqlQuery(options.endpoint, options.query)
 </div>
 <div class="format-links">
 	<h3>Download as</h3>

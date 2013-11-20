@@ -1,4 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader)
+@(rs: es.weso.wfLodPortal.models.ResultQuery)(implicit request: RequestHeader, options: es.weso.wfLodPortal.models.Options)
 
 @import es.weso.wfLodPortal.models._
 @import es.weso.wfLodPortal.sparql.Handlers._
@@ -26,7 +26,7 @@
 	countries.toList.sorted
 }
 
-@main(None, options("mode").toString) {
+@main(None,  options.mode) {
 	@for(mode<-List("webindex","odb")){
 		@defining(loadCountries(mode)){ countries =>
 		<nav class="breadcrumbs">
@@ -90,5 +90,34 @@
 			});
 		</script>
 		}
+		
+		$('#world-map').vectorMap({
+			map: 'world_merc_en',
+			backgroundColor: "#fff",
+			series: {
+		    	regions: [{
+			    	values: countries,
+			    	scale: ['#C8EEFF', '#0071A4'],
+			    	normalizeFunction: 'polynomial'
+			    }]
+			},
+			zoomOnScroll: false,
+		    
+		    onRegionLabelShow: function(e, el, code) {
+		    	$("#countryName").html(countryCodes[code].name);
+			},
+			
+			onRegionOut: function(e, code) {
+				$("#countryName").html("");
+			},
+		    
+		    onRegionClick: function(e, code) {
+		    	var uri = countryCodes[code].uri;
+
+		    	if (uri)
+				    window.location.href = uri;
+		    }
+		});
+	</script>
 	}
 }

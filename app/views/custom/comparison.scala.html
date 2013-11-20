@@ -1,9 +1,9 @@
-@(observations: play.api.libs.json.JsValue, mode: String, host: String, version: String)(implicit request: RequestHeader)
+@(mode: String, version: String)(implicit request: RequestHeader, observations: play.api.libs.json.JsValue)
 
 @import views.html.helpers._
 
 @href = @{
-	host + "/" + mode + "/" + version
+	request.host + "/" + mode + "/" + version
 }
 
 @label = @{

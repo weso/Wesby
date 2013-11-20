@@ -1,4 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])(implicit request:RequestHeader)
+@(rs: es.weso.wfLodPortal.models.ResultQuery)(implicit request:RequestHeader, options:es.weso.wfLodPortal.models.Options)
 
 @import es.weso.wfLodPortal.sparql.Handlers._
 @import es.weso.wfLodPortal.utils.CommonURIS._
@@ -65,7 +65,7 @@
 	handleLiteralAsValue(rs.subject.get, wfOnto, "ref-year")
 }
 
-@main(None, options("mode").toString) {
+@main(None, options.mode) {
 	<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
 	<nav class="breadcrumbs">
 		@hostLink(request) &gt; @data(options) &gt; <a href="/ontology/Country">Country</a> &gt; 
@@ -131,7 +131,7 @@
 		var urls = [];
 		var years = [];
 	
-		@for(observation <-options("observation.history").asInstanceOf[ListBuffer[Observation]]) {
+		@for(observation <-loadObservations(options.uri, options.mode)) {
 			values.push(@observation.value);
 			urls.push("@observation.uri");
 			years.push("@observation.year");

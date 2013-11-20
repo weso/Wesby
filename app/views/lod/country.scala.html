@@ -1,5 +1,4 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader)
-
+@(rs: es.weso.wfLodPortal.models.ResultQuery)(implicit request: RequestHeader, options: es.weso.wfLodPortal.models.Options)
 @import es.weso.wfLodPortal.utils.CommonURIS._
 @import es.weso.wfLodPortal.models._
 @import es.weso.wfLodPortal.sparql.Handlers._
@@ -9,13 +8,12 @@
 @import views.html.helpers.utils._
 @import es.weso.wfLodPortal.sparql.custom.RankingCustomQuery._
 @import scala.collection.mutable.ListBuffer
-
-@defining(loadHierarchyValues(options)) { hierarchyValues =>
+@defining(loadHierarchyValues(options.uri, options.mode)) { hierarchyValues =>
 	@defining(iso3(rs)) { iso3 =>
-		@defining(loadCountryRanking(options, iso3)) { countryRanking =>
+		@defining(loadCountryRanking(options.mode)) { countryRanking =>
 			@defining(loadIndicators(rs)) { indicators =>
 				@defining(loadObservations(rs)) { observations =>
-					@main(Some(("COMPARE THIS",compareUri(options, iso3))), options("mode").toString){
+					@main(Some(("COMPARE THIS",compareUri(options.uri, iso3))), options.mode){
 						<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
 						<script src="@routes.Assets.at("javascripts/map.js")"></script>
 						<script src="@routes.Assets.at("javascripts/jGraf.min.js")"></script>
