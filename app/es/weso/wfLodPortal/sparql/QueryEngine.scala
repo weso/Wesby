@@ -18,7 +18,6 @@ object QueryEngine extends Cacheable with Configurable {
 
   def performQuery(queryStr: String, args: Seq[String]): ResultSet = {
     val query = applyFilters(queryStr, args)
- println(query)
     retrieve(query, cacheExpiration, executeQuery)
   }
 
