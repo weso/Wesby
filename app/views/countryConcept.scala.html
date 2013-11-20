@@ -8,15 +8,17 @@
 @import views.helpers.Utils._
 @import views.helpers.wf.Utils._
 
-@loadCountries = @{ 
+@loadCountries(repository:String) = @{ 
   var countries = scala.collection.mutable.Map[String,Tuple2[String, String]]()
 	
   for(country <- rs.predicate.get.get(rdf, "type").get.nodes) {
     country.asRdfResource match {
       case Some(r) =>
-        val countryLabel:String= cachedLabel(r)
-        val uri = r.uri.relative
-		countries(countryLabel) = (iso2(r.dss), uri)
+        if(r.uri.relative.contains(repository)) {
+	        val countryLabel:String= cachedLabel(r)
+	        val uri = r.uri.relative
+			countries(countryLabel) = (iso2(r.dss), uri)
+		}
 	  case None => {}
 	  } 
 	}
@@ -25,66 +27,68 @@
 }
 
 @main(None, options("mode").toString) {
-	@defining(loadCountries){ countries =>
-	<nav class="breadcrumbs">
-		@hostLink(request) &gt; @data(options) &gt; Country
-	</nav>
-	<h1>@label(rs)</h1>
-	<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	
-	
-	<div id="countryName" class="country-name"></div>
-	<div id="world-map" class="country-concept-map"></div>
-	<nav class="country-list">
-		@for(country <- countries) {
-			<a class="country" href="@country._2._2" code="@country._2._1">@country._1</a>
-		}
-	</nav>
-	
-	@subjectGrill(rs)
-	@sparqlQuery(options)
-
-	<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
-	<script src="@routes.Assets.at("javascripts/map.js")"></script>	
-	<script>
-		var countryCodes = {};
-		var countries = {};
+	@for(mode<-List("webindex","odb")){
+		@defining(loadCountries(mode)){ countries =>
+		<nav class="breadcrumbs">
+			@hostLink(request) &gt; @data(options) &gt; Country
+		</nav>
+		<h1>@label(rs)</h1>
+		<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	
 		
-		@for(country <- countries) {	
-			countryCodes["@country._2._1"] = {
-												uri: "@country._2._2",
-												name: "@country._1"
-											 };
-			
-			countries["@country._2._1"]  = 1;
-		}
+		<div id="countryName-@mode" class="country-name"></div>
+		<div id="world-map-@mode" class="country-concept-map"></div>
+		<nav class="country-list">
+			@for(country <- countries) {
+				<a class="country" href="@country._2._2" code="@country._2._1">@country._1</a>
+			}
+		</nav>
 		
-		$('#world-map').vectorMap({
-			map: 'world_merc_en',
-			backgroundColor: "#fff",
-			series: {
-		    	regions: [{
-			    	values: countries,
-			    	scale: ['#C8EEFF', '#0071A4'],
-			    	normalizeFunction: 'polynomial'
-			    }]
-			},
-			zoomOnScroll: false,
-		    
-		    onRegionLabelShow: function(e, el, code) {
-		    	$("#countryName").html(countryCodes[code].name);
-			},
+		@subjectGrill(rs)
+		@sparqlQuery(options)
+	
+		<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
+		<script src="@routes.Assets.at("javascripts/map.js")"></script>	
+		<script>
+			var countryCodes = {};
+			var countries = {};
 			
-			onRegionOut: function(e, code) {
-				$("#countryName").html("");
-			},
-		    
-		    onRegionClick: function(e, code) {
-		    	var uri = countryCodes[code].uri;
-
-		    	if (uri)
-				    window.location.href = uri;
-		    }
-		});
-	</script>
+			@for(country <- countries) {	
+				countryCodes["@country._2._1"] = {
+													uri: "@country._2._2",
+													name: "@country._1"
+												 };
+				
+				countries["@country._2._1"]  = 1;
+			}
+			
+			$('#world-map-@mode').vectorMap({
+				map: 'world_merc_en',
+				backgroundColor: "#fff",
+				series: {
+			    	regions: [{
+				    	values: countries,
+				    	scale: ['#C8EEFF', '#0071A4'],
+				    	normalizeFunction: 'polynomial'
+				    }]
+				},
+				zoomOnScroll: false,
+			    
+			    onRegionLabelShow: function(e, el, code) {
+			    	$("#countryName-@mode").html(countryCodes[code].name);
+				},
+				
+				onRegionOut: function(e, code) {
+					$("#countryName-@mode").html("");
+				},
+			    
+			    onRegionClick: function(e, code) {
+			    	var uri = countryCodes[code].uri;
+	
+			    	if (uri)
+					    window.location.href = uri;
+			    }
+			});
+		</script>
+		}
 	}
 }
