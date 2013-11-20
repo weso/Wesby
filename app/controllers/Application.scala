@@ -3,14 +3,15 @@ package controllers
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
+
+import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
 import com.hp.hpl.jena.rdf.model.ModelFactory
+
 import es.weso.wfLodPortal.TemplateEgine
-import es.weso.wfLodPortal.sparql._
+import es.weso.wfLodPortal.sparql.ModelLoader
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.RequestHeader
 
 object Application extends Controller with TemplateEgine {

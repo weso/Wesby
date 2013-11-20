@@ -1,8 +1,7 @@
 package es.weso.wfLodPortal.models
 
-import es.weso.wfLodPortal.sparql.QueryEngine
 import es.weso.wfLodPortal.Configurable
-import es.weso.wfLodPortal.sparql.ModelLoader
+import es.weso.wfLodPortal.sparql.QueryEngine
 import es.weso.wfLodPortal.utils.UriFormatter
 
 class Options(val partialUri: String) extends Configurable {

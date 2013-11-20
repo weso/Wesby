@@ -1,8 +1,8 @@
 package es.weso.wfLodPortal.models
 
-import scala.collection.mutable.Map
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.Map
 
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 
@@ -59,10 +59,10 @@ case class Property(val property: RdfProperty) {
 
 case class LazyDataStore[T](val uri: Uri, val method: (String) => T) {
   protected lazy val dataStore = method(uri.absolute)
-  
+
   def data = dataStore
   def d = dataStore
   def u = uri
   def m = method
-  
+
 }

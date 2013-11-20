@@ -46,7 +46,7 @@ object Utils {
   def rdfTypeLabel(resultQuery: ResultQuery): String = {
     handleResourceAsString(resultQuery.subject.get,
       rdf, "type",
-      (r: RdfResource) => cachedLabel(r.dataStores))
+      (r: RdfResource) => cachedLabel(r))
   }
 
   def label(resultQuery: ResultQuery): String = {

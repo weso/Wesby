@@ -1,11 +1,9 @@
 package es.weso.wfLodPortal.models
 
-import es.weso.wfLodPortal.models._
-
 case class ResultQuery(
   sub: Option[LazyDataStore[Model]],
   pred: Option[LazyDataStore[InverseModel]]) {
-  
+
   lazy val subject = sub match {
     case Some(dt) => Some(dt.data)
     case None => None

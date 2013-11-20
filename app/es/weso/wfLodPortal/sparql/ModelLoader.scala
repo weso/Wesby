@@ -20,6 +20,7 @@ import es.weso.wfLodPortal.utils.UriFormatter
 import es.weso.wfLodPortal.utils.UriFormatter._
 import es.weso.wfLodPortal.models.Uri
 import play.Logger
+import com.hp.hpl.jena.query.QueryParseException
 
 object ModelLoader extends Configurable {
 
@@ -35,6 +36,7 @@ object ModelLoader extends Configurable {
 
   def loadUri(uri: String) = {
     val fullUri: Uri = UriFormatter.format(baseUri + uri)
+    Logger.info("Uri: "+fullUri.absolute)
     val subject = LazyDataStore(fullUri, loadSubject)
     val predicate = LazyDataStore(fullUri, loadPredicate)
     ResultQuery(subject, predicate)
@@ -42,47 +44,55 @@ object ModelLoader extends Configurable {
 
   def loadUri(sufix: String, preffix: String) = {
     val fullUri = UriFormatter.format(uriToBaseURI(sufix + preffix))
-    Logger.info(fullUri.toString)
+    Logger.info("Uri: "+fullUri.absolute)
     val subject = LazyDataStore(fullUri, loadSubject)
     val predicate = LazyDataStore(fullUri, loadPredicate)
     ResultQuery(subject, predicate)
   }
 
   protected def loadSubject(uri: String): Model = {
-    val rs = QueryEngine.performQuery(querySubject, Seq("<" + uri + ">"))
     val jenaModel = ModelFactory.createDefaultModel
     val model = Model(jenaModel)
-    val resource = ResourceFactory.createResource(uri)
-    while (rs.hasNext) {
-      val qs = rs.next
-      val property = processProperty(qs, Verb)
-      val predicate = processPredicate(qs)
-      jenaModel.add(resource, property.property, predicate.rdfNode)
-      model.add(property, predicate)
+    try {
+      val rs = QueryEngine.performQuery(querySubject, Seq("<" + uri + ">"))
+      val resource = ResourceFactory.createResource(uri)
+      while (rs.hasNext) {
+        val qs = rs.next
+        val property = processProperty(qs, Verb)
+        val predicate = processPredicate(qs)
+        jenaModel.add(resource, property.property, predicate.rdfNode)
+        model.add(property, predicate)
+      }
+    } catch {
+      case e: QueryParseException =>
+        Logger.warn("wfLodPortal wfLodPortal was unable to query: '" + uri + "'")
     }
     model
   }
 
   def loadPredicate(uri: String): InverseModel = {
-    val rs = QueryEngine.performQuery(queryPredicate, Seq("<" + uri + ">"))
-
     val jenaModel = ModelFactory.createDefaultModel
     val model = InverseModel(jenaModel)
-    val resource = ResourceFactory.createResource(uri)
-
-    while (rs.hasNext) {
-      val qs = rs.next
-      val vl = qs.get(Subject)
-      val property = processProperty(qs, Verb)
-      if (vl.isAnon()) {
-        val subject = RdfAnon(vl.asResource())
-        jenaModel.add(subject.resource, property.property, resource)
-        model.add(subject, property)
-      } else {
-        val subject = processResource(qs, Subject)
-        jenaModel.add(subject.resource, property.property, resource)
-        model.add(subject, property)
+    try {
+      val rs = QueryEngine.performQuery(queryPredicate, Seq("<" + uri + ">"))
+      val resource = ResourceFactory.createResource(uri)
+      while (rs.hasNext) {
+        val qs = rs.next
+        val vl = qs.get(Subject)
+        val property = processProperty(qs, Verb)
+        if (vl.isAnon) {
+          val subject = RdfAnon(vl.asResource())
+          jenaModel.add(subject.resource, property.property, resource)
+          model.add(subject, property)
+        } else {
+          val subject = processResource(qs, Subject)
+          jenaModel.add(subject.resource, property.property, resource)
+          model.add(subject, property)
+        }
       }
+    } catch {
+      case e: QueryParseException =>
+        Logger.warn("wfLodPortal was unable to query: '" + uri + "'")
     }
     model
   }
