@@ -1,11 +1,8 @@
-@(options: scala.collection.mutable.Map[String,Object])
-
+@(options: es.weso.wfLodPortal.models.Options)
 @label = @{
-	if (options("mode") == "odb") "ODB"; else "WEB INDEX"
+	if (options.mode == "odb") "ODB"; else "WEB INDEX"
 }
-
 @href = @{
-	options("host").toString + options("mode").toString + "/" + options("version").toString	
+	options.host + options.mode + "/" + options.version
 }
-
 <a href="@href" title="Data">@label</a>

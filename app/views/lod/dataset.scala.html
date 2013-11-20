@@ -1,11 +1,10 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery, options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader)
-
+@(rs: es.weso.wfLodPortal.models.ResultQuery)(implicit request: RequestHeader, options: es.weso.wfLodPortal.models.Options)
 @import views.helpers.Utils._
 @import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
-@main(None, options("mode").toString) {
+@main(None, options.mode) {
 	<nav class="breadcrumbs">
 		@hostLink(request) &gt; @data(options) &gt; Country
 	</nav>

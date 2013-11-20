@@ -1,7 +1,6 @@
 package views.helpers.wf
 
 import scala.collection._
-
 import es.weso.wfLodPortal.Configurable
 import es.weso.wfLodPortal.models._
 import es.weso.wfLodPortal.models._
@@ -11,6 +10,8 @@ import es.weso.wfLodPortal.utils.CommonURIS._
 import play.api.cache.Cache
 import play.api.Play.current
 import views.helpers.Utils.label
+import es.weso.wfLodPortal.sparql.custom.IndexValueCustomQuery
+import es.weso.wfLodPortal.sparql.custom.RankingCustomQuery
 
 object Utils extends Configurable {
 
@@ -87,17 +88,16 @@ object Utils extends Configurable {
     Cache.getOrElse(key, cacheExpiration)(label(rs))
   }
 
-  def compareUri(options: mutable.Map[String, Object], iso3: String) = {
-    "/" + options("mode").toString + "/compare?selectedCountries=" + iso3
+  def compareUri(mode: String, iso3: String) = {
+    new StringBuilder("/").append(mode)
+      .append("/compare?selectedCountries=").append(iso3).toString
   }
 
-  def loadCountryRanking(options: scala.collection.mutable.Map[String, Object], iso3: String): scala.collection.immutable.Map[String, Object] = {
-    val ranking = options("ranking.allCountries")
-    ranking.asInstanceOf[scala.collection.immutable.Map[String, Object]]
+  def loadCountryRanking(mode: String): scala.collection.immutable.Map[String, Object] = {
+    RankingCustomQuery.loadRanking(mode)
   }
 
-  def loadHierarchyValues(options: scala.collection.mutable.Map[String, Object]): Index = {
-    val ranking = options("query.hierarchy")
-    ranking.asInstanceOf[Index]
+  def loadHierarchyValues(uri: String, mode: String): Index = {
+    IndexValueCustomQuery.loadHierarchy(uri, mode)
   }
 }

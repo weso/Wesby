@@ -1,9 +1,9 @@
-@(countries:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String], mode: String, host: String, version: String)(implicit request: RequestHeader)
+@(version: String, mode: String)(implicit request: RequestHeader, regions:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String])
 
 @import views.html.helpers._
 
 @href = @{
-	host + "/" + mode + "/" + version
+	request.host + "/" + mode + "/" + version
 }
 
 @label = @{
@@ -44,7 +44,7 @@
 		<button id="compareButton">Compare</button>
 	</form>
 	<script>
-		var dataCountries = @Html(play.api.libs.json.Json.stringify(countries))
+		var dataCountries = @Html(play.api.libs.json.Json.stringify(regions))
 		var dataYears = @Html(play.api.libs.json.Json.stringify(years))
 		var dataIndicators = @Html(play.api.libs.json.Json.stringify(subindexes))
 		
