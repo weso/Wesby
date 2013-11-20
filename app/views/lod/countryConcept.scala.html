@@ -56,6 +56,7 @@
 	<script src="@routes.Assets.at("javascripts/jvectormap.js")"></script>
 	<script src="@routes.Assets.at("javascripts/map.js")"></script>	
 	<script>
+		// Repository selector
 		var wiDiv = document.getElementById("div-webindex");
 		var odbDiv = document.getElementById("div-odb");
 	
@@ -87,46 +88,50 @@
 		odbButton.onclick = buttonHandler;
 		wiButton.onclick = buttonHandler;
 	
-		@for(mode<-List("webindex","odb")){
-		var countryCodes = {};
-		var countries = {};
-		
-		@for(country <- loadCountries(mode)) {	
-				countryCodes["@country._2._1"] = {
-													uri: "@country._2._2",
-													name: "@country._1"
-												 };
-				
-				countries["@country._2._1"]  = 1;
-			}
-			
-			$('#world-map-@mode').vectorMap({
-				map: 'world_merc_en',
-				backgroundColor: "#fff",
-				series: {
-			    	regions: [{
-				    	values: countries,
-				    	scale: ['#C8EEFF', '#0071A4'],
-				    	normalizeFunction: 'polynomial'
-				    }]
-				},
-				zoomOnScroll: false,
-			    
-			    onRegionLabelShow: function(e, el, code) {
-			    	$("#countryName-@mode").html(countryCodes[code].name);
-				},
-				
-				onRegionOut: function(e, code) {
-					$("#countryName-@mode").html("");
-				},
-			    
-			    onRegionClick: function(e, code) {
-			    	var uri = countryCodes[code].uri;
+		// Map
 	
-			    	if (uri)
-					    window.location.href = uri;
-			    }
-			});
+		@for(mode<-List("webindex","odb")){
+			(function() {
+				var countryCodes = {};
+				var countries = {};
+			
+				@for(country <- loadCountries(mode)) {	
+					countryCodes["@country._2._1"] = {
+														uri: "@country._2._2",
+														name: "@country._1"
+													 };
+				
+					countries["@country._2._1"]  = 1;
+				}
+				
+				$('#world-map-@mode').vectorMap({
+					map: 'world_mill_en',
+					backgroundColor: "#fff",
+					series: {
+				    	regions: [{
+					    	values: countries,
+					    	scale: ['#C8EEFF', '#0071A4'],
+					    	normalizeFunction: 'polynomial'
+					    }]
+					},
+					zoomOnScroll: false,
+				    
+				    onRegionLabelShow: function(e, el, code) {
+				    	$("#countryName-@mode").html(countryCodes[code].name);
+					},
+					
+					onRegionOut: function(e, code) {
+						$("#countryName-@mode").html("");
+					},
+				    
+				    onRegionClick: function(e, code) {
+				    	var uri = countryCodes[code].uri;
+		
+				    	if (uri)
+						    window.location.href = uri;
+				    }
+				});
+			})();
 		}
 		
 		odbDiv.style.display = "none";

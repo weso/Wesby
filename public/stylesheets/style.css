@@ -595,6 +595,11 @@ div.ranking-col2 {
 
 /* Country concept */
 
+div#div-webindex, div#div-odb {
+	overflow: auto;
+	margin-bottom: 3em;
+}
+
 div.tabs {
 	text-align: center;
 	border-bottom: 0.1em solid #d5d5d5;
