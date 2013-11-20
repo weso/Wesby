@@ -18,6 +18,7 @@ import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery
 import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex
 import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.subindexWrites
 import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery
+import es.weso.wfLodPortal.sparql.custom.ObservationCustomQuery
 import es.weso.wfLodPortal.utils.CommonURIS.p
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
 import es.weso.wfLodPortal.utils.CommonURIS.rdfs
@@ -60,12 +61,20 @@ trait TemplateEgine extends Controller with Configurable {
     currentType match {
       case e if currentType == country => renderCountry(uri, mode, resultQuery, options)
       case e if currentType == indicator => Ok(views.html.indicator(resultQuery, options))
-      case e if currentType == observation => Ok(views.html.observation(resultQuery, options))
+      case e if currentType == observation => renderObservation(uri, mode, resultQuery, options)
       case e if currentType == dataset => Ok(views.html.dataset(resultQuery, options))
       case e if currentType == countryConcept => Ok(views.html.countryConcept(resultQuery, options))
       case _ => Ok(views.html.fallback(resultQuery, options))
 
     }
+  }
+
+  def renderObservation(uri: String, mode: String, resultQuery: ResultQuery, options: scala.collection.mutable.Map[String, Object])(implicit request: RequestHeader) = {
+  	val observations = ObservationCustomQuery.loadObservations(uri, mode)
+  	
+  	options("observation.history") = observations
+  	
+  	Ok(views.html.observation(resultQuery, options))
   }
 
   def renderCountry(uri: String, mode: String, resultQuery: ResultQuery,
