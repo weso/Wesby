@@ -79,7 +79,7 @@
 		<div class="value"><p class="value">@value</p><p class="desc">VALUE</p></div>
 	}
 
-	<h1>@label(rs)</h1>
+	<h1 class="observation">@label(rs)</h1>
 	<h2><a href="@rdfType(rs)">Observation</a></h2>	
 	<h3 class="description">@showLabel("", indicatorDescription)</h3>
 	<div id="graph"></div>
@@ -125,34 +125,44 @@
 			legend: {
 				show: false,
 			}
-		};	
-		
-		var values = [];
-		var urls = [];
-		var years = [];
+		};
+		if (window.attachEvent)
+			window.attachEvent('resize', loadObservations);
+		else
+			window.addEventListener('resize', loadObservations, false);
 	
-		@for(observation <-loadObservations(options.uri, options.mode)) {
-			values.push(@observation.value);
-			urls.push("@observation.uri");
-			years.push("@observation.year");
-		}
+		loadObservations();
 		
-		var series = [
-			{
-				name: "",
-				values: values,
-				urls: urls
+		function loadObservations() {
+			var values = [];
+			var urls = [];
+			var years = [];
+		
+			@for(observation <-loadObservations(options.uri, options.mode)) {
+				values.push(@observation.value);
+				urls.push("@observation.uri");
+				years.push("@observation.year");
 			}
-		];
-		
-		var graphDiv = document.getElementById("graph");
-		graphOptions.width = graphDiv.offsetWidth;
-		graphOptions.series = series;
-		graphOptions.xAxis.values = years;
-		
-		if (values.length > 0) {
-			var graph = jGraf.lineChart(graphOptions);
-			graphDiv.appendChild(graph.render());
+			
+			var series = [
+				{
+					name: "",
+					values: values,
+					urls: urls
+				}
+			];
+			
+			var graphDiv = document.getElementById("graph");
+			graphDiv.innerHTML = "";
+			
+			graphOptions.width = graphDiv.offsetWidth;
+			graphOptions.series = series;
+			graphOptions.xAxis.values = years;
+			
+			if (values.length > 0) {
+				var graph = jGraf.lineChart(graphOptions);
+				graphDiv.appendChild(graph.render());
+			}
 		}
 	</script>
 }

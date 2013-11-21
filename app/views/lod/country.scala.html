@@ -123,11 +123,19 @@
 						@grill(rs)
 						@sparqlQuery(options)
 						<script>
-							$(function(){
+							if (window.attachEvent)
+								window.attachEvent('resize', loadMap);
+							else
+								window.addEventListener('resize', loadMap, false);
+						
+							loadMap();
+						
+							function loadMap(){
 						    	// Map
 						    	var code = "@iso2(rs)";
 						    	
 						    	var container = "#country-map";
+						    	document.getElementById("country-map").innerHTML = "";
 						
 						    	var map = new jvm.WorldMap({
 						    			container: $(container), 
@@ -150,7 +158,7 @@
 						    	
 						    	var selectedRegions = new Array(code);
 						    	map.setSelectedRegions(selectedRegions);
-							});
+							}
 						</script>
 						@if(!observations.isEmpty){
 						<script>
@@ -194,8 +202,15 @@
 									show: false,
 								}
 							};					
+							
+							if (window.attachEvent)
+								window.attachEvent('resize', loadObservations);
+							else
+								window.addEventListener('resize', loadObservations, false);
 						
-						    $(function(){
+							loadObservations();
+						
+						    function loadObservations(){
 						    	// Observation graphs
 						    	
 						    	var observations = [];
@@ -233,6 +248,7 @@
 								
 								var length = observationList.length;
 								var graphs = document.getElementById("graphs");
+								graphs.innerHTML = "";
 	
 								graphOptions.width = graphs.offsetWidth;
 								graphOptions.height = 400;
@@ -273,94 +289,96 @@
 										$("div#graphs div." + indicator).removeClass("hidden").addClass("shown");
 									};
 								}
-						    });
+						    }
 						    
 						    // Country ranking graph
 						 
-						    var series = [];
-						    var colours = [];
-						    var thisCountryIso3 = "@{iso3}";
-						    
-						    var rainbow = new Rainbow();
-						    
-						    rainbow.setSpectrum("#223355", "#327365", "#53944f", "#7ab33f", "#f0f066");
-						    rainbow.setNumberRange(0, @{countryRanking("series").asInstanceOf[ListBuffer[Country]].length} - 1);
-						    
-						    var i = 0;
-						    
-						    @for(country <- countryRanking("series").asInstanceOf[ListBuffer[Country]]) {
-						    	var iso3 = "@{country.iso3}";
-						    	
-							    series.push({
-							    	name: "@{country.name}",
-							    	urls: [ "@{country.uri.relative}" ],
-							    	values: [ @{country.value} ]
-							    });
+							if (window.attachEvent)
+								window.attachEvent('resize', loadRanking);
+							else
+								window.addEventListener('resize', loadRanking, false);
+								
+							loadRanking();
+						 
+							function loadRanking() {
+							    var series = [];
+							    var colours = [];
+							    var thisCountryIso3 = "@{iso3}";
 							    
-							    colours.push(iso3 == thisCountryIso3 ? "#333" : "#" + rainbow.colorAt(i));
+							    var rainbow = new Rainbow();
 							    
-							    i++;
-						    }
-						    
-						    var countryRanking = document.getElementById("countryRanking");
-						    graphOptions.width = countryRanking.offsetWidth;
-						    graphOptions.height = 200;
-						    graphOptions.valueOnItem.show = false;
-						    
-						    graphOptions.margins = [10, 0, 10, 1];
-						    graphOptions.xAxis.values = [ "" ];
-						    graphOptions.xAxis.title = "";
-						    graphOptions.xAxis.margin = 0;
-						    graphOptions.yAxis.margin = 3;
-							graphOptions.series = series;
-							graphOptions.serieColours = colours;
-							
-							var graph = jGraf.barChart(graphOptions);
-							countryRanking.appendChild(graph.render());
+							    rainbow.setSpectrum("#223355", "#327365", "#53944f", "#7ab33f", "#f0f066");
+							    rainbow.setNumberRange(0, @{countryRanking("series").asInstanceOf[ListBuffer[Country]].length} - 1);
+							    
+							    var i = 0;
+							    
+							    @for(country <- countryRanking("series").asInstanceOf[ListBuffer[Country]]) {
+							    	var iso3 = "@{country.iso3}";
+							    	
+								    series.push({
+								    	name: "@{country.name}",
+								    	urls: [ "@{country.uri.relative}" ],
+								    	values: [ @{country.value} ]
+								    });
+								    
+								    colours.push(iso3 == thisCountryIso3 ? "#333" : "#" + rainbow.colorAt(i));
+								    
+								    i++;
+							    }
+							    
+							    var countryRanking = document.getElementById("countryRanking");
+							    countryRanking.innerHTML = "";
+							    graphOptions.width = countryRanking.offsetWidth;
+							    graphOptions.height = 200;
+							    graphOptions.valueOnItem.show = false;
+							    
+							    graphOptions.margins = [10, 0, 10, 1];
+							    graphOptions.xAxis.values = [ "" ];
+							    graphOptions.xAxis.title = "";
+							    graphOptions.xAxis.margin = 0;
+							    graphOptions.yAxis.margin = 3;
+								graphOptions.series = series;
+								graphOptions.serieColours = colours;
+								
+								var graph = jGraf.barChart(graphOptions);
+								countryRanking.appendChild(graph.render());
+							}
 							
 							// Index graph
 							
-							var series = [];
-							var colours = [];
+							if (window.attachEvent)
+								window.attachEvent('resize', loadIndexGraph);
+							else
+								window.addEventListener('resize', loadIndexGraph, false);
 							
-							var name = "@hierarchyValues.name";
-							var score = @{hierarchyValues.score};
-							var uri = "@hierarchyValues.uri.relative";
-							var colour1 = "@hierarchyValues.colour1";
+							loadIndexGraph();
 							
-							if (score == NaN)
-								score = 0;
-							
-							series.push({
-								name: name,
-								values: [ score ],
-								urls: [ uri ],
-							});
-							
-							colours.push(colour1);
-							
-							@for(subindex <- hierarchyValues.children) {
-								var name = "@subindex._2.name";
-								var score = @{subindex._2.score};
-								var uri = "@subindex._2.uri.relative";
-								var colour1 = "@subindex._2.colour1";
-								var colour2 = "@subindex._2.colour2";
+							function loadIndexGraph() {
+								var series = [];
+								var colours = [];
+								
+								var name = "@hierarchyValues.name";
+								var score = @{hierarchyValues.score};
+								var uri = "@hierarchyValues.uri.relative";
+								var colour1 = "@hierarchyValues.colour1";
 								
 								if (score == NaN)
 									score = 0;
-
+								
 								series.push({
 									name: name,
 									values: [ score ],
-									urls: [ uri ]
+									urls: [ uri ],
 								});
 								
 								colours.push(colour1);
 								
-								@for(component <- subindex._2.children) {
-									var name = "@component._2.name";
-									var score = @{component._2.score};
-									var uri = "@component._2.uri.relative";
+								@for(subindex <- hierarchyValues.children) {
+									var name = "@subindex._2.name";
+									var score = @{subindex._2.score};
+									var uri = "@subindex._2.uri.relative";
+									var colour1 = "@subindex._2.colour1";
+									var colour2 = "@subindex._2.colour2";
 									
 									if (score == NaN)
 										score = 0;
@@ -371,23 +389,41 @@
 										urls: [ uri ]
 									});
 									
-									colours.push(colour2);
+									colours.push(colour1);
+									
+									@for(component <- subindex._2.children) {
+										var name = "@component._2.name";
+										var score = @{component._2.score};
+										var uri = "@component._2.uri.relative";
+										
+										if (score == NaN)
+											score = 0;
+		
+										series.push({
+											name: name,
+											values: [ score ],
+											urls: [ uri ]
+										});
+										
+										colours.push(colour2);
+									}
 								}
+								
+								var rankingGraph = document.getElementById("rankingGraph");
+								rankingGraph.innerHTML = "";
+								var col1 = document.getElementById("ranking-col1");
+								
+								graphOptions.width = rankingGraph.offsetWidth;
+								graphOptions.height = col1.offsetHeight;
+								graphOptions.margins = [2, 0, 4, 5];
+								graphOptions.valueOnItem.show = true;
+								graphOptions.series = series;
+								graphOptions.serieColours = colours;
+								graphOptions.valueOnItem["font-size"] = "14px";
+								
+								var graph = jGraf.barChart(graphOptions);
+								rankingGraph.appendChild(graph.render());
 							}
-							
-							var rankingGraph = document.getElementById("rankingGraph");
-							var col1 = document.getElementById("ranking-col1");
-							
-							graphOptions.width = rankingGraph.offsetWidth;
-							graphOptions.height = col1.offsetHeight;
-							graphOptions.margins = [2, 0, 4, 5];
-							graphOptions.valueOnItem.show = true;
-							graphOptions.series = series;
-							graphOptions.serieColours = colours;
-							graphOptions.valueOnItem["font-size"] = "14px";
-							
-							var graph = jGraf.barChart(graphOptions);
-							rankingGraph.appendChild(graph.render());
 						</script>
 						}
 						}
