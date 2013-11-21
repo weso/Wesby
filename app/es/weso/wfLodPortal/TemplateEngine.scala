@@ -35,7 +35,7 @@ trait TemplateEgine extends Controller with Configurable {
   protected val indicator = conf.getString("indicator.template")
   protected val observation = conf.getString("observation.template")
   protected val dataset = conf.getString("dataset.template")
-  protected val countryConcept = conf.getString("countryConcept.template")
+  protected val skosConcept = conf.getString("skosConcept.template")
 
   protected val currentVersion = conf.getString("application.version")
 
@@ -54,7 +54,12 @@ trait TemplateEgine extends Controller with Configurable {
       case e if currentType == indicator => Ok(views.html.lod.indicator(resultQuery))
       case e if currentType == observation => Ok(views.html.lod.observation(resultQuery))
       case e if currentType == dataset => Ok(views.html.lod.dataset(resultQuery))
-      case e if currentType == countryConcept => Ok(views.html.lod.countryConcept(resultQuery))
+      case e if currentType == skosConcept => {
+        if(request.path.contains("/Country"))
+        	Ok(views.html.lod.countryConcept(resultQuery))
+    	else
+    	    Ok(views.html.lod.fallback(resultQuery))        	  
+    	}
       case _ => Ok(views.html.lod.fallback(resultQuery))
     }
   }
