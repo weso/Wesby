@@ -603,7 +603,7 @@ div#div-webindex, div#div-odb {
 div.tabs {
 	text-align: center;
 	border-bottom: 0.1em solid #d5d5d5;
-	margin-bottom: 2.5em;
+	margin-bottom: 2em;
 }
 
 div.tabs a.tab {
@@ -639,7 +639,7 @@ div.country-concept-map {
 }
 
 nav.country-list {
-	margin-top: 1em;
+	margin-top: 2em;
 	margin-bottom: 2em;
 	width: 100%;
 }
@@ -660,7 +660,7 @@ div.country-name {
 	font-size: 1.5em;
 	padding: 0.2em 0;
 	height: 1.1em;
-	margin: -1em 0 1em 0;
+	margin: 0em 0 1em 0;
 }
 
 div.year {

@@ -110,7 +110,12 @@
 					series: {
 				    	regions: [{
 					    	values: countries,
-					    	scale: ['#C8EEFF', '#0071A4'],
+					    	@if(mode == "webindex") {
+					    		scale: ['#C8EEFF', '#0071A4'],
+					    	} 
+					    	@if(mode == "odb") {
+						    	scale: ['#C8EEFF', '#459019'],
+					    	}
 					    	normalizeFunction: 'polynomial'
 					    }]
 					},
