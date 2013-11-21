@@ -26,7 +26,8 @@
 		
 			button.onclick = function() {
 				var query = editor.doc.getValue();
-				window.open("@{endpoint}?default-graph-uri=&query=" + encodeURIComponent(query), "_blank");
+				window.location.href = "@{routes.Application.snorql()}?default-graph-uri=&query=" + encodeURIComponent(query);
+				//window.open("@{routes.Application.snorql()}?default-graph-uri=&query=" + encodeURIComponent(query), "_blank");
 			};
 	    }
 	    

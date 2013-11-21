@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/pages.css")"/>
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/sortable.css")"/>
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet" type="text/css">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.png")"/>
     </head>
 	<body>
@@ -83,8 +83,8 @@
 				<div class="footer">&copy; 2013 World Wide Web Foundation.</div>
 			</footer>
 		</div>
+		<script src="@{routes.Assets.at("javascripts/richTable.js")}"></script>
 	</body>
-	<script src="@{routes.Assets.at("javascripts/richTable.js")}"></script>
 </html>
 @compareLabel = @{ 
 		compare match {
@@ -92,7 +92,6 @@
 			case None => "COMPARER"
 		}
 }
-
 @compareUri = @{
 		compare match {
 			case Some(c) => c._2

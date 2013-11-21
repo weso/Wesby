@@ -3,17 +3,10 @@
 @import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
+@import es.weso.wfLodPortal.models.Options
 @main(None, "Snorql: A SPARQL Explorer"){
-	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/codemirror.css")"/>
-	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/snorql.css")"/>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/snorql/prototype.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/snorql/scriptaculous/scriptaculous.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/snorql/sparql.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/snorql/namespaces.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/snorql/snorql.js")"></script>
-	<script src="@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
-	<script src="@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
-	<script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/codemirror.css")"></link>
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/snorql.css")"></link>
   <div class="snorql">
   	<nav class="breadcrumbs">
 		@hostLink(request) &gt; Snorql: A SPARQL Explorer
@@ -81,6 +74,14 @@
 
     <div id="footer">Powered by <a id="poweredby" href="#">Snorql</a></div>
   </div>
+  <script src="@routes.Assets.at("javascripts/snorql/prototype.js")"></script>
+  <script src="@routes.Assets.at("javascripts/snorql/scriptaculous/scriptaculous.js")"></script>
+  <script src="@routes.Assets.at("javascripts/snorql/sparql.js")"></script>
+  <script src="@routes.Assets.at("javascripts/snorql/namespaces.js")"></script>
+  <script src="@routes.Assets.at("javascripts/snorql/snorql.js")"></script>
+  <script src="@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
+  <script src="@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
+  <script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
   <script>
 			snorql.start();
 			var editor = CodeMirror.fromTextArea(document
@@ -89,6 +90,14 @@
 				tabMode : "indent",
 				lineNumbers : true,
 				matchBrackets : true
+			});
+			var $j = jQuery.noConflict();
+			$j(document).ready(function() {
+				if(window.location.pathname!="@{Options.baseUri}snorql"){
+					$j('html, body').animate({
+						scrollTop : $j("div.CodeMirror").offset().top
+					}, 2000);
+				}
 			});
 		</script>
 }

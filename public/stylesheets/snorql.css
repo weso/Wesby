@@ -59,7 +59,7 @@ img {
 }
 
 .link {
-	background: url(link.png) center right no-repeat;
+	background: url('/assets/images/link.png') center right no-repeat;
 	padding-right: 13px;
 }
 
@@ -187,7 +187,7 @@ div.dropdown {
 	width: 13em;
 	height: 1.6em;
 	overflow: hidden;
-	background: url('../images/arrow.png') no-repeat 97% 50% #fff;
+	background: url('/assets/images/arrow.png') no-repeat 97% 50% #fff;
 	border-left: 1px solid #eee;
 	border-right: 1px solid #eee;
 	border-bottom: 1px solid #ccc;
