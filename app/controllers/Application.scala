@@ -89,6 +89,10 @@ object Application extends Controller with TemplateEgine {
     Redirect(to)
   }
 
+  def snorql() = Action {
+    implicit request => Ok(views.html.snorql())
+  }
+
   protected def downloadAs(uri: String, format: String, models: Seq[JenaModel])(implicit request: RequestHeader) = {
     format match {
       case "n3" =>
