@@ -82,9 +82,13 @@ object Application extends Controller with TemplateEgine {
   }
 
   def root(mode: String, version: String) = Action {
-    implicit request => renderRoot(mode, version)
+  	implicit request =>
+  	if (mode == "webindex")
+    	renderRootWI(mode, version)
+    else
+    	renderRootODB(mode, version)
   }
-
+ 
   def redirect(to: String) = Action {
     Redirect(to)
   }
