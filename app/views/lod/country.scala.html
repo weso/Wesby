@@ -55,7 +55,7 @@
 										</td>
 										<td class="score">
 											<a href="@hierarchyValues.uri.relative" title"Go to @hierarchyValues.name">
-												@hierarchyValues.score
+												@BigDecimal(hierarchyValues.score).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
 											</a>
 										</td>
 									</tr>	
@@ -75,7 +75,7 @@
 											</td>
 											<td class="score">
 												<a href="@subindex._2.uri.relative" title"Go to @subindex._2.name">
-													@subindex._2.score
+													@BigDecimal(subindex._2.score).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
 												</a>
 											</td>
 										</tr>
@@ -94,7 +94,7 @@
 												</td>
 												<td class="score">
 													<a href="@component._2.uri.relative" title"Go to @component._2.name">
-														@component._2.score
+														@BigDecimal(component._2.score).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
 													</a>	
 												</td>
 											</tr>
@@ -295,7 +295,7 @@
 							    	values: [ @{country.value} ]
 							    });
 							    
-							    colours.push(iso3 == thisCountryIso3 ? "#333" : rainbow.colorAt(i));
+							    colours.push(iso3 == thisCountryIso3 ? "#333" : "#" + rainbow.colorAt(i));
 							    
 							    i++;
 						    }
