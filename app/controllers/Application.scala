@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
 
-import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
+import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
 
 import es.weso.wfLodPortal.TemplateEgine
