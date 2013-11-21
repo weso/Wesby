@@ -9,7 +9,7 @@ trait CustomQuery extends Configurable {
 
   def checkMode(param: String, version: String) = {
     new StringBuilder(baseUri)
-      .append(param).append("/v")
+      .append(param).append("/")
       .append(version).append("/").toString
   }
 }
