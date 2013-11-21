@@ -18,11 +18,18 @@
   	<nav class="breadcrumbs">
 		@hostLink(request) &gt; Snorql: A SPARQL Explorer
 	</nav>	
-    <div id="header">
-      <h1 id="title">Snorql: A SPARQL Explorer</h1>
+	
+    <h1>Snorql: <span class="exploring" id="title"></span></h1>
+    
+    <div id="default-graph-section" class="section">
+      <h2 style="display: inline">GRAPH:</h2>
+      <p style="display: inline">
+        Default graph.
+        <a href="?browse=graphs">List named graphs</a>
+      </p>
     </div>
-
-    <div class="section" style="float: right; width: 8em">
+    
+    <div class="section">
       <h2>Browse:</h2>
       <ul>
         <li><a class="graph-link" href="?browse=superclasses">Super Classes</a></li>
@@ -32,15 +39,7 @@
       </ul>
     </div>
 
-    <div id="default-graph-section" class="section" style="margin-right: 12em">
-      <h2 style="display: inline">GRAPH:</h2>
-      <p style="display: inline">
-        Default graph.
-        <a href="?browse=graphs">List named graphs</a>
-      </p>
-    </div>
-
-    <div id="named-graph-section" class="section" style="margin-right: 12em">
+    <div id="named-graph-section" class="section">
       <h2 style="display: inline">GRAPH:</h2>
       <p style="display: inline">
         <span id="selected-named-graph">Named graph goes here</span>.
@@ -48,8 +47,7 @@
       </p>
     </div>
 
-    <div class="section" style="margin-right: 12em">
-      <h2>SPARQL:</h2>
+    <div class="section">
       <pre id="prefixestext"></pre>
       <form id="queryform" action="#" method="get"><div>
         <input type="hidden" name="query" value="" id="query" />
@@ -59,13 +57,15 @@
       </div></form>
       <div>
         <textarea name="query" rows="9" cols="80" id="querytext"></textarea>
-        Results:
-        <select id="selectoutput" onchange="snorql.updateOutputMode()">
-          <option selected="selected" value="browse">Browse</option>
-          <option value="json">as JSON</option>
-          <option value="xml">as XML</option>
-          <option value="xslt">as XML+XSLT</option>
-        </select>
+        <label for="selectoutput">Results:</label>
+        <div class="dropdown">
+	        <select id="selectoutput" onchange="snorql.updateOutputMode()">
+	          <option selected="selected" value="browse">Browse</option>
+	          <option value="json">as JSON</option>
+	          <option value="xml">as XML</option>
+	          <option value="xslt">as XML+XSLT</option>
+	        </select>
+        </div>
         <span id="xsltcontainer"><span id="xsltinput">
           XSLT stylesheet URL:
           <input id="xsltstylesheet" type="text" value="snorql/xml-to-html.xsl" size="30" />
@@ -82,9 +82,13 @@
     <div id="footer">Powered by <a id="poweredby" href="#">Snorql</a></div>
   </div>
   <script>
-		snorql.start();
-		var editor = CodeMirror.fromTextArea(document.getElementById("querytext"), {
-		   	mode: "application/x-sparql-query", tabMode: "indent", 
-		   	lineNumbers: true,  matchBrackets: true });
-  </script>
+			snorql.start();
+			var editor = CodeMirror.fromTextArea(document
+					.getElementById("querytext"), {
+				mode : "application/x-sparql-query",
+				tabMode : "indent",
+				lineNumbers : true,
+				matchBrackets : true
+			});
+		</script>
 }
