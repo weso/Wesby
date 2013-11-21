@@ -117,6 +117,7 @@
 								}
 							</select>
 						</div>
+						<p class="note">* Only indicators with observations for more than one year are shown</p>
 						<div id="graphs"></div>
 						}
 						@grill(rs)
@@ -235,6 +236,7 @@
 	
 								graphOptions.width = graphs.offsetWidth;
 								graphOptions.height = 400;
+								graphOptions.margins = [10, 0, 10, 0];
 								graphOptions.valueOnItem.show = true;
 								graphOptions.serieColours = ["#CC2222"];
 								graphOptions.yAxis.margin = 0;
