@@ -19,11 +19,13 @@ class Options(val partialUri: String) extends Configurable {
   def endpoint = Options.endpoint
   def defaultVersion = Options.defaultVersion
   def fallback = Options.fallback
+  def baseUri = Options.baseUri
 }
 
 object Options extends Configurable {
   val host = conf.getString("sparql.actualuri")
   val endpoint = conf.getString("sparql.endpoint")
   val defaultVersion = conf.getString("application.version")
+  val baseUri = conf.getString("sparql.baseuri")
   val fallback = conf.getString("query.show.fallback")
 }
