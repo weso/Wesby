@@ -3,14 +3,12 @@
 @import views.html.helpers._
 @import es.weso.wfLodPortal.models.Options
 
-@breadcrumb = @{ if (mode == "odb") "ODB"; else "WEB INDEX" }
-
 @main(None, mode) {
 	<img class="root-logo" alt="Web Index" src="@routes.Assets.at("images/webindex.png")" />
 	<nav class="breadcrumbs">
-		@hostLink(request) &gt; @breadcrumb
+		@hostLink(request) &gt; WEB INDEX
 	</nav>
-	<h1 class="main">@if(mode == "odb"){OPEN DATA BAROMETER}else{WEB INDEX}</h1>
+	<h1 class="main">WEB INDEX</h1>
 	
 	<p class="main-description">
 		This is the summary of the promotion of the Web Index to the Linked Data initiative applying the <a href="http://www.w3.org/DesignIssues/LinkedData.html" title="Go to Linked Data Article by Sir Tim Berners-Lee">design issues</a> outlined by <a href="http://www.w3.org/People/Berners-Lee/" title="Go to Sir Tim Berners-Lee Contact Page">Sir Tim Berners-Lee</a> to publish a new 5 star dataset containing all observations gathered by the <a href="http://webfoundation.org/" title="Go to World Wide Web Foundation Website">World Wide Web Foundation</a> and other international organizations.

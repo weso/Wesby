@@ -64,7 +64,7 @@ trait TemplateEgine extends Controller with Configurable {
     }
   }
 
-  def renderRoot(mode: String, version: String)(implicit request: RequestHeader) = {
+  def renderRootWI(mode: String, version: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom._
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
@@ -74,7 +74,20 @@ trait TemplateEgine extends Controller with Configurable {
     implicit val subindexes = loadSubindexes(mode, version)
     implicit val queries = RootQueries.loadQueries
 
-    Ok(views.html.custom.root(version, mode))
+    Ok(views.html.custom.WIroot(version, mode))
+  }
+  
+  def renderRootODB(mode: String, version: String)(implicit request: RequestHeader) = {
+    import es.weso.wfLodPortal.sparql.custom._
+    import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
+    import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
+    import es.weso.wfLodPortal.sparql.custom.RootQueries._
+
+    implicit val regions = loadRegions(mode, version)
+    implicit val subindexes = loadSubindexes(mode, version)
+    implicit val queries = RootQueries.loadQueries
+
+    Ok(views.html.custom.ODBroot(version, mode))
   }
 
   def renderPreCompare(mode: String, selectedCountries: Option[String], selectedIndicators: Option[String])(implicit request: RequestHeader) = {
