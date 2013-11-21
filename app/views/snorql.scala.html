@@ -30,7 +30,7 @@
     </div>
     
     <div class="section">
-      <h2>Browse:</h2>
+      <h2>browse:</h2>
       <ul>
         <li><a class="graph-link" href="?browse=superclasses">Super Classes</a></li>
         <li><a class="graph-link" href="?browse=classes">Classes</a></li>
@@ -55,23 +55,27 @@
         <input type="hidden" name="stylesheet" value="" id="stylesheet" disabled="disabled" />
         <input type="hidden" name="graph" value="" id="graph-uri" disabled="disabled" />
       </div></form>
-      <div>
+      <div class="wrapper">
         <textarea name="query" rows="9" cols="80" id="querytext"></textarea>
-        <label for="selectoutput">Results:</label>
-        <div class="dropdown">
-	        <select id="selectoutput" onchange="snorql.updateOutputMode()">
-	          <option selected="selected" value="browse">Browse</option>
-	          <option value="json">as JSON</option>
-	          <option value="xml">as XML</option>
-	          <option value="xslt">as XML+XSLT</option>
-	        </select>
+        <div class="clear">
+        	<input type="button" value="TEST QUERY" onclick="snorql.submitQuery()" />
+	        <input type="button" value="CLEAR" onclick="snorql.resetQuery()" class="b-clear" />
+        	<div class="select">
+		        <label for="selectoutput">Result:</label>
+		        <div class="dropdown">
+			        <select id="selectoutput" onchange="snorql.updateOutputMode()">
+			          <option selected="selected" value="browse">Browse</option>
+			          <option value="json">as JSON</option>
+			          <option value="xml">as XML</option>
+			          <option value="xslt">as XML+XSLT</option>
+			        </select>
+		        </div>
+        	</div>
+	        <span id="xsltcontainer"><span id="xsltinput">
+	          XSLT stylesheet URL:
+	          <input id="xsltstylesheet" type="text" value="snorql/xml-to-html.xsl" size="30" />
+	        </span></span>
         </div>
-        <span id="xsltcontainer"><span id="xsltinput">
-          XSLT stylesheet URL:
-          <input id="xsltstylesheet" type="text" value="snorql/xml-to-html.xsl" size="30" />
-        </span></span>
-        <input type="button" value="Go!" onclick="snorql.submitQuery()" />
-        <input type="button" value="Reset" onclick="snorql.resetQuery()" />
       </div>
     </div>
 
@@ -90,5 +94,5 @@
 				lineNumbers : true,
 				matchBrackets : true
 			});
-		</script>
+  </script>
 }
