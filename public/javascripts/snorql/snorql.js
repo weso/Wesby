@@ -14,7 +14,7 @@ function Snorql() {
     	//document.location.href.match(/^([^?]*)snorql\//)[1] + 'sparql';
     // modify these to your likeing
     this._poweredByLink = 'http://www.openlinksw.com/dataspace/doc/dav/wiki/Main/';
-    this._poweredByLabel = 'WFLodPortal';
+    this._poweredByLabel = 'Virtuoso Open Source';
     this._enableNamedGraphs = false;
 
     var WF_namespacePrefixes = {
@@ -515,7 +515,7 @@ function SPARQLResultFormatter(json, namespaces) {
             var externalLink = document.createElement('a');
             externalLink.href = node.value;
             img = document.createElement('img');
-            img.src = 'link.png';
+            img.src = '/assets/images/link.png';
             img.alt = '[' + match[1] + ']';
             img.title = 'Go to Web page';
             externalLink.appendChild(img);
