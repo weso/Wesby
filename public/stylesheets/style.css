@@ -147,8 +147,15 @@ div.sparql button {
 	font-family: 'Source Sans Pro', sans-serif;
 	border: none;
 	padding: 0.8em 3em;
-	margin: 1em 0;
+	margin: 1em 0 2em 0;
 	float: right;
+	width: 100%;
+}
+
+@media all and (min-width: 37em) {
+	div.sparql button {
+		width: auto;
+	}
 }
 
 div.format-links {
@@ -163,26 +170,50 @@ div.format-links h3 {
 }
 
 div.format-links a {
-	width: 20%;
+	width: 50%;
 	float: left;
 	text-align: center;
 	font-size: 0.9em;
+	margin-bottom: 1em;
+}
+
+@media all and (min-width: 30em) {
+	div.format-links a {
+		width: 20%;
+	}
 }
 
 footer {
 	overflow: auto;
 	margin-top: 1em;
-	background-color: #EEAA11;
 	font-size: 0.9em;
 }
 
 footer div.quarter {
-	width: 20%;
+	margin: 0;
+	width: 50%;
 	float: left;
-	min-height: 9em;
-	padding: 1em 0;
 	color: #fff;
 	font-family: 'Source Sans Pro', sans-serif;
+}
+
+@media all and (min-width: 37em) {
+	footer div.quarter {
+		width: 25%;
+	}
+}
+
+@media all and (min-width: 45em) {
+	footer {
+		background-color: #EEAA11;	
+	}
+	
+	footer div.quarter {
+		width: 20%;
+		float: left;
+		min-height: 9em;
+		padding: 1em 0;
+	}
 }
 
 footer div.first {
@@ -204,6 +235,17 @@ footer div.forth {
 footer div.fifth {
 	background-color: #EEAA11;
 	text-align: center;
+	height: 3em;
+	padding-top: 1em;
+	margin: 0;
+	width: 100%;
+}
+
+@media all and (min-width: 45em) {
+	footer div.fifth {
+		width: 20%;
+		height: 5em;
+	}
 }
 
 footer div.fifth a.valid {
@@ -225,8 +267,17 @@ footer div.fifth a.valid {
 }*/
 
 footer div.fifth img {
-	display: block;
-	margin: 2em auto 0.4em auto;
+	height: 2em;
+	margin-right: 2em;
+	vertical-align: middle;
+}
+
+@media all and (min-width: 45em) {
+	footer div.fifth img {
+		display: block;
+		margin: 2em auto 0.4em auto;
+		height: 3em;
+	}
 }
 
 footer div.footer {
@@ -238,8 +289,16 @@ footer div.footer {
 }
 
 footer ul {
-	margin-top: 0.5em;
-	padding-left: 2em;
+	margin: 0;
+	padding: 0.5em;
+	height: 6em;
+}
+
+@media all and (min-width: 45em) {
+	footer ul {
+		margin-top: 0.5em;
+		padding: 0 1em;
+	}
 }
 
 footer li {
@@ -427,16 +486,18 @@ table.children {
 /* Select */
 
 div.dropdown {
-	display: inline-block;
-	width: 13em;
+	display: block;
 	height: 1.6em;
 	overflow: hidden;
 	background: url('../images/arrow.png') no-repeat 97% 50% #fff;
-	border-left: 1px solid #eee;
-	border-right: 1px solid #eee;
-	border-bottom: 1px solid #ccc;
-	border-top: 1px solid #eee;
-	margin-left: 1em;
+	border: 0.1em solid #eee;
+}
+
+@media all and (min-width: 30em) {
+	div.dropdown {
+		display: inline-block;
+		width: 13em;
+	}
 }
 
 div.dropdown select {
@@ -455,10 +516,11 @@ div.dropdown select {
 /* Help */
 
 .help {
-	font-size: 1.1em;
+	font-size: 1em;
 	color: #888;
 	font-style: italic;
 	font-weight: 100;
+	padding-right: 1em;
 }
 
 /* Country view */
@@ -495,7 +557,7 @@ div.shown {
 p.note {
 	font-size: 0.8em;
 	text-align: right;
-	margin: 0;
+	margin: 1em 0 0 0;
 	color: #888;
 }
 
@@ -593,16 +655,18 @@ div.country-ranking {
 	margin-bottom: 2em;
 }
 
-div.ranking-col1 {
-	float: left;
-	width: 50%;
-	margin-bottom: 0.5em;
-}
-
-div.ranking-col2 {
-	float: left;
-	width: 50%;
-	margin-bottom: 0.5em;
+@media all and (min-width: 30em) {
+	div.ranking-col1 {
+		float: left;
+		width: 50%;
+		margin-bottom: 0.5em;
+	}
+	
+	div.ranking-col2 {
+		float: left;
+		width: 50%;
+		margin-bottom: 0.5em;
+	}
 }
 
 /* Country concept */
@@ -620,13 +684,13 @@ div.tabs {
 
 div.tabs a.tab {
 	display: inline-block;
-	width: 8em;
+	width: 40%;
 	height: 2em;
 	padding-top: 0.5em;
 	border: 0.1em solid #d5d5d5;
 	background-color: #d5d5d5;
 	color: #888;
-	margin: 0 0.5em -0.1em 0.5em;
+	margin: 0 1% -0.1em 1%;
 	text-decoration: none;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -635,6 +699,13 @@ div.tabs a.tab {
 	-ms-user-select: none;
 	user-select: none;
 	cursor: pointer;
+}
+
+@media all and (min-width: 30em) {
+	div.tabs a.tab {
+		width: 8em;
+		margin: 0 0.5em -0.1em 0.5em;
+	}
 }
 
 div.tabs a.selected {
@@ -647,7 +718,19 @@ div.tabs a.selected {
 }
 
 div.country-concept-map {
-	height: 30em;
+	height: 10em;
+}
+
+@media all and (min-width: 30em) {
+	div.country-concept-map {
+		height: 15em;
+	}
+}
+
+@media all and (min-width: 45em) {
+	div.country-concept-map {
+		height: 30em;
+	}
 }
 
 nav.country-list {
@@ -658,10 +741,35 @@ nav.country-list {
 
 nav.country-list a.country {
 	display: inline-block;
-	width: 19%;
-	padding: 0.5em 0.5%;
+	width: 48%;
+	padding: 0.5em 1%;
 	float: left;
 	font-size: 0.8em;
+}
+
+@media all and (min-width: 30em) {
+	nav.country-list a.country {
+		width: 24%;
+		padding: 0.5em 0.5%;
+	}
+}
+
+@media all and (min-width: 37em) {
+	nav.country-list a.country {
+		width: 19%;
+	}
+}
+
+/* Observation */
+
+h1.observation {
+	clear: both;
+}
+
+@media all and (min-width: 30em) {
+	h1.observation {
+		clear: none;
+	}
 }
 
 div.country-name {
@@ -766,7 +874,14 @@ nav.breadcrumbs {
 /* Root */
 
 img.root-logo {
-	float: right;
+	width: 100%;
+}
+
+@media all and (min-width: 30em) {
+	img.root-logo {
+		float: right;
+		width: 14em;
+	}
 }
 
 div.byElements {
@@ -774,9 +889,11 @@ div.byElements {
 	margin-top: 1em;
 }
 
-div.byElements div {
-	width: 50%;
-	float: left;
+@media all and (min-width: 30em) {
+	div.byElements div {
+		width: 50%;
+		float: left;
+	}
 }
 
 div.byElements h2, p.root-section {
@@ -1214,6 +1331,7 @@ p.intro {
 }
 
 p.more-info {
+	clear: both;
 	text-transform: uppercase;
 	color: #888;
 	border-bottom: 0.1em solid #ddd;
@@ -1276,17 +1394,23 @@ div.repository a img {
 
 div.repository {
 	margin-bottom: 2em;
-	overflow: auto;
-	float: left;
-	width: 46%;
 }
 
-div.first {
-	padding-right: 3%;
-}
-
-div.second {
-	padding-left: 3%;
+@media all and (min-width: 45em) {
+	div.repository {
+		margin-bottom: 2em;
+		overflow: auto;
+		float: left;
+		width: 46%;
+	}
+	
+	div.first {
+		padding-right: 3%;
+	}
+	
+	div.second {
+		padding-left: 3%;
+	}
 }
 
 div.repository p {
@@ -1295,6 +1419,7 @@ div.repository p {
 	font-style: italic;
 	color: #666;
 	text-align: justify;
+	min-height: 10em;
 }
 
 div.repository a.button {

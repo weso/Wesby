@@ -51,10 +51,7 @@
       <div class="wrapper">
         <textarea name="query" rows="9" cols="80" id="querytext"></textarea>
         <div class="clear">
-        	<input type="button" value="TEST QUERY" onclick="snorql.submitQuery()" />
-	        <input type="button" value="CLEAR" onclick="snorql.resetQuery()" class="b-clear" />
         	<div class="select">
-		        <label for="selectoutput">Result:</label>
 		        <div class="dropdown">
 			        <select id="selectoutput" onchange="snorql.updateOutputMode()">
 			          <option selected="selected" value="browse">Browse</option>
@@ -64,6 +61,8 @@
 			        </select>
 		        </div>
         	</div>
+        	<input type="button" value="TEST QUERY" onclick="snorql.submitQuery()" />
+	        <input type="button" value="CLEAR" onclick="snorql.resetQuery()" class="b-clear" />
 	        <span id="xsltcontainer"><span id="xsltinput">
 	          XSLT stylesheet URL:
 	          <input id="xsltstylesheet" type="text" value="snorql/xml-to-html.xsl" size="30" />
@@ -98,11 +97,10 @@
 			});
 			var $j = jQuery.noConflict();
 			$j(document).ready(function() {
-				if(window.location.pathname!="@{Options.baseUri}snorql"){
-					$j('html, body').animate({
-						scrollTop : $j("div.CodeMirror").offset().top
-					}, 2000);
-				}
+				$j('html, body').animate({
+					scrollTop : $j("div.CodeMirror").offset().top
+				}, 2000);
+
 			});
 		</script>
 }

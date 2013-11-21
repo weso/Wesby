@@ -17,7 +17,7 @@
 h2 {
 	font-weight: normal;
 	font-size: 120%;
-	margin: 0;
+	margin: 1em 0 0 0;
 	padding: 0 0 0.2em 0;
 	color: #888;
 }
@@ -34,7 +34,10 @@ textarea {
 	color: #2a5384;
 	margin: 0;
 	margin-bottom: 1em;
-	font-size: 1.1em:
+	font-size: 1.1em;
+	word-break: break-all;
+	width: 100%;
+	overflow: scroll;
 }
 
 ul {
@@ -52,8 +55,7 @@ img {
 }
 
 .section {
-	margin: 0.9em;
-	padding: 0.6em 0.9em;
+
 }
 
 .busy {
@@ -61,7 +63,7 @@ img {
 }
 
 .link {
-	background: url('/assets/images/link.png') center right no-repeat;
+	background: url(link.png) center right no-repeat;
 	padding-right: 13px;
 }
 
@@ -77,7 +79,7 @@ img {
 }
 
 .uri {
-	white-space: nowrap;
+	font-size: 0.9em;
 }
 
 .uri a,a.uri {
@@ -160,6 +162,7 @@ div.section li {
 div.section ul {
 	padding: 0;
 	margin: 0;
+	overflow: auto;
 	margin-bottom: 2em;
 }
 
@@ -173,9 +176,16 @@ input[type=button] {
 	font-family: "Century Gothic", Arial;
 	border: none;
 	padding: 0.8em 0;
-	width: 10em;
-	margin-left: 1em;
+	width: 49%;
+	margin-left: 1%;
 	float: right;
+}
+
+@media all and (min-width: 37em) {
+	input[type=button] {
+		width: 10em;
+		margin-left: 1em;
+	}
 }
 
 input[type=button]:hover {
@@ -184,6 +194,18 @@ input[type=button]:hover {
 
 input[type=button].b-clear {
 	background-color: #444;
+	margin-left: 0;
+	margin-right: 1%;
+	float: left;
+}
+
+@media all and (min-width: 37em) {
+	input[type=button].b-clear {
+		background-color: #444;
+		margin-left: 1em;
+		margin-right: 0;
+		float: right;
+	}
 }
 
 input[type=button].b-clear:hover {
@@ -200,21 +222,26 @@ label {
 
 div.dropdown {
 	clear:both;
-	width: 13em;
+	width: 98%;
 	height: 1.6em;
 	overflow: hidden;
-	background: url('/assets/images/arrow.png') no-repeat 97% 50% #fff;
-	border-left: 1px solid #eee;
-	border-right: 1px solid #eee;
-	border-bottom: 1px solid #ccc;
-	border-top: 1px solid #eee;
+	background: url('../images/arrow.png') no-repeat 97% 50% #fff;
+	border-left: 0.5% solid #eee;
+	border-right: 0.5% solid #eee;
+	border-bottom: 0.5% solid #ccc;
+	border-top: 0.5% solid #eee;
 	margin-left: 0;
+}
+
+@media all and (min-width: 37em) {
+	div.dropdown {
+		width: 15em;
+	}
 }
 
 div.dropdown select {
 	background: transparent;
-	width: 98%;
-	padding: 1% 0.53em;
+	width: 100%;
 	font-size: 0.9em;
 	line-height: 1;
 	border: 0;
@@ -233,6 +260,7 @@ div.dropdown select {
 div.clear {
 	clear: both;
 	overflow: auto;
+	margin-bottom: 2em;
 }
 
 div.wrapper {
@@ -240,5 +268,7 @@ div.wrapper {
 }
 
 div.select {
-	margin-top: 1em;
+	margin-bottom: 2em;
+	overflow: auto;
+	clear: both;
 }
