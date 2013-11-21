@@ -1,9 +1,10 @@
 @(version: String, mode: String)(implicit request: RequestHeader, regions:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String])
 
 @import views.html.helpers._
+@import es.weso.wfLodPortal.models.Options
 
 @href = @{
-	request.host + "/" + mode + "/" + version
+	routes.Application.root(mode, version)
 }
 
 @label = @{
@@ -13,7 +14,7 @@
 @main(None, mode){
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/Selector.min.css")"/>
 	<nav class="breadcrumbs">
-		@hostLink(request) &gt; <a href="http://@href" title="Data">@label</a> &gt; COMPARER
+		@hostLink(request) &gt; <a href="@href" title="Data">@label</a> &gt; COMPARER
 	</nav>
 	<div id="help" class="help"></div>
 	<div class="columns">
