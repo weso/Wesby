@@ -29,11 +29,14 @@ HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)     
 GET    /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
 GET    /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
 
-GET    /webindex/:version                                                         controllers.Application.root(mode="webindex", version)
-HEAD   /webindex/:version                                                         controllers.Application.root(mode="webindex", version)
+GET    /webindex/:version                                                          controllers.Application.root(mode="webindex", version)
+HEAD   /webindex/:version                                                          controllers.Application.root(mode="webindex", version)
 
 GET    /odb/:version                                                               controllers.Application.root(mode="odb", version)
 HEAD   /odb/:version                                                               controllers.Application.root(mode="odb", version)
+
+GET    /snorql                                                                     controllers.Application.snorql()
+HEAD   /snorql                                                                     controllers.Application.snorql()
 
 GET    /*path                                                                      controllers.Application.fallback(path: String)
 HEAD   /*path                                                                      controllers.Application.fallback(path: String)
