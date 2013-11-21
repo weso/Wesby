@@ -10,21 +10,29 @@
 	<textarea id="query-@randomString">@{query.replace("\\n", "\n").replace("\\t", "\t")}</textarea>
 	<button id="test-query-@randomString">Test query</button>
 	<script>
-		// Button
-		var button = document.getElementById("test-query-@randomString");
-		
-		button.onclick = function() {
-			var query = editor.doc.getValue();
-			window.location.href = "@{endpoint}?default-graph-uri=&query=" + encodeURIComponent(query);
-		};
 		
 		// Codemirror (Pretty code)
 		
-		var editor = CodeMirror.fromTextArea(document.getElementById("query-@randomString"), {
-	    	mode: "application/x-sparql-query",
-	        tabMode: "indent",
-	        lineNumbers: true,
-	        matchBrackets: true
-	    });
+		function load@{randomString} () {
+			var editor = CodeMirror.fromTextArea(document.getElementById("query-@randomString"), {
+		    	mode: "application/x-sparql-query",
+		        tabMode: "indent",
+		        lineNumbers: true,
+		        matchBrackets: true
+		    });
+		    
+		    // Button
+		    var button = document.getElementById("test-query-@randomString");
+		
+			button.onclick = function() {
+				var query = editor.doc.getValue();
+				window.open("@{endpoint}?default-graph-uri=&query=" + encodeURIComponent(query), "_blank");
+			};
+	    }
+	    
+	    if (window.attachEvent)
+			window.attachEvent('load', load@{randomString});
+		else
+			window.addEventListener('load', load@{randomString}, false);
 	</script>
 }
