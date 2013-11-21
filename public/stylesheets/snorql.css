@@ -1,39 +1,214 @@
-body { font-family: sans-serif; font-size: 80%; }
-body, html { margin: 0; padding: 0; }
-#header { margin: 0; padding: 0.8em; }
-#footer { font-size: 60%; margin: 0 1.8em 1em 0; text-align: center; }
-h1 { font-weight: normal; font-size: 160%; margin: 0; text-align: center; }
-.subtitle { text-align: center; margin-top: 0; }
-h2 { font-weight: normal; font-size: 120%; margin: 0; padding: 0 0 0.2em 0; }
-form { margin: 0; }
-textarea { width: 100%; }
-#prefixestext { color: #555; margin: 0; }
-ul { margin: 0; padding: 0; }
-li { margin: 0 0 0 1em; padding: 0; }
-img { border: none; }
-.section { margin: 0.9em; padding: 0.6em 0.9em; }
-.busy { color: #888; }
-.link { background: url(link.png) center right no-repeat; padding-right: 13px; }
-.queryresults { border-collapse: collapse; margin-top: 0.3em; }
-.queryresults td, .queryresults th { padding: 0.2em 0.4em; vertical-align: top; }
-.uri { white-space: nowrap; }
-.uri a, a.uri { text-decoration: none; }
-.unbound { color: #888; }
-.queryresults a small { font-size: 100%; color: #55a; }
-.queryresults small { font-size: 100%; color: #666; }
-.queryresults .property { white-space: nowrap; }
-#rdficon { float: right; margin: 0.6em 1em; }
-.directory li { margin-bottom: 0.5em; }
-.directory small { font-size: 80%; color: #666; }
+#header {
+	margin: 0;
+	padding: 0.8em;
+}
 
-.snorql h1, .snorql h2 { color: #400; }
-.snorql #header, .snorql .section { background: #ccf; }
-.snorql .queryresults th { background: #88c; }
-.snorql .queryresults .odd td { background: #f2f2ff; }
-.snorql .queryresults .even td { background: #ddf; }
+#footer {
+	font-size: 60%;
+	margin: 0 1.8em 1em 0;
+	text-align: center;
+}
 
-.browser h1, .browser h2 { color: #810; }
-.browser #header, .browser .section { background: #beb; }
-.browser .queryresults th { background: #7b7; }
-.browser .queryresults .odd td { background: #f0fcf0; }
-.browser .queryresults .even td { background: #d4f6d4; }
+.subtitle {
+	text-align: center;
+	margin-top: 0;
+}
+
+h2 {
+	font-weight: normal;
+	font-size: 120%;
+	margin: 0;
+	padding: 0 0 0.2em 0;
+}
+
+form {
+	margin: 0;
+}
+
+textarea {
+	width: 100%;
+}
+
+#prefixestext {
+	color: #555;
+	margin: 0;
+	margin-bottom: 1em;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	margin: 0 0 0 1em;
+	padding: 0;
+}
+
+img {
+	border: none;
+}
+
+.section {
+	margin: 0.9em;
+	padding: 0.6em 0.9em;
+}
+
+.busy {
+	color: #888;
+}
+
+.link {
+	background: url(link.png) center right no-repeat;
+	padding-right: 13px;
+}
+
+.queryresults {
+	border-collapse: collapse;
+	margin-top: 0.3em;
+}
+
+.queryresults td,.queryresults th {
+	padding: 0.2em 0.4em;
+	vertical-align: top;
+}
+
+.uri {
+	white-space: nowrap;
+}
+
+.uri a,a.uri {
+	text-decoration: none;
+}
+
+.unbound {
+	color: #888;
+}
+
+.queryresults a small {
+	font-size: 100%;
+	color: #55a;
+}
+
+.queryresults small {
+	font-size: 100%;
+	color: #666;
+}
+
+.queryresults .property {
+	white-space: nowrap;
+}
+
+#rdficon {
+	margin: 0.6em 1em;
+}
+
+.directory li {
+	margin-bottom: 0.5em;
+}
+
+.directory small {
+	font-size: 80%;
+	color: #666;
+}
+
+.snorql .queryresults th {
+	background: #88c;
+}
+
+.snorql .queryresults .odd td {
+	background: #f2f2ff;
+}
+
+.snorql .queryresults .even td {
+	background: #ddf;
+}
+
+.browser h1,.browser h2 {
+	color: #810;
+}
+
+.browser #header,.browser .section {
+	background: #beb;
+}
+
+.browser .queryresults th {
+	background: #7b7;
+}
+
+.browser .queryresults .odd td {
+	background: #f0fcf0;
+}
+
+.browser .queryresults .even td {
+	background: #d4f6d4;
+}
+
+div.section li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 33%;
+	float: left;
+	text-align: center;
+}
+
+div.section ul {
+	padding: 0;
+	margin: 0;
+	margin-bottom: 2em;
+}
+
+input[type=button] {
+	font-size: 1.1em;
+	text-transform: uppercase;
+	background-color: #000;
+	color: #fff;
+	font-weight: 100;
+	letter-spacing: 0.2em;
+	font-family: "Century Gothic", Arial;
+	border: none;
+	padding: 0.8em 0;
+	width: 6em;
+	margin-left: 1em;
+	float: right;
+}
+
+.CodeMirror {
+	margin-bottom: 1em;
+}
+
+label {
+	margin-bottom: 0.4em;
+}
+
+div.dropdown {
+	clear:both;
+	width: 13em;
+	height: 1.6em;
+	overflow: hidden;
+	background: url('../images/arrow.png') no-repeat 97% 50% #fff;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #eee;
+	margin-left: 0;
+}
+
+div.dropdown select {
+	background: transparent;
+	width: 98%;
+	padding: 1% 0.53em;
+	font-size: 0.9em;
+	line-height: 1;
+	border: 0;
+	border-radius: 0;
+	height: 1.6em;
+	-webkit-appearance: none;
+	color: #444;
+}
+
+.exploring {
+	color: #666;
+	font-size: 0.8em;
+}
