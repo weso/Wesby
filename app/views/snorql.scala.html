@@ -61,8 +61,8 @@
 			        </select>
 		        </div>
         	</div>
-        	<input type="button" value="TEST QUERY" onclick="snorql.submitQuery()" />
-	        <input type="button" value="CLEAR" onclick="snorql.resetQuery()" class="b-clear" />
+        	<input id="submitQuery" type="button" value="TEST QUERY" />
+	        <input id="resetQuery" type="button" value="CLEAR" class="b-clear" />
 	        <span id="xsltcontainer"><span id="xsltinput">
 	          XSLT stylesheet URL:
 	          <input id="xsltstylesheet" type="text" value="snorql/xml-to-html.xsl" size="30" />
@@ -96,10 +96,21 @@
 				matchBrackets : true
 			});
 			var $j = jQuery.noConflict();
+
+			$j("#submitQuery").click(function {
+				editor.save();
+				snorql.submitQuery();
+			});
+
+			$j("#resetQuery").click(function {
+				snorql.resetQuery();
+			});
+			
 			$j(document).ready(function() {
 				$j('html, body').animate({
 					scrollTop : $j("div.CodeMirror").offset().top
 				}, 2000);
+				editor.doc.getValue()
 
 			});
 		</script>
