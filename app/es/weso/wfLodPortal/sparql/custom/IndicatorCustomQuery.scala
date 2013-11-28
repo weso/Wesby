@@ -19,7 +19,7 @@ import play.api.libs.json.Json
 import play.api.libs.json.Reads
 import play.api.libs.json.Writes
 
-object IndicatorCustomQuery extends Configurable {
+object IndicatorCustomQuery extends CustomQuery with Configurable {
   case class Indicator(val uri: Uri, val code: String, var description: String, observations: ListBuffer[Observation])
   case class Observation(val uri: Uri, val value: Float, val year: Float, val country: Country)
   case class Country(uri: Uri, val label: String, iso3: String)
@@ -35,7 +35,7 @@ object IndicatorCustomQuery extends Configurable {
   implicit val indicatorReads = Json.reads[Indicator]
   implicit val indicatorWrites = Json.writes[Indicator]
 
-  def loadObservations(regions: Array[String], years: Array[String], indicators: Array[String]) = {
+  def loadObservations(mode: String, regions: Array[String], years: Array[String], indicators: Array[String]) = {
 
     val regionFilter = if (regions(0) == "ALL") ""
     else {
@@ -65,7 +65,7 @@ object IndicatorCustomQuery extends Configurable {
       }.mkString(" || ") + ") ."
     }
 
-    val rs = QueryEngine.performQuery(queryCountries, List(indicatorFilter, yearFilter, regionFilter))
+    val rs = QueryEngine.performQuery(queryCountries, Seq(mode, indicatorFilter, yearFilter, regionFilter))
 
     val map: MutableMap[String, Indicator] = HashMap.empty
 
