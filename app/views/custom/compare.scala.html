@@ -4,11 +4,11 @@
 @import es.weso.wfLodPortal.models.Options
 
 @href = @{
-	routes.Application.root(mode, version)
+	routes.WebFoundation.root(mode, version)
 }
 
 @label = @{
-	if (mode == "odb") "ODB"; else "WEB INDEX"
+	if (mode == "odb") "ODB" else "WEB INDEX"
 }
 
 @main(None, mode){
