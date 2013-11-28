@@ -35,7 +35,7 @@ object WebFoundation extends Controller with TemplateEgine {
     val c = countries.split(",")
     val y = years.split(",")
     val i = indicators.split(",")
-    val observations = IndicatorCustomQuery.loadObservations(c, y, i)
+    val observations = IndicatorCustomQuery.loadObservations(mode, c, y, i)
     implicit val json = Json.toJson[Map[String, Indicator]](observations)
 
     Ok(views.html.custom.comparison(currentVersion, mode)(request, json))

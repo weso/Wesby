@@ -55,7 +55,7 @@ object ModelLoader extends Configurable {
     val jenaModel = ModelFactory.createDefaultModel
     val model = Model(jenaModel)
     try {
-      val rs = QueryEngine.performQuery(querySubject, Seq("<" + uri + ">"))
+      val rs = QueryEngine.performQuery(querySubject, Seq(uri))
       val resource = ResourceFactory.createResource(uri)
       while (rs.hasNext) {
         val qs = rs.next
@@ -77,7 +77,7 @@ object ModelLoader extends Configurable {
     val jenaModel = ModelFactory.createDefaultModel
     val model = InverseModel(jenaModel)
     try {
-      val rs = QueryEngine.performQuery(queryPredicate, Seq("<" + uri + ">"))
+      val rs = QueryEngine.performQuery(queryPredicate, Seq(uri))
       val resource = ResourceFactory.createResource(uri)
       while (rs.hasNext) {
         val qs = rs.next
