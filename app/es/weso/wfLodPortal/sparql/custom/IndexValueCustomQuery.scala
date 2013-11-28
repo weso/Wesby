@@ -14,11 +14,11 @@ import es.weso.wfLodPortal.utils._
 import es.weso.wfLodPortal.utils.UriFormatter._
 import es.weso.wfLodPortal.models.Uri
 
-object IndexValueCustomQuery extends Configurable {
+object IndexValueCustomQuery  extends CustomQuery with Configurable {
   case class Index(uri: Uri, name: String, rank: String, score: String, children: MutableMap[String, Index], colour1: String, colour2: String)
 
   val queryHierarchy = conf.getString("query.hierarchy")
-  var queryValues = conf.getString("query.hierarchy.values")
+  val queryValues = conf.getString("query.hierarchy.values")
   val queryRanking = conf.getString("query.hierarchy.ranking")
 
   def loadHierarchy(uri: String, mode: String) = {
