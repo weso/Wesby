@@ -21,6 +21,7 @@ import es.weso.wfLodPortal.utils.UriFormatter._
 import es.weso.wfLodPortal.models.Uri
 import play.Logger
 import com.hp.hpl.jena.query.QueryParseException
+import com.hp.hpl.jena.sparql.resultset.ResultSetException
 
 object ModelLoader extends Configurable {
 
@@ -36,7 +37,7 @@ object ModelLoader extends Configurable {
 
   def loadUri(uri: String) = {
     val fullUri: Uri = UriFormatter.format(baseUri + uri)
-    Logger.info("Uri: "+fullUri.absolute)
+    Logger.info("Uri: " + fullUri.absolute)
     val subject = LazyDataStore(fullUri, loadSubject)
     val predicate = LazyDataStore(fullUri, loadPredicate)
     ResultQuery(subject, predicate)
@@ -44,7 +45,7 @@ object ModelLoader extends Configurable {
 
   def loadUri(sufix: String, preffix: String) = {
     val fullUri = UriFormatter.format(uriToBaseURI(sufix + preffix))
-    Logger.info("Uri: "+fullUri.absolute)
+    Logger.info("Uri: " + fullUri.absolute)
     val subject = LazyDataStore(fullUri, loadSubject)
     val predicate = LazyDataStore(fullUri, loadPredicate)
     ResultQuery(subject, predicate)
@@ -65,7 +66,9 @@ object ModelLoader extends Configurable {
       }
     } catch {
       case e: QueryParseException =>
-        Logger.warn("wfLodPortal wfLodPortal was unable to query: '" + uri + "'")
+        Logger.warn("wfLodPortal was unable to query: '" + uri + "'")
+      case e: ResultSetException =>
+        Logger.warn("wfLodPortal was unable to process the resultSet '" + e.getMessage + "'")
     }
     model
   }
@@ -93,6 +96,9 @@ object ModelLoader extends Configurable {
     } catch {
       case e: QueryParseException =>
         Logger.warn("wfLodPortal was unable to query: '" + uri + "'")
+      case e: ResultSetException =>
+        Logger.warn("wfLodPortal was unable to process the resultSet, uri: " +
+        		"'"  + uri + "', message: '"+ e.getMessage + "'")
     }
     model
   }
