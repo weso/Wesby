@@ -54,12 +54,11 @@ trait TemplateEgine extends Controller with Configurable {
       case e if currentType == indicator => Ok(views.html.lod.indicator(resultQuery))
       case e if currentType == observation => Ok(views.html.lod.observation(resultQuery))
       case e if currentType == dataset => Ok(views.html.lod.dataset(resultQuery))
-      case e if currentType == skosConcept => {
-        if(request.path.contains("/Country"))
-        	Ok(views.html.lod.countryConcept(resultQuery))
-    	else
-    	    Ok(views.html.lod.fallback(resultQuery))        	  
-    	}
+      case e if currentType == skosConcept =>
+        if (request.path.contains("/Country"))
+          Ok(views.html.lod.countryConcept(resultQuery))
+        else
+          Ok(views.html.lod.fallback(resultQuery))
       case _ => Ok(views.html.lod.fallback(resultQuery))
     }
   }
@@ -76,7 +75,7 @@ trait TemplateEgine extends Controller with Configurable {
 
     Ok(views.html.custom.WIroot(version, mode))
   }
-  
+
   def renderRootODB(mode: String, version: String)(implicit request: RequestHeader) = {
     import es.weso.wfLodPortal.sparql.custom._
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
@@ -95,11 +94,11 @@ trait TemplateEgine extends Controller with Configurable {
     import es.weso.wfLodPortal.sparql.custom.RegionCustomQueries._
     import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery._
     import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery._
-    
+
     val regions = Json.toJson[List[Region]](loadRegions(mode, currentVersion))
     val years = Json.toJson[List[Int]](loadYears(mode, currentVersion))
     val subindexes = Json.toJson[List[Subindex]](loadSubindexes(mode, currentVersion))
-    
+
     Ok(views.html.custom.compare(currentVersion, mode)(request, regions, years, subindexes, selectedCountries, selectedIndicators))
   }
 
