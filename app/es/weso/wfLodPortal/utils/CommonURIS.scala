@@ -6,6 +6,13 @@ object CommonURIS extends Configurable {
 
   protected val base = conf.getString("sparql.actualuri")
 
+  /*
+   * Place here the commons uris, used by your project's custom views.
+   * 
+   * As a piece of advise, load the prefixes from conf/prefixes.ttl with
+   * the helper *****
+   */
+  
   val cex = "http://purl.org/weso/ontology/computex#"
   val dbpedia = "http://dbpedia.org/resource/"
   val dcterms = "http://purl.org/dc/terms/"
