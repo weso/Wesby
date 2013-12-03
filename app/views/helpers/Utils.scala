@@ -80,7 +80,7 @@ object Utils {
       if !text.isEmpty
     } yield text
 
-    if (labels.length > 0) labels.head; else ""
+    if (labels.length > 0) labels.head else Empty
   }
 
 }

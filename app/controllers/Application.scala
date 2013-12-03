@@ -17,18 +17,13 @@ import play.api.mvc.RequestHeader
 object Application extends Controller with TemplateEgine {
 
   val Html = Accepting("text/html")
-
   val PlainText = Accepting("text/plain")
-
   val N3 = Accepting("text/n3")
   val RdfN3 = Accepting("text/rdf+n3")
-
   val Turtle = Accepting("text/turtle")
   val XTurtle = Accepting("application/x-turtle")
-
   val Xml = Accepting("application/xml")
   val RdfXML = Accepting("application/rdf+xml")
-
   val RdfJSON = Accepting("application/rdf+json")
 
   val charsetDecoder = Charset.forName("UTF-8").newDecoder();
@@ -37,6 +32,14 @@ object Application extends Controller with TemplateEgine {
 
   def index = Action {
     implicit request => Ok(views.html.custom.home(currentVersion))
+  }
+
+  def snorql() = Action {
+    implicit request => Ok(views.html.snorql())
+  }
+
+  def redirect(to: String) = Action {
+    Redirect(to)
   }
 
   def fallback(uri: String) = Action {
@@ -69,32 +72,6 @@ object Application extends Controller with TemplateEgine {
               Redirect(request.path + "?format=n-triples")
           }
       }
-  }
-
-  def preCompare(mode: String, selectedCountries: Option[String] = None, selectedIndicators: Option[String] = None) = Action {
-    implicit request =>
-      renderPreCompare(mode, selectedCountries, selectedIndicators)
-  }
-
-  def compare(mode: String, countries: String, years: String, indicators: String) = Action {
-    implicit request =>
-      renderCompare(mode, countries, years, indicators)
-  }
-
-  def root(mode: String, version: String) = Action {
-  	implicit request =>
-  	if (mode == "webindex")
-    	renderRootWI(mode, version)
-    else
-    	renderRootODB(mode, version)
-  }
- 
-  def redirect(to: String) = Action {
-    Redirect(to)
-  }
-
-  def snorql() = Action {
-    implicit request => Ok(views.html.snorql())
   }
 
   protected def downloadAs(uri: String, format: String, models: Seq[JenaModel])(implicit request: RequestHeader) = {

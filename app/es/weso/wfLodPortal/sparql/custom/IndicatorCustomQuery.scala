@@ -19,7 +19,7 @@ import play.api.libs.json.Json
 import play.api.libs.json.Reads
 import play.api.libs.json.Writes
 
-object IndicatorCustomQuery extends Configurable {
+object IndicatorCustomQuery extends CustomQuery with Configurable {
   case class Indicator(val uri: Uri, val code: String, var description: String, observations: ListBuffer[Observation])
   case class Observation(val uri: Uri, val value: Float, val year: Float, val country: Country)
   case class Country(uri: Uri, val label: String, iso3: String)
@@ -35,28 +35,11 @@ object IndicatorCustomQuery extends Configurable {
   implicit val indicatorReads = Json.reads[Indicator]
   implicit val indicatorWrites = Json.writes[Indicator]
 
-  def loadObservations(regions: Array[String], years: Array[String], indicators: Array[String]) = {
+  def loadObservations(mode: String, regions: Array[String],
+    years: Array[String], indicators: Array[String]) = {
 
-    val regionFilter = regions.map {
-      new StringBuilder("(?iso3 = \"")
-        .append(_)
-        .append("\"^^xsd:string)")
-    }.mkString(" || ")
-
-    val yearFilter = years.map {
-      new StringBuilder("(?year = ")
-        .append(_)
-        .append(")")
-    }.mkString(" || ")
-
-    val indicatorFilter = indicators.map {
-      indicator =>
-        new StringBuilder("(?indicatorCode  = \"")
-          .append(indicator.replace("_", " "))
-          .append("\"^^xsd:string)")
-    }.mkString(" || ")
-
-    val rs = QueryEngine.performQuery(queryCountries, List(indicatorFilter, yearFilter, regionFilter))
+    val rs = QueryEngine.performQuery(queryCountries, Seq(mode,
+      regionFilters(regions), yearFilters(years), regionFilters(regions)))
 
     val map: MutableMap[String, Indicator] = HashMap.empty
 
@@ -66,7 +49,8 @@ object IndicatorCustomQuery extends Configurable {
       val code = qs.getLiteral("?indicatorCode").getString
       val description = qs.getLiteral("?definition").getString
 
-      val indicator = map.getOrElse(code, Indicator(uri, code, description, ListBuffer.empty))
+      val indicator = map.getOrElse(code, Indicator(uri, code, description,
+        ListBuffer.empty))
 
       if (description.length > indicator.description.length) {
         indicator.description = description
@@ -90,5 +74,39 @@ object IndicatorCustomQuery extends Configurable {
     val label = qs.getLiteral("?countryLabel").getString
     val iso3 = qs.getLiteral("?iso3").getString
     Country(uri, label, iso3)
+  }
+
+  protected def regionFilters(regions: Array[String]): String = {
+    if (regions(0) == "ALL") ""
+    else {
+      "Filter(" + regions.map {
+        new StringBuilder("(?iso3 = str(\"")
+          .append(_)
+          .append("\"))")
+      }.mkString(" || ") + ") ."
+    }
+  }
+
+  protected def yearFilters(years: Array[String]): String = {
+    if (years(0) == "ALL") ""
+    else {
+      "Filter(" + years.map {
+        new StringBuilder("(?year = ")
+          .append(_)
+          .append(")")
+      }.mkString(" || ") + ") ."
+    }
+  }
+
+  protected def indicatorFilters(indicators: Array[String]): String = {
+    if (indicators(0) == "ALL") ""
+    else {
+      "Filter(" + indicators.map {
+        indicator =>
+          new StringBuilder("(?indicatorCode  = str(\"")
+            .append(indicator.replace("_", " "))
+            .append("\"))")
+      }.mkString(" || ") + ") ."
+    }
   }
 }
