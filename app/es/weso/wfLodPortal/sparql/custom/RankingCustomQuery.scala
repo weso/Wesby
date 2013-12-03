@@ -3,7 +3,7 @@ package es.weso.wfLodPortal.sparql.custom
 import scala.Array.canBuildFrom
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
-import scala.collection.mutable.{Map => MutableMap}
+import scala.collection.mutable.{ Map => MutableMap }
 import com.hp.hpl.jena.query.QuerySolution
 import es.weso.wfLodPortal.Configurable
 import es.weso.wfLodPortal.sparql.QueryEngine
@@ -29,11 +29,11 @@ object RankingCustomQuery extends Configurable {
     val rs = QueryEngine.performQuery(queryRanking, Seq(mode))
 
     val countries = new ListBuffer[Country]()
-    
+
     val values = new ListBuffer[String]()
-    
-    var min:Double = 0
-    var max:Double = 0
+
+    var min: Double = 0
+    var max: Double = 0
 
     while (rs.hasNext) {
       val qs = rs.next
@@ -42,32 +42,31 @@ object RankingCustomQuery extends Configurable {
       val iso3 = qs.getLiteral("?iso3").getString
       val label = qs.getLiteral("?label").getString
       val _value = qs.getLiteral("?value").getString
-      
+
       val value = try {
-      	_value.toDouble
-      }
-      catch {
-      	case _ => 0
+        _value.toDouble
+      } catch {
+        case _: Throwable => 0
       }
 
       if (value < min)
-      	min = value
-      	
+        min = value
+
       if (value > max)
-      	max = value
+        max = value
 
       val country = Country(UriFormatter.format(uri), label, iso2, iso3, value)
 
       countries += country
       values += label
     }
-    
+
     val difference = max - min
-    
+
     for (country <- countries) {
-    	country.value = (country.value - min) * 100 / difference
+      country.value = (country.value - min) * 100 / difference
     }
-    
+
     Map("series" -> countries, "values" -> values, "max" -> max, "min" -> min)
   }
 }
