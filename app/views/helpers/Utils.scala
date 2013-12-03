@@ -4,13 +4,14 @@ import es.weso.wfLodPortal.models.RdfLiteral
 import es.weso.wfLodPortal.models.RdfNode
 import es.weso.wfLodPortal.models.RdfResource
 import es.weso.wfLodPortal.models.ResultQuery
-import es.weso.wfLodPortal.sparql.Handlers.handleFirstLiteralAsValue
-import es.weso.wfLodPortal.sparql.Handlers.handleResourceAsString
+import es.weso.wfLodPortal.sparql.Handlers._
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
 import es.weso.wfLodPortal.utils.CommonURIS.rdfs
 import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
 import play.api.templates.Html
 import views.helpers.wf.Utils.cachedLabel
+import es.weso.wfLodPortal.models.DataStore
+import es.weso.wfLodPortal.models.DataStore
 
 object Utils {
 
@@ -36,8 +37,7 @@ object Utils {
 
   def rdfType(resultQuery: ResultQuery): String = {
     val result = handleResourceAsString(resultQuery.subject.get,
-      rdf, "type",
-      (r: RdfResource) => { r.uri.relative })
+      rdf, "type", (r: RdfResource) => { r.uri.relative })
     if (result.isEmpty)
       "Unknown rdf:type"
     else result
