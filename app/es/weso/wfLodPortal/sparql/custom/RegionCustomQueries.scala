@@ -36,7 +36,6 @@ object RegionCustomQueries extends CustomQuery with Configurable {
 
   def loadRegions(mode: String, version: String): List[Region] = {
     val param = checkMode(mode, version)
-    println(param)
 
     def inner(r: RdfResource): Option[Region] = {
       val uri = r.uri
