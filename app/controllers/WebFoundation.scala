@@ -35,6 +35,7 @@ object WebFoundation extends Controller with TemplateEgine {
     val c = countries.split(",")
     val y = years.split(",")
     val i = indicators.split(",")
+
     val observations = IndicatorCustomQuery.loadObservations(mode, c, y, i)
     implicit val json = Json.toJson[Map[String, Indicator]](observations)
 
@@ -42,16 +43,15 @@ object WebFoundation extends Controller with TemplateEgine {
   }
 
   def root(mode: String, version: String) = Action { implicit request =>
-      implicit val regions = loadRegions(mode, version)
-      implicit val subindexes = loadSubindexes(mode, version)
-      implicit val queries = RootQueries.loadQueries
-      Ok(
-        if (mode == "webindex") {
-          views.html.custom.WIroot(version, mode)
-        } else {
-          views.html.custom.ODBroot(version, mode)
-        }
-      )
+    implicit val regions = loadRegions(mode, version)
+    implicit val subindexes = loadSubindexes(mode, version)
+    implicit val queries = RootQueries.loadQueries
+    Ok(
+      if (mode == "webindex") {
+        views.html.custom.WIroot(version, mode)
+      } else {
+        views.html.custom.ODBroot(version, mode)
+      })
   }
 
 }

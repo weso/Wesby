@@ -81,32 +81,43 @@
   <script src="@routes.Assets.at("javascripts/snorql/prototype.js")"></script>
   <script src="@routes.Assets.at("javascripts/snorql/scriptaculous/scriptaculous.js")"></script>
   <script src="@routes.Assets.at("javascripts/snorql/sparql.js")"></script>
-  <script src="@routes.Assets.at("javascripts/snorql/namespaces.js")"></script>
   <script src="@routes.Assets.at("javascripts/snorql/snorql.js")"></script>
   <script src="@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
   <script src="@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
   <script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
   <script>
-			snorql.start();
-			var editor = CodeMirror.fromTextArea(document
-					.getElementById("querytext"), {
+			
+			var editor = CodeMirror.fromTextArea(document.getElementById("querytext"), 
+				{
 				mode : "application/x-sparql-query",
 				tabMode : "indent",
 				lineNumbers : true,
 				matchBrackets : true
-			});
+				}
+			);
+			
 			var $j = jQuery.noConflict();
 
-			$j("#submitQuery").click(function {
-				editor.save();
-				snorql.submitQuery();
-			});
-
-			$j("#resetQuery").click(function {
-				snorql.resetQuery();
-			});
-			
 			$j(document).ready(function() {
+			
+				$j.ajax({
+				    dataType: 'text',
+				    success: function(string) {
+				        data = $j.parseJSON(string);
+				        snorql.start(data);
+				    },
+				    url: '@routes.Assets.at("javascripts/snorql/namespaces.json")'
+				});
+				
+				$j("#submitQuery").click(function() {
+					editor.save();
+					snorql.submitQuery();
+				});
+
+				$j("#resetQuery").click(function() {
+					snorql.resetQuery();
+				});
+				
 				$j('html, body').animate({
 					scrollTop : $j("div.CodeMirror").offset().top
 				}, 2000);

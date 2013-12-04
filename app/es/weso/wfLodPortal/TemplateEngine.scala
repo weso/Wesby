@@ -19,7 +19,6 @@ import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.Subindex
 import es.weso.wfLodPortal.sparql.custom.SubindexCustomQuery.subindexWrites
 import es.weso.wfLodPortal.sparql.custom.YearsCustomQuery
 import es.weso.wfLodPortal.sparql.custom.ObservationCustomQuery
-import es.weso.wfLodPortal.utils.CommonURIS.p
 import es.weso.wfLodPortal.utils.CommonURIS.rdf
 import es.weso.wfLodPortal.utils.CommonURIS.rdfs
 import models.ResultQuery
@@ -39,8 +38,8 @@ trait TemplateEgine extends Controller with Configurable {
 
   protected val currentVersion = conf.getString("application.version")
 
-  protected val RdfType = p(rdf, "type")
-  protected val RdfLabel = p(rdfs, "label")
+  protected val RdfType = rdf + "type"
+  protected val RdfLabel = rdfs + "label"
 
   protected val Undefined = "UNDEFINED"
 
@@ -55,12 +54,12 @@ trait TemplateEgine extends Controller with Configurable {
       case e if currentType == observation => Ok(views.html.lod.observation(resultQuery))
       case e if currentType == dataset => Ok(views.html.lod.dataset(resultQuery))
       case e if currentType == skosConcept =>
-        if (request.path.contains("/Country")){
+        if (request.path.contains("/Country")) {
           Ok(views.html.lod.countryConcept(resultQuery))
-        }else {Ok(views.html.lod.fallback(resultQuery))}
+        } else { Ok(views.html.lod.fallback(resultQuery)) }
       case _ => Ok(views.html.lod.fallback(resultQuery))
     }
-    
+
   }
 
   protected def rdfType(resultQuery: ResultQuery): String = {

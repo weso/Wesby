@@ -27,7 +27,7 @@ GET    /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)     
 HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.WebFoundation.compare(mode="odb", countries, years,  indicators)
 
 GET    /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
-GET    /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
+HEAD   /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
 
 GET    /webindex/:version                                                          controllers.WebFoundation.root(mode="webindex", version)
 HEAD   /webindex/:version                                                          controllers.WebFoundation.root(mode="webindex", version)

@@ -35,6 +35,10 @@
 @indicatorURI = @{
 	handleResourceAsString(rs.subject.get, 
 		cex, "indicator", 
+		(r:RdfResource)=> {println(r)
+		null})
+	handleResourceAsString(rs.subject.get, 
+		cex, "indicator", 
 		(r:RdfResource)=>r.uri.relative.toString)
 }
 

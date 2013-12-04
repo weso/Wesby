@@ -11,17 +11,21 @@ trait DataStore {
   protected val map: Map[String, Property] = HashMap.empty
 
   protected def addToDataStore(p: RdfProperty, n: RdfNode) {
-    val m = map.getOrElse(p.uri.relative, Property(p))
+    val m = map.getOrElse(p.uri.absolute, Property(p))
     m.nodes += n
-    map += p.uri.relative -> m
+    map += p.uri.absolute -> m
   }
 
-  def get(base: String, suffix: String): Option[Property] = {
-    get(base + suffix)
+  def get(uri: Uri): Option[Property] = {
+    get(uri.absolute)
   }
 
   def get(uri: String): Option[Property] = {
     map.get(uri)
+  }
+
+  def get(base: String, suffix: String): Option[Property] = {
+    get(base + suffix)
   }
 
   def list = map.valuesIterator.toList

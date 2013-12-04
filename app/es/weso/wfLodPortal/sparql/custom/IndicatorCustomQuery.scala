@@ -39,7 +39,7 @@ object IndicatorCustomQuery extends CustomQuery with Configurable {
     years: Array[String], indicators: Array[String]) = {
 
     val rs = QueryEngine.performQuery(queryCountries, Seq(mode,
-      regionFilters(regions), yearFilters(years), regionFilters(regions)))
+      indicatorFilters(indicators), yearFilters(years), regionFilters(regions)))
 
     val map: MutableMap[String, Indicator] = HashMap.empty
 
@@ -76,14 +76,15 @@ object IndicatorCustomQuery extends CustomQuery with Configurable {
     Country(uri, label, iso3)
   }
 
-  protected def regionFilters(regions: Array[String]): String = {
-    if (regions(0) == "ALL") ""
+  protected def indicatorFilters(indicators: Array[String]): String = {
+    if (indicators(0) == "ALL") ""
     else {
-      "Filter(" + regions.map {
-        new StringBuilder("(?iso3 = str(\"")
-          .append(_)
-          .append("\"))")
-      }.mkString(" || ") + ") ."
+      "Filter(" + indicators.map {
+        indicator =>
+          new StringBuilder("(str(?indicatorCode)  = \"")
+            .append(indicator.replace("_", " "))
+            .append("\")")
+      }.mkString(" || ") + ") . "
     }
   }
 
@@ -94,19 +95,19 @@ object IndicatorCustomQuery extends CustomQuery with Configurable {
         new StringBuilder("(?year = ")
           .append(_)
           .append(")")
-      }.mkString(" || ") + ") ."
+      }.mkString(" || ") + ") . "
     }
   }
 
-  protected def indicatorFilters(indicators: Array[String]): String = {
-    if (indicators(0) == "ALL") ""
+  protected def regionFilters(regions: Array[String]): String = {
+    if (regions(0) == "ALL") ""
     else {
-      "Filter(" + indicators.map {
-        indicator =>
-          new StringBuilder("(?indicatorCode  = str(\"")
-            .append(indicator.replace("_", " "))
-            .append("\"))")
-      }.mkString(" || ") + ") ."
+      "Filter(" + regions.map {
+        new StringBuilder("(str(?iso3) = \"")
+          .append(_)
+          .append("\")")
+      }.mkString(" || ") + ") . "
     }
   }
+
 }

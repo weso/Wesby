@@ -17,63 +17,22 @@ function Snorql() {
     this._poweredByLabel = 'Virtuoso Open Source';
     this._enableNamedGraphs = false;
 
-    var WF_namespacePrefixes = {
-    	"cex": "http://purl.org/weso/ontology/computex#",
-    	"dbpedia": "http://dbpedia.org/resource/",
-    	"dcterms": "http://purl.org/dc/terms/",
-    	"geo": "http://www.w3.org/2003/01/geo/wgs84_pos#",
-    	"odb": "http://data.webfoundation.org/odb/v2013/",
-    	"odb-component": "http://data.webfoundation.org/odb/v2013/component/",
-    	"odb-computation": "http://data.webfoundation.org/odb/v2013/computation/",
-    	"odb-country": "http://data.webfoundation.org/odb/v2013/country/",
-    	"odb-dataset": "http://data.webfoundation.org/odb/v2013/dataset/",
-    	"odb-index": "http://data.webfoundation.org/odb/v2013/index/",
-    	"odb-indicator": "http://data.webfoundation.org/odb/v2013/indicator/",
-    	"odb-obs": "http://data.webfoundation.org/odb/v2013/observation/",
-    	"odb-ranking": "http://data.webfoundation.org/odb/v2013/ranking/",
-    	"odb-region": "http://data.webfoundation.org/odb/v2013/region/",
-    	"odb-slice": "http://data.webfoundation.org/odb/v2013/slice/",
-    	"odb-weightSchema": "http://data.webfoundation.org/odb/v2013/weightSchema/",
-    	"owl": "http://www.w3.org/2002/07/owl#",
-    	"qb": "http://purl.org/linked-data/cube#",
-    	"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-    	"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    	"sdmxAttribute": "http://purl.org/linked-data/sdmx/2009/attribute#",
-    	"sdmxCode": "http://purl.org/linked-data/sdmx/2009/code#",
-    	"sdmxConcept": "http://purl.org/linked-data/sdmx/2009/concept#",
-    	"sdmxSubject": "http://purl.org/linked-data/sdmx/2009/subject#",
-    	"skos": "http://www.w3.org/2004/02/skos/core#",
-    	"test": "http://data.webfoundation.org/test/v2013/",
-    	"time": "http://www.w3.org/2006/time#",
-    	"webindex": "http://data.webfoundation.org/webindex/v2013/",
-    	"wf-onto": "http://data.webfoundation.org/ontology/",
-    	"wf-org": "http://data.webfoundation.org/organization/",
-    	"wf-people": "http://data.webfoundation.org/people/",
-    	"wi-component": "http://data.webfoundation.org/webindex/v2013/component/",
-    	"wi-computation": "http://data.webfoundation.org/webindex/v2013/computation/",
-    	"wi-country": "http://data.webfoundation.org/webindex/v2013/country/",
-    	"wi-dataset": "http://data.webfoundation.org/webindex/v2013/dataset/",
-    	"wi-index": "http://data.webfoundation.org/webindex/v2013/index/",
-    	"wi-indicator": "http://data.webfoundation.org/webindex/v2013/indicator/",
-    	"wi-obs": "http://data.webfoundation.org/webindex/v2013/observation/",
-    	"wi-ranking": "http://data.webfoundation.org/webindex/v2013/ranking/",
-    	"wi-region": "http://data.webfoundation.org/webindex/v2013/region/",
-    	"wi-slice": "http://data.webfoundation.org/webindex/v2013/slice/",
-    	"wi-weightSchema": "http://data.webfoundation.org/webindex/v2013/weightSchema/",
-    	"xsd": "http://www.w3.org/2001/XMLSchema#"
-    	}
-    
+    /* WF_namespacePrefixes are generated on start-up, so 
+     * this file fetch the prefixes from /namespaces.js
+     */
+    //var WF_namespacePrefixes = {}
+
     this._browserBase = null;
     this._namespaces = {};
     this._graph = null;
     this._xsltDOM = null;
 
-    this.start = function() {
+    this.start = function(prefixes) {
         // TODO: Extract a QueryType class
         this.setBrowserBase(document.location.href.replace(/\?.*/, ''));
         this._displayEndpointURL();
         this._displayPoweredBy();
-        this.setNamespaces(WF_namespacePrefixes);
+        this.setNamespaces(prefixes);
         this.updateOutputMode();
         var match = document.location.href.match(/\?(.*)/);
         var queryString = match ? match[1] : '';
