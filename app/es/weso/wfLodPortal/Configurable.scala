@@ -8,4 +8,5 @@ trait Configurable {
   conf.append(new PropertiesConfiguration("conf/endpoint.properties"))
   conf.append(new PropertiesConfiguration("conf/queries.properties"))
   conf.append(new PropertiesConfiguration("conf/prefixes.properties"))
+  conf.append(new PropertiesConfiguration("conf/comparer.properties"))
 }

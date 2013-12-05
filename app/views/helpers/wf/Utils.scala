@@ -95,7 +95,7 @@ object Utils extends Configurable {
   }
 
   def loadCountryRanking(mode: String) = {
-    RankingCustomQuery.loadRanking(mode)
+    RankingCustomQuery.loadRanking(mode).toSeq.sortWith(_._1 > _._1)
   }
 
   def loadHierarchyValues(uri: String, mode: String) = {
