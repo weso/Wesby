@@ -20,12 +20,16 @@ object WebFoundation extends Controller with TemplateEgine {
 
   def preCompare(mode: String, selectedCountries: Option[String] = None,
     selectedIndicators: Option[String] = None) = Action { implicit request =>
-
+    
+    val maxCountries = conf.getString("comparer.max.countries")
+    val maxIndicators = conf.getString("comparer.max.indicators")
+    val maxYears = conf.getString("comparer.max.years")
+    
     val regions = Json.toJson[List[Region]](loadRegions(mode, currentVersion))
     val years = Json.toJson[List[Int]](loadYears(mode, currentVersion))
     val subindexes = Json.toJson[List[Subindex]](loadSubindexes(mode, currentVersion))
 
-    Ok(views.html.custom.compare(currentVersion, mode)(request, regions, years, subindexes, selectedCountries, selectedIndicators))
+    Ok(views.html.custom.compare(currentVersion, mode)(request, regions, years, subindexes, selectedCountries, selectedIndicators, maxCountries, maxIndicators, maxYears))
 
   }
 

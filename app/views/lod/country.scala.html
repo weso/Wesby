@@ -107,6 +107,7 @@
 						<div id="rankingGraph" class="ranking-col2"></div>
 						
 						<h3 class="clear">World Index Ranking</h3>
+						<nav><ul id="countryRankingSelector"></ul></nav>
 						<div id="countryRanking" class="country-ranking"></div>
 						
 						<span class="help">Select an indicator to view the progression of its observations</span>
@@ -301,47 +302,93 @@
 							loadRanking();
 						 
 							function loadRanking() {
-							    var series = [];
-							    var colours = [];
 							    var thisCountryIso3 = "@{iso3}";
-							    
-							    var rainbow = new Rainbow();
-							    
-							    rainbow.setSpectrum("#223355", "#327365", "#53944f", "#7ab33f", "#f0f066");
-							    rainbow.setNumberRange(0, @{countryRanking("series").asInstanceOf[ListBuffer[Country]].length} - 1);
-							    
-							    var i = 0;
-							    
-							    @for(country <- countryRanking("series").asInstanceOf[ListBuffer[Country]]) {
-							    	var iso3 = "@{country.iso3}";
-							    	
-								    series.push({
-								    	name: "@{country.name}",
-								    	urls: [ "@{country.uri.relative}" ],
-								    	values: [ @{country.value} ]
-								    });
-								    
-								    colours.push(iso3 == thisCountryIso3 ? "#333" : "#" + rainbow.colorAt(i));
-								    
-								    i++;
-							    }
-							    
 							    var countryRanking = document.getElementById("countryRanking");
+							    var countryRankingSelector = document.getElementById("countryRankingSelector");
 							    countryRanking.innerHTML = "";
-							    graphOptions.width = countryRanking.offsetWidth;
-							    graphOptions.height = 200;
-							    graphOptions.valueOnItem.show = false;
+							    countryRankingSelector.innerHTML = "";
+							    var liWidth = parseInt(100 / @{countryRanking.length}) - 2;
 							    
-							    graphOptions.margins = [10, 0, 10, 1];
-							    graphOptions.xAxis.values = [ "" ];
-							    graphOptions.xAxis.title = "";
-							    graphOptions.xAxis.margin = 0;
-							    graphOptions.yAxis.margin = 3;
-								graphOptions.series = series;
-								graphOptions.serieColours = colours;
-								
-								var graph = jGraf.barChart(graphOptions);
-								countryRanking.appendChild(graph.render());
+							    var count = 0;
+							    
+							    @for(ranking <- countryRanking) {	
+							    	var a = document.createElement("a");
+							    	a.innerHTML = a.value = "@{ranking._1}";
+							    	
+							    	if (count == 0)
+							    		a.className = "selected"
+							    		
+							    	a.onclick = function() {
+								    	var lis = countryRankingSelector.querySelectorAll("li a");
+								    	var length = lis.length;
+									
+								    	for (var i = 0; i < length; i++)
+								    		lis[i].className = "not-selected";
+								    		
+								    	this.className = "selected";
+								    	
+								    	var rankings = 	countryRanking.querySelectorAll("div");
+								    	var length = rankings.length;
+								    	
+								    	for (var i = 0; i < length; i++)
+								    		rankings[i].style.display = "none";
+								    		
+								    	document.getElementById("ranking-" + this.value).style.display = "block";
+							    	};
+							    	
+							    	var li = document.createElement("li");
+							    	li.appendChild(a);
+							    	li.style.width = liWidth + "%";
+							    	countryRankingSelector.appendChild(li);
+							    						    
+							    	var rainbow = new Rainbow();
+							    	var series = [];
+							    	var colours = [];
+							    
+							    	rainbow.setSpectrum("#223355", "#327365", "#53944f", "#7ab33f", "#f0f066");
+							    	rainbow.setNumberRange(0, @{ranking._2.series.length} - 1);
+							    
+							    	var i = 0;
+							    
+								    @for(country <- ranking._2.series) {
+								    	var iso3 = "@{country.iso3}";
+								    	
+									    series.push({
+									    	name: "@{country.name}",
+									    	urls: [ "@{country.uri.relative}" ],
+									    	values: [ @{country.value} ]
+									    });
+									    
+									    colours.push(iso3 == thisCountryIso3 ? "#333" : "#" + rainbow.colorAt(i));
+									    
+									    i++;
+								    }
+							    
+								    graphOptions.width = countryRanking.offsetWidth;
+								    graphOptions.height = 200;
+								    graphOptions.valueOnItem.show = false;
+								    
+								    graphOptions.margins = [10, 0, 10, 1];
+								    graphOptions.xAxis.values = [ "" ];
+								    graphOptions.xAxis.title = "";
+								    graphOptions.xAxis.margin = 0;
+								    graphOptions.yAxis.margin = 3;
+									graphOptions.series = series;
+									graphOptions.serieColours = colours;
+									
+									var graph = jGraf.barChart(graphOptions);
+									
+									var div = document.createElement("div");
+									div.appendChild(graph.render());
+									div.id = "ranking-" + "@{ranking._1}";
+									
+									if (count > 0)
+										div.style.display = "none";
+									
+									countryRanking.appendChild(div);
+									
+									count++;
+								}
 							}
 							
 							// Index graph
