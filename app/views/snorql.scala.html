@@ -87,15 +87,6 @@
   <script src="@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
   <script>
 			
-			var editor = CodeMirror.fromTextArea(document.getElementById("querytext"), 
-				{
-				mode : "application/x-sparql-query",
-				tabMode : "indent",
-				lineNumbers : true,
-				matchBrackets : true
-				}
-			);
-			
 			var $j = jQuery.noConflict();
 
 			$j(document).ready(function() {
@@ -103,8 +94,20 @@
 				$j.ajax({
 				    dataType: 'text',
 				    success: function(string) {
+				        
 				        data = $j.parseJSON(string);
+				        
 				        snorql.start(data);
+				        
+				        var editor = CodeMirror.fromTextArea(document.getElementById("querytext"), 
+							{
+							mode : "application/x-sparql-query",
+							tabMode : "indent",
+							lineNumbers : true,
+							matchBrackets : true
+							}
+						);
+						
 				    },
 				    url: '@routes.Assets.at("javascripts/snorql/namespaces.json")'
 				});
@@ -121,7 +124,6 @@
 				$j('html, body').animate({
 					scrollTop : $j("div.CodeMirror").offset().top
 				}, 2000);
-				editor.doc.getValue()
 
 			});
 		</script>
