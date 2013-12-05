@@ -1,4 +1,4 @@
-@(version: String, mode: String)(implicit request: RequestHeader, regions:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String])
+@(version: String, mode: String)(implicit request: RequestHeader, regions:play.api.libs.json.JsValue, years: play.api.libs.json.JsValue, subindexes:play.api.libs.json.JsValue, selectedCountries: Option[String], selectedIndicators: Option[String], maxCountries: String, maxIndicators: String, maxYears: String)
 
 @import views.html.helpers._
 @import es.weso.wfLodPortal.models.Options
@@ -51,13 +51,21 @@
 		
 		var selectedCountries = "@{selectedCountries.getOrElse("")}";
 		selectedCountries = selectedCountries.split(",");
+		if (selectedCountries.length == 1 && selectedCountries[0] == "")
+			selectedCountries = [];
 		
 		var selectedIndicators = "@{selectedIndicators.getOrElse("")}";
 		selectedIndicators = selectedIndicators.split(",");
+		if (selectedIndicators.length == 1 && selectedIndicators[0] == "")
+			selectedIndicators = [];
 		
 		for (var i = 0; i < dataYears.length; i++) {
 			dataYears[i] = { label: dataYears[i], code: dataYears[i] };
 		}
+		
+		var maxCountries = @{maxCountries};
+		var maxIndicators = @{maxIndicators};
+		var maxYears = @{maxYears};
 	</script>
 	<script src="@routes.Assets.at("javascripts/comparer/Selector.min.js")"></script>
 	<script src="@routes.Assets.at("javascripts/comparer/comparer.js")"></script>

@@ -669,6 +669,42 @@ div.country-ranking {
 	}
 }
 
+ul#countryRankingSelector {
+	padding: 0;
+	margin: 0 0 0.5em 0;
+	text-align: center;
+	border-bottom: 0.1em solid #ccc;
+}
+
+ul#countryRankingSelector li {
+	margin: 0.5em 1% -0.1em 1%;
+	display: inline-block;
+	list-style: none;
+	text-align: center;
+}
+
+ul#countryRankingSelector li a, ul#countryRankingSelector li a.not-selected {
+	width: 100%;
+	display: inline-block;
+	padding: 0.5em 0;
+	border-top: 0.1em solid #ddd;
+	border-left: 0.1em solid #ddd;
+	border-right: 0.1em solid #ddd;
+	background-color: #ddd;
+	color: #777;
+	cursor: default;
+}
+
+ul#countryRankingSelector li a:hover {
+	background-color: #bbb;
+	color: #555;
+}
+
+ul#countryRankingSelector li a.selected {
+	background-color: #fff;
+	color: #333;
+}
+
 /* Country concept */
 
 div#div-webindex, div#div-odb {
