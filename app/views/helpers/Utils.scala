@@ -1,21 +1,25 @@
 package views.helpers
 
-import es.weso.wfLodPortal.models.RdfLiteral
-import es.weso.wfLodPortal.models.RdfNode
-import es.weso.wfLodPortal.models.RdfResource
-import es.weso.wfLodPortal.models.ResultQuery
-import es.weso.wfLodPortal.sparql.Handlers._
-import es.weso.wfLodPortal.utils.CommonURIS.rdf
-import es.weso.wfLodPortal.utils.CommonURIS.rdfs
-import es.weso.wfLodPortal.utils.CommonURIS.wfOnto
+import es.weso.wesby.Configurable
+import es.weso.wesby.models.RdfLiteral
+import es.weso.wesby.models.RdfNode
+import es.weso.wesby.models.RdfProperty
+import es.weso.wesby.models.RdfResource
+import es.weso.wesby.models.ResultQuery
+import es.weso.wesby.sparql.Handlers.handleFirstLiteralAsValue
+import es.weso.wesby.sparql.Handlers.handleResourceAsString
+import es.weso.wesby.utils.CommonURIS.rdf
+import es.weso.wesby.utils.CommonURIS.rdfs
+import es.weso.wesby.utils.CommonURIS.wfOnto
+import play.api.Play.current
+import play.api.cache.Cache
 import play.api.templates.Html
-import views.helpers.wf.Utils.cachedLabel
-import es.weso.wfLodPortal.models.DataStore
-import es.weso.wfLodPortal.models.DataStore
 
-object Utils {
+object Utils extends Configurable {
 
   val Empty = ""
+
+  val cacheExpiration = conf.getInt("sparql.expiration")
 
   def toUpper(text: String) = text.toUpperCase
 
@@ -33,6 +37,21 @@ object Utils {
   def iso3(resultQuery: ResultQuery): String = {
     handleFirstLiteralAsValue(resultQuery.subject.get,
       wfOnto, "has-iso-alpha3-code")
+  }
+
+  def cachedLabel(r: RdfProperty): String = {
+    val key = r.uri.absolute.hashCode.toString
+    Cache.getOrElse(key, cacheExpiration)(label(r.dss))
+  }
+
+  def cachedLabel(r: RdfResource): String = {
+    val key = r.uri.absolute.hashCode.toString
+    Cache.getOrElse(key, cacheExpiration)(label(r.dss))
+  }
+
+  def cachedLabel(rs: ResultQuery): String = {
+    val key = rs.pred.get.uri.absolute.hashCode.toString
+    Cache.getOrElse(key, cacheExpiration)(label(rs))
   }
 
   def rdfType(resultQuery: ResultQuery): String = {

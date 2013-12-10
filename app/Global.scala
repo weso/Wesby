@@ -4,7 +4,7 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-import es.weso.wfLodPortal.Configurable
+import es.weso.wesby.Configurable
 import play.api.GlobalSettings
 import play.api.Logger
 import play.api.libs.ws.Response
@@ -16,12 +16,7 @@ object Global extends WithFilters(new GzipFilter) with GlobalSettings with Confi
 
   val actualUri = conf.getString("sparql.actualuri")
 
-  val uris = Seq(
-    "organization/WF",
-    "organization/WebFoundation",
-    "organization/WESO",
-    "ontology/WESO",
-    "ontology/Observation")
+  val uris = Seq[String]()
 
   precachedUris
 

@@ -1,4 +1,5 @@
 @(compare: Option[Tuple2[String, String]], mode: String)(content: Html)(implicit request: RequestHeader)
+@import es.weso.wesby.models.Options
 <!DOCTYPE html>
 <!--[if IE 8]>
 <html class="no-js lt-ie9" lang="en" >
@@ -10,7 +11,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<title>DATA PORTAL</title>
+		<title>@Options.title</title>
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/style.css")"/>
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/pages.css")"/>
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/sortable.css")"/>
@@ -23,14 +24,11 @@
 			<header>
 				<div class="leftHeader">
 					<a href="@routes.Application.index">
-						<img alt="World Wide Web Foundation" src="@routes.Assets.at("images/W3F-logo.png")" class="W3F-logo" />
+						<img alt="World Wide Web Foundation" src="@routes.Assets.at("images/wesby-logo.png")" class="W3F-logo" />
 					</a>
 				</div>
 				<div class="rightHeader">
-					<p class="title1"><span>DATA PORTAL</span></p>
-					@if(! mode.isEmpty) {
-						<a class="compare" href="@Html(compareUri)">@compareLabel</a>
-					}
+					<p class="title1"><span>@Options.title</span></p>
 				</div>
 				<div class="border"></div>
 			</header>
@@ -38,63 +36,9 @@
 				@content
 			</div>
 			<footer>
-				<div class="quarter first">
-					<ul>
-						<li><a href="#" title="About" class="title">ABOUT</a></li>
-						<li><a href="http://webfoundation.org" title="Go to World Wide Web Foundation">Foundation</a></li>
-						<li><a href="http://thewebindex.org" title="Go to thewebindex.org">Web Index 2013</a></li>
-						<li><a href="http://www.opendataresearch.org/project/2013/odb" title="Go to Open Data Barometer">Open Data Barometer</a></li>
-					</ul>
-				</div>
-				<div class="quarter second">
-					<ul>
-						<li><a href="@routes.Application.index" title="Go to the Web Foundation Linked Open Data Portal" class="title">LOD Portal</a></li>
-						<li><a href="http://data.webfoundation.org/sparql" title="Go to the SPARQL endpoint">SPARQL endpoint</a></li>
-						<li><a href="http://data.webfoundation.org/snorql" title="Go to the Snorql">Snorql</a></li>
-					</ul>
-				</div>
-				<div class="quarter third">
-					<ul>
-						<li><a href="http://thewebindex.org" title="Web Index Repository" class="title">THE WEB INDEX</a></li>
-						<li><a href="@routes.WebFoundation.root("webindex", "v2013")" title="Go to the Web Index 2013 landing page">The Web Index 2013</a></li>
-						<li><a href="@routes.Application.redirect()" title="Go to the Web Index 2012 landing page">The Web Index 2012</a></li>
-						<li><a href="@routes.WebFoundation.preCompare("webindex",None,None)" title="Web Index Comparer">Comparer</a></li>
-					</ul>
-				</div>
-				<div class="quarter forth">
-					<ul>
-						<li><a href="http://www.opendataresearch.org/project/2013/odb" title="Open Data Barometer Website" class="title">OPEN DATA BAROMETER</a></li>
-						<li><a href="@routes.WebFoundation.root("webindex", "v2013")" title="Open Data Barometer">ODB 2013</a></li>
-						<li><a href="@routes.WebFoundation.preCompare("odb",None,None)" title="Open Data Barometer Comparer">Comparer</a></li>
-					</ul>
-				</div>
-				<div class="quarter fifth">
-					<a href="http://validator.w3.org/check?uri=referer" title="Valid HTML" class="valid">
-				 		HTML5
-				 	</a>
-					<a href="http://jigsaw.w3.org/css-validator/check/referer" title="Valid CSS" class="valid">
-				    	CSS3
-				    </a>
-					<a href="http://www.weso.es" title="Go to weso.es">
-						<img alt="WESO logo" src="@routes.Assets.at("images/weso.png")" />
-					</a>
-					Created by <a href="http://www.weso.es" title="Go to weso.es">WESO</a>
-				</div>
-				<div class="footer">&copy; 2013 World Wide Web Foundation.</div>
+				<div class="footer">&copy; @Options.license</div>
 			</footer>
 		</div>
 		<script src="@{routes.Assets.at("javascripts/richTable.js")}"></script>
 	</body>
 </html>
-@compareLabel = @{ 
-		compare match {
-			case Some(c) => c._1
-			case None => "COMPARER"
-		}
-}
-@compareUri = @{
-		compare match {
-			case Some(c) => c._2
-			case None => "/" + mode + "/compare"
-		}
-}
