@@ -7,8 +7,8 @@ import java.nio.charset.CodingErrorAction
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
 
-import es.weso.wfLodPortal.TemplateEgine
-import es.weso.wfLodPortal.sparql.ModelLoader
+import es.weso.wesby.TemplateEgine
+import es.weso.wesby.sparql.ModelLoader
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
@@ -31,7 +31,9 @@ object Application extends Controller with TemplateEgine {
   charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 
   def index = Action {
-    implicit request => Ok(views.html.custom.home(currentVersion))
+    implicit request =>
+      val default = conf.getString("sparql.index")
+      Redirect(default)
   }
 
   def snorql() = Action {
@@ -39,7 +41,7 @@ object Application extends Controller with TemplateEgine {
   }
 
   def redirect(to: String) = Action {
-    Redirect(to)
+    implicit request => Redirect(to)
   }
 
   def fallback(uri: String) = Action {

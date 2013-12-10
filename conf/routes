@@ -14,27 +14,6 @@ HEAD   /favicon.ico                                                             
 GET    /assets/*file                                                               controllers.Assets.at(path="/public", file)
 HEAD   /assets/*file                                                               controllers.Assets.at(path="/public", file)
 
-GET    /webindex/compare                                                           controllers.WebFoundation.preCompare(mode="webindex", selectedCountries: Option[String], selectedIndicators: Option[String])
-HEAD   /webindex/compare                                                           controllers.WebFoundation.preCompare(mode="webindex", selectedCountries: Option[String], selectedIndicators: Option[String])
-
-GET    /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.WebFoundation.compare(mode="webindex", countries, years, indicators)
-HEAD   /webindex/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)   controllers.WebFoundation.compare(mode="webindex", countries, years, indicators)
-
-GET    /odb/compare                                                                controllers.WebFoundation.preCompare(mode="odb", selectedCountries: Option[String], selectedIndicators: Option[String])
-HEAD   /odb/compare                                                                controllers.WebFoundation.preCompare(mode="odb", selectedCountries: Option[String], selectedIndicators: Option[String])
-
-GET    /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.WebFoundation.compare(mode="odb", countries, years, indicators)
-HEAD   /odb/compare/COUNTRY(:countries)/YEAR(:years)/INDICATOR(:indicators)        controllers.WebFoundation.compare(mode="odb", countries, years,  indicators)
-
-GET    /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
-HEAD   /webindex/v2012                                                             controllers.Application.redirect(to="http://data.webfoundation.org/webindex/")
-
-GET    /webindex/:version                                                          controllers.WebFoundation.root(mode="webindex", version)
-HEAD   /webindex/:version                                                          controllers.WebFoundation.root(mode="webindex", version)
-
-GET    /odb/:version                                                               controllers.WebFoundation.root(mode="odb", version)
-HEAD   /odb/:version                                                               controllers.WebFoundation.root(mode="odb", version)
-
 GET    /snorql                                                                     controllers.Application.snorql()
 HEAD   /snorql                                                                     controllers.Application.snorql()
 

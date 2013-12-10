@@ -1,14 +1,10 @@
-@(rs: es.weso.wfLodPortal.models.ResultQuery)(implicit request: RequestHeader, options: es.weso.wfLodPortal.models.Options)
+@(rs: es.weso.wesby.models.ResultQuery)(implicit request: RequestHeader, options: es.weso.wesby.models.Options)
 
 @import views.helpers.Utils._
-@import views.helpers.wf.Utils._
 @import views.html.helpers._
 @import views.html.helpers.utils._
 
 @main(None, options.mode) {
-	<nav class="breadcrumbs">
-		@hostLink(request) &gt; @data(options)
-	</nav>
 	<h1>@cachedLabel(rs)</h1>
 	<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>	
 	@grill(rs)
