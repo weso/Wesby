@@ -16,19 +16,15 @@ trait TemplateEgine extends Controller with Configurable {
   protected val currentVersion = conf.getString("application.version")
 
   protected val RdfType = rdf + "type"
-  protected val RdfLabel = rdfs + "label"
 
   protected val Undefined = "UNDEFINED"
 
   def renderAsTemplate(resultQuery: ResultQuery, uri: String)(implicit request: RequestHeader) = {
-
     implicit val options = new Options(uri)
-
     val currentType = rdfType(resultQuery)
-    currentType match {
-      case _ => Ok(views.html.lod.fallback(resultQuery))
-    }
-
+    val templateName = conf.getString(currentType, Undefined)
+    val template = TemplateMapping.templates.getOrElse(templateName, views.html.lod.fallback)
+    Ok(template.render(resultQuery, request, options))
   }
 
   protected def rdfType(resultQuery: ResultQuery): String = {
