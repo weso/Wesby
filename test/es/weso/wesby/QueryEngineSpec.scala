@@ -1,22 +1,10 @@
 package es.weso.wesby
 
-import scala.collection.Seq
-import org.specs2.mutable.Specification
-import org.specs2.specification.Fragments
-import org.specs2.main.ArgProperty
 import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
+import org.specs2.mutable.Specification
 import es.weso.wesby.sparql.QueryEngine
 import play.api.test.WithApplication
-import play.api.test.FakeApplication
-import play.api.test.PlaySpecification
-import scala.collection.mutable.StringBuilder
-import play.api.test.WithApplication
-import play.api.GlobalSettings
-import play.api.test.FakeApplication
-import play.api.test.FakeApplication
-import play.api.test.WithApplication
-import play.api.test.WithApplication
+import org.specs2.runner.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class QueryEngineSpec extends Specification with Configurable {
@@ -27,7 +15,7 @@ class QueryEngineSpec extends Specification with Configurable {
   val querySubject = conf.getString("query.subject")
   val queryPredicate = conf.getString("query.predicate")
 
-  "QueryEngine " should {
+  "QueryEngine" should {
     "apply filters with" >> {
       "a single argument to the subject query" in new WithApplication {
         val subs = "term"
