@@ -13,6 +13,9 @@ import play.filters.gzip.GzipFilter
 import play.api.Play
 import play.api.Application
 
+/**
+ * Handles the start up settings of the application.
+ */
 object Global extends WithFilters(new GzipFilter) with GlobalSettings with Configurable {
 
   val actualUri = conf.getString("sparql.actualuri")
@@ -26,6 +29,10 @@ object Global extends WithFilters(new GzipFilter) with GlobalSettings with Confi
     }
   }
 
+  /**
+   * Load a set of URIs in order to cache the underneath queries that are 
+   * performed by Wesby.
+   */
   def precachedUris() = {
     for (uri <- uris) {
       val fullUri = actualUri + uri
@@ -39,6 +46,10 @@ object Global extends WithFilters(new GzipFilter) with GlobalSettings with Confi
     }
   }
 
+  /**
+   * Logs the result of the response
+   * @param response the response to be match
+   */
   def loaded(response: Try[Response]) = {
     response match {
       case Success(v) =>
