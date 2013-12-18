@@ -1,4 +1,3 @@
-
 # general
 *~
 *.log
@@ -17,6 +16,7 @@ dump
 .scala_dependencies
 bin
 .worksheet
+*.sc
 
 # Scala-IDE specific
 .scala_dependencies
