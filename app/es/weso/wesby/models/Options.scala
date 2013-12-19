@@ -4,12 +4,15 @@ import es.weso.wesby.Configurable
 import es.weso.wesby.sparql.QueryEngine
 import es.weso.wesby.utils.UriFormatter
 
+/**
+ * Options is used in order to pass general information
+ * to the views.
+ * @param partialUri the relative URI (to the baseUri)
+ */
 class Options(val partialUri: String) extends Configurable {
   import Options._
 
   val uri = UriFormatter.fullUri(partialUri)
-
-  val mode = if (uri contains "odb/") "odb" else "webindex"
 
   def query = QueryEngine.applyFilters(fallback, Seq("<" + uri + ">"))
   
@@ -22,6 +25,9 @@ class Options(val partialUri: String) extends Configurable {
   def license = Options.license
 }
 
+/**
+ * Options companion object.
+ */
 object Options extends Configurable {
   val host = conf.getString("sparql.actualuri")
   val endpoint = conf.getString("sparql.endpoint")
