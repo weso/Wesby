@@ -47,8 +47,8 @@ object CommonURIS extends Configurable {
   val wfPeople = UriFormatter.namespaces.get("wf-people").get
   val wiComponent = UriFormatter.namespaces.get("wi-component").get
   val wiComputation = UriFormatter.namespaces.get("wi-computation").get
-  val wiCountry = UriFormatter.namespaces.get("wi-country")
-  val wiDataset = UriFormatter.namespaces.get("wi-dataset")
+  val wiCountry = UriFormatter.namespaces.get("wi-country").get
+  val wiDataset = UriFormatter.namespaces.get("wi-dataset").get
   val wiIndex = UriFormatter.namespaces.get("wi-index").get
   val wiIndicator = UriFormatter.namespaces.get("wi-indicator").get
   val wiObs = UriFormatter.namespaces.get("wi-obs").get
