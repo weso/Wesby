@@ -2,6 +2,9 @@ package es.weso.wesby.utils
 
 import es.weso.wesby.Configurable
 
+/**
+ * Contains the commons URIs used in the project
+ */
 object CommonURIS extends Configurable {
 
   /*
