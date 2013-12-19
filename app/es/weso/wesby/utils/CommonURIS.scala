@@ -5,7 +5,7 @@ import es.weso.wesby.Configurable
 object CommonURIS extends Configurable {
 
   /*
-   * Place here the commons uris used by your project's custom views.
+   * Place here the commons URIs used by your project's custom views.
    * 
    * As a piece of advise, load the prefixes from conf/prefixes.ttl with
    * the helper UriFormatter.

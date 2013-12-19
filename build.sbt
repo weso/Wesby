@@ -1,6 +1,6 @@
 name := "wesby"
 
-version := "0.1.0-M1-SNAPSHOT"
+version := "0.1.0-M2-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   jdbc,
