@@ -20,7 +20,8 @@ case class Uri(val relative: String, val absolute: String, val short: Option[Sho
 }
 
 /**
- * Uri's companion object.
+ * Uri's companion object, implicit conversions and helpers.
+ * 
  */
 object Uri {
   import ShortUri._
@@ -52,7 +53,7 @@ case class ShortUri(val prefix: (String, String), val suffix: (String, String)) 
 }
 
 /**
- * ShortUri's Companion Object
+ * ShortUri's Companion Object, implicit conversions and helpers.
  */
 object ShortUri {
 
