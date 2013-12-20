@@ -14,6 +14,10 @@ import es.weso.wesby.models.Uri
 import play.api.Logger
 import play.api.libs.json.Json
 
+/**
+ * Handles the URIs performing transformation between local and base uri, and
+ * generating Uri objects.
+ */
 object UriFormatter extends Configurable {
 
   val actualUri = conf.getString("sparql.actualuri")
@@ -29,6 +33,9 @@ object UriFormatter extends Configurable {
   charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE)
   charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE)
 
+  /**
+   * Reads the namespaces from conf/wesby/prefixes.ttl
+   */
   protected def loadNamespaces() = {
     val Matcher = "PREFIX[' '||\t]*(.*):[' '||\t]*<(.*)>[' '||\t]*".r
 
@@ -50,6 +57,9 @@ object UriFormatter extends Configurable {
     prefixes
   }
 
+  /**
+   * Updates the Snorql's namespaces.js file
+   */
   protected def updatePubbyNamespaces(prefixes: Map[String, String]): Unit = {
 
     Logger.info("Updating namespaces.js (Snorql) file")
@@ -67,18 +77,30 @@ object UriFormatter extends Configurable {
     Logger.info("Done updating.")
   }
 
+  /**
+   * Adds the base URI to the partial URI
+   */
   def fullUri(uri: String) = {
     baseUri + uri
   }
 
+  /**
+   * Localizes the URI
+   */
   def uriToLocalURI(uri: String) = {
     uri.replace(baseUri, actualUri)
   }
 
+  /**
+   * Transforms the URI into an absolute URI
+   */
   def uriToBaseURI(uri: String) = {
     uri.replace(actualUri, baseUri)
   }
 
+  /**
+   * Generates an Uri object from a URI
+   */
   def format(uri: String): Uri = {
     val index = math.max(uri.lastIndexOf("#"), uri.lastIndexOf("/")) + 1
     val prefix = uri.subSequence(0, index).toString
@@ -93,6 +115,11 @@ object UriFormatter extends Configurable {
     Uri(localUri, uri, shortUri)
   }
 
+  /**
+   * Generates an Uri object from a URI split by base and Uri
+   * @param base the base URI
+   * @param uri the suffix URI
+   */
   def format(base: String, uri: String): Uri = format(base + uri)
 
 }
