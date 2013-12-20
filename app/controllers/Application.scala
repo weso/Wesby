@@ -14,6 +14,9 @@ import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api.mvc.RequestHeader
 
+/**
+ * Wesby's Controllers which Handles the different Web Services.
+ */
 object Application extends Controller with TemplateEgine {
 
   val Html = Accepting("text/html")
@@ -30,20 +33,34 @@ object Application extends Controller with TemplateEgine {
   charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE);
   charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 
-  def index = Action {
+  /**
+   * Redirects to the default page.
+   */
+  def index() = Action {
     implicit request =>
       val default = conf.getString("sparql.index")
       Redirect(default)
   }
 
+  /**
+   * Renders the built-in Snorql
+   */
   def snorql() = Action {
     implicit request => Ok(views.html.snorql())
   }
 
+  /**
+   * Performs a redirect to the supplied URI
+   * @param to the URI to be redirected
+   */
   def redirect(to: String) = Action {
     implicit request => Redirect(to)
   }
 
+  /**
+   * Intercepts the partial URI and renders the result
+   * @param uri the supplied partial URI
+   */
   def fallback(uri: String) = Action {
     implicit request =>
       val resultQuery = ModelLoader.loadUri(uri)
@@ -76,6 +93,13 @@ object Application extends Controller with TemplateEgine {
       }
   }
 
+  /**
+   * Download the resource in a given format
+   * @param uri the supplied URI
+   * @param format the format to be downloaded
+   * @param models the models to be merged
+   * @param request the implicit request
+   */
   protected def downloadAs(uri: String, format: String, models: Seq[JenaModel])(implicit request: RequestHeader) = {
     format match {
       case "n3" =>
@@ -92,6 +116,12 @@ object Application extends Controller with TemplateEgine {
     }
   }
 
+  /**
+   * Merges the models and renders it in the supplied contentType.
+   * @param models the models to be rendered
+   * @param contentType the target content type
+   * @param request the implicit request
+   */
   protected def renderModelsAs(models: Seq[JenaModel], contentType: (String, String, String))(implicit request: RequestHeader) = {
     val out = new ByteArrayOutputStream
     val mergedModel: JenaModel = ModelFactory.createDefaultModel
