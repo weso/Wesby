@@ -21,6 +21,9 @@ import es.weso.wesby.utils.UriFormatter
 import es.weso.wesby.utils.UriFormatter.uriToBaseURI
 import play.Logger
 
+/**
+ * Loads the Resource Model and InverseModel into Memory.
+ */
 object ModelLoader extends Configurable {
 
   val querySubject = conf.getString("query.subject")
@@ -33,7 +36,12 @@ object ModelLoader extends Configurable {
   val Verb = "?v"
   val Predicate = "?p"
 
-  def loadUri(uri: String) = {
+  /**
+   * Loads a ResulQuery for the given URI,
+   * it contains its children and parents.
+   * @param uri the supplied URI
+   */
+  def loadUri(uri: String): ResultQuery = {
     val fullUri: Uri = UriFormatter.format(baseUri + uri)
     Logger.info("Uri: " + fullUri.absolute)
     val subject = LazyDataStore(fullUri, loadSubject)
@@ -41,7 +49,13 @@ object ModelLoader extends Configurable {
     ResultQuery(subject, predicate)
   }
 
-  def loadUri(sufix: String, preffix: String) = {
+  /**
+   * Loads a ResulQuery for the composed URI,
+   * it contains its children and parents.
+   * @param prefix the supplied prefix
+   * @param suffix the supplied suffix
+   */
+  def loadUri(sufix: String, preffix: String): ResultQuery = {
     val fullUri = UriFormatter.format(uriToBaseURI(sufix + preffix))
     Logger.info("Uri: " + fullUri.absolute)
     val subject = LazyDataStore(fullUri, loadSubject)
@@ -49,6 +63,10 @@ object ModelLoader extends Configurable {
     ResultQuery(subject, predicate)
   }
 
+  /**
+   * Loads a Model which contains its children.
+   * @param uri the supplied URI
+   */
   protected def loadSubject(uri: String): Model = {
     val jenaModel = ModelFactory.createDefaultModel
     val model = Model(jenaModel)
@@ -71,7 +89,11 @@ object ModelLoader extends Configurable {
     model
   }
 
-  def loadPredicate(uri: String): InverseModel = {
+  /**
+   * Loads an InverseModel which contains its parents.
+   * @param uri the supplied URI
+   */
+  protected def loadPredicate(uri: String): InverseModel = {
     val jenaModel = ModelFactory.createDefaultModel
     val model = InverseModel(jenaModel)
     try {
@@ -96,11 +118,16 @@ object ModelLoader extends Configurable {
         Logger.warn("wesby was unable to query: '" + uri + "'")
       case e: ResultSetException =>
         Logger.warn("wesby was unable to process the resultSet, uri: " +
-        		"'"  + uri + "', message: '"+ e.getMessage + "'")
+          "'" + uri + "', message: '" + e.getMessage + "'")
     }
     model
   }
 
+  /**
+   * Process the predicate return a RdfNode.
+   * The returned RdfNode may be an RdfProperty, an RdfResource or an RdfLiteral.
+   * @param qs the target QuerySolution
+   */
   protected def processPredicate(qs: QuerySolution): RdfNode = {
     val uri = qs.get(Predicate)
     uri match {
@@ -118,13 +145,23 @@ object ModelLoader extends Configurable {
     }
   }
 
-  protected def processResource(qs: QuerySolution, param: String) = {
+  /**
+   * Process the the query solution returning a RdfResource
+   * @param qs the target QuerySolution
+   * @param param Name of the resource field
+   */
+  protected def processResource(qs: QuerySolution, param: String): RdfResource = {
     val vl = qs.get(param)
     val uri = UriFormatter.format(vl.asResource.getURI)
     val dss = processResultQuery(uri)
     RdfResource(uri, dss, vl.asResource)
   }
 
+  /**
+   * Process the the query solution returning a RdfProperty
+   * @param qs the target QuerySolution
+   * @param param Name of the property field
+   */
   protected def processProperty(qs: QuerySolution, param: String): RdfProperty = {
     val uri = UriFormatter.format(qs.get(param).asResource.getURI)
     val dss = processResultQuery(uri)
@@ -132,7 +169,11 @@ object ModelLoader extends Configurable {
     RdfProperty(uri, dss, property)
   }
 
-  protected def processResultQuery(uri: Uri) = {
+  /**
+   * Generates a ResultQuery for a given URI
+   * @param uri the supplied URI
+   */
+  protected def processResultQuery(uri: Uri): ResultQuery = {
     val subject = Some(LazyDataStore(uri, loadSubject))
     val predicate = Some(LazyDataStore(uri, loadPredicate))
     ResultQuery(subject, predicate)
