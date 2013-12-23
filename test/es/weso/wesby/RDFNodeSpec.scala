@@ -16,91 +16,68 @@ class RDFNodeSpec extends Specification {
   "RDFNode" should {
     "perform safe casts between it's subtypes" >> {
       "RDFResource to RDFLiteral must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val res = Handlers.handleFirstAs(rq, rdf, "type", (x: RdfNode) => x).get
+        val res = getExampleRdfResource
         res.asRdfLiteral must beNone
       }
       "RDFResource to RDFAnon must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val res = Handlers.handleFirstAs(rq, rdf, "type", (x: RdfNode) => x).get
+        val res = getExampleRdfResource
         res.asRdfAnon must beNone
       }
       "RDFResource to RDFProperty must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val res = Handlers.handleFirstAs(rq, rdf, "type", (x: RdfNode) => x).get
+        val res = getExampleRdfResource
         res.asRdfProperty must beNone
       }
       "RDFResource to RDFResource must be Some" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val res = Handlers.handleFirstAs(rq, rdf, "type", (x: RdfNode) => x).get
+        val res = getExampleRdfResource
         res.asRdfResource must beSome
       }
       "RDFLiteral to RDFLiteral must be Some" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val lit = Handlers.handleFirstAs(rq, rdfs, "label", (x: RdfNode) => x).get
+        val lit = getExampleTypedRdfLiteral
         lit.asRdfLiteral must beSome
       }
       "RDFLiteral to RDFAnon must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val lit = Handlers.handleFirstAs(rq, rdfs, "label", (x: RdfNode) => x).get
+        val lit = getExampleUntypedRdfLiteral
         lit.asRdfAnon must beNone
       }
       "RDFLiteral to RDFProperty must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val lit = Handlers.handleFirstAs(rq, rdfs, "label", (x: RdfNode) => x).get
+        val lit = getExampleTypedRdfLiteral
         lit.asRdfProperty must beNone
       }
       "RDFLiteral to RDFResource must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val lit = Handlers.handleFirstAs(rq, rdfs, "label", (x: RdfNode) => x).get
+        val lit = getExampleUntypedRdfLiteral
         lit.asRdfResource must beNone
       }
       "RDFProperty to RDFLiteral must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val prop = rq.get(rdf + "type")
-        val rdfProp = prop.get.p
-        rdfProp.asRdfLiteral must beNone
+        val prop = getExampleRdfProperty
+        prop.asRdfLiteral must beNone
       }
       "RDFProperty to RDFAnon must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val prop = rq.get(rdf + "type")
-        val rdfProp = prop.get.p
-        rdfProp.asRdfAnon must beNone
+        val prop = getExampleRdfProperty
+        prop.asRdfAnon must beNone
       }
       "RDFProperty to RDFProperty must be Some" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val prop = rq.get(rdf + "type")
-        val rdfProp = prop.get.p
-        rdfProp.asRdfProperty must beSome
+        val prop = getExampleRdfProperty
+        prop.asRdfProperty must beSome
       }
       "RDFProperty to RDFResource must be None" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-        val prop = rq.get(rdf + "type")
-        val rdfProp = prop.get.p
-        rdfProp.asRdfResource must beNone
+        val prop = getExampleRdfProperty
+        prop.asRdfResource must beNone
       }
     }
   }
 
   "RDFResource" should {
     "Return its URI" in new WithApplication {
-      val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-      // The resource type is wfOnto:Country
-      val rdfNode = Handlers.handleFirstAs(rq, rdf, "type", (x: RdfNode) => x).get
-      val rdfRes = rdfNode.asRdfResource.get
+      val rdfRes = getExampleRdfResource
       rdfRes.u.absolute must beEqualTo(wfOnto + "Country")
     }
     "Navigate to its parents" in new WithApplication {
-      val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-      val rdfNode = Handlers.handleFirstAs(rq, rdf, "type", (x: RdfNode) => x).get
-      val rdfRes = rdfNode.asRdfResource.get
+      val rdfRes = getExampleRdfResource
       val parents = rdfRes.dataStores.predicate.get.list
       parents.size must beGreaterThan(0)
     }
     "Navigate to its children" in new WithApplication {
-      val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-      val rdfNode = Handlers.handleFirstAs(rq, rdf, "type", (x: RdfNode) => x).get
-      val rdfRes = rdfNode.asRdfResource.get
+      val rdfRes = getExampleRdfResource
       val children = rdfRes.dataStores.subject.get.list
       children.size must beGreaterThan(0)
     }
@@ -108,24 +85,20 @@ class RDFNodeSpec extends Specification {
 
   "RDFLiteral" should {
     "Return its value" in new WithApplication {
-      val rq = ModelLoader.loadUri(wiCountry, "USA").subject.get
-      val rdfLit = Handlers.handleFirstLiteralAs(rq, rdfs, "label", x => x).get
+      val rdfLit = getExampleUntypedRdfLiteral
       rdfLit.value must beEqualTo("United States of America")
     }
     "Return its type" >> {
       "Must be Some when it has type" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "USA").subject.get
-        val rdfLit = Handlers.handleFirstLiteralAs(rq, dcterms, "issued", x => x).get
+        val rdfLit = getExampleTypedRdfLiteral
         rdfLit.dataType must beSome
       }
       "The type URI must be correct" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "USA").subject.get
-        val rdfLit = Handlers.handleFirstLiteralAs(rq, dcterms, "issued", x => x).get
+        val rdfLit = getExampleTypedRdfLiteral
         rdfLit.dataType.get.absolute must beEqualTo(xsd + "date")
       }
       "Must be None when it doesn't have type" in new WithApplication {
-        val rq = ModelLoader.loadUri(wiCountry, "USA").subject.get
-        val rdfLit = Handlers.handleFirstLiteralAs(rq, rdfs, "label", x => x).get
+        val rdfLit = getExampleUntypedRdfLiteral
         rdfLit.dataType must beNone
       }
     }
@@ -133,19 +106,51 @@ class RDFNodeSpec extends Specification {
 
   "RDFProperty" should {
     "Return its URI" in new WithApplication {
-      val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-      // Get the rdf:type property
-      val prop = rq.get(rdf +"type")
-      val rdfProp = prop.get.p
-      // The property url must be the same as before (rdf:type)
-      rdfProp.u.absolute must beEqualTo(rdf +"type")
+      val rdfProp = getExampleRdfProperty
+      rdfProp.u.absolute must beEqualTo(rdf + "type")
     }
     "Not have any parents" in new WithApplication {
-      val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
-      val prop = rq.get(rdf +"type")
-      val rdfProp = prop.get.p
+      val rdfProp = getExampleRdfProperty
       val parents = rdfProp.dataStores.predicate.get.list
-      parents must have size(0)
+      parents must have size (0)
     }
+  }
+
+  /**
+   * @return An example RDFProperty to use in the tests.
+   * The property is rdf:type
+   */
+  def getExampleRdfProperty: RdfProperty = {
+    val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
+    // Get the property with tag rdf:type
+    val prop = rq.get(rdf + "type")
+    prop.get.p
+  }
+
+  /**
+   * @return An example RDFResource to use in the tests.
+   * The resource is rdf:type
+   */
+  def getExampleRdfResource: RdfResource = {
+    val rq = ModelLoader.loadUri(wiCountry, "ESP").subject.get
+    Handlers.handleFirstResourceAs(rq, rdf, "type", x => x).get
+  }
+
+  /**
+   * @return An example RDFLiteral with type to use in the tests.
+   * The literal is dcterms:issued, with type xsd:label (value= 2013-12-11)
+   */
+  def getExampleTypedRdfLiteral: RdfLiteral = {
+    val rq = ModelLoader.loadUri(wiCountry, "USA").subject.get
+    Handlers.handleFirstLiteralAs(rq, dcterms, "issued", x => x).get
+  }
+
+  /**
+   * @return An example RDFLiteral whithout type to use in the tests.
+   * The literal is rdfs:label (value= United States of America)
+   */
+  def getExampleUntypedRdfLiteral: RdfLiteral = {
+    val rq = ModelLoader.loadUri(wiCountry, "USA").subject.get
+    Handlers.handleFirstLiteralAs(rq, rdfs, "label", x => x).get
   }
 }
