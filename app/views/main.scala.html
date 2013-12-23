@@ -17,13 +17,13 @@
 		<link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/sortable.css")"/>
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.png")"/>
+        <link rel="icon" type="image/png" href="@Options.host_r@routes.Assets.at("images/favicon.png")"/>
     </head>
 	<body>
 		<div class="content">
 			<header>
 				<div class="leftHeader">
-					<a href="@routes.Application.index">
+					<a href="@Options.host">
 						<img alt="World Wide Web Foundation" src="@Options.host_r@routes.Assets.at("images/wesby-logo.png")" class="W3F-logo" />
 					</a>
 				</div>
@@ -33,7 +33,7 @@
 				@content
 			</div>
 			<footer>
-				<div class="footer">&copy; @Options.license</div>
+				<div class="footer">&copy; @Options.license Powered by <a href="https://github.com/weso/Wesby" title="Go to Wesby Repo">Wesby</a></div>
 			</footer>
 		</div>
 		<script src="@Options.host_r@routes.Assets.at("javascripts/richTable.js")"></script>
