@@ -6,11 +6,9 @@ import es.weso.wesby.models.RdfNode
 import es.weso.wesby.models.RdfProperty
 import es.weso.wesby.models.RdfResource
 import es.weso.wesby.models.ResultQuery
-import es.weso.wesby.sparql.Handlers.handleFirstLiteralAsValue
 import es.weso.wesby.sparql.Handlers.handleResourceAsString
 import es.weso.wesby.utils.CommonURIS.rdf
 import es.weso.wesby.utils.CommonURIS.rdfs
-import es.weso.wesby.utils.CommonURIS.wfOnto
 import play.api.Play.current
 import play.api.cache.Cache
 import play.api.templates.Html
@@ -28,16 +26,6 @@ object Utils extends Configurable {
   def toLower(text: String) = text.toLowerCase
 
   def toLower(html: Html) = html.toString.toLowerCase
-
-  def iso2(resultQuery: ResultQuery): String = {
-    handleFirstLiteralAsValue(resultQuery.subject.get,
-      wfOnto, "has-iso-alpha2-code")
-  }
-
-  def iso3(resultQuery: ResultQuery): String = {
-    handleFirstLiteralAsValue(resultQuery.subject.get,
-      wfOnto, "has-iso-alpha3-code")
-  }
 
   def cachedLabel(r: RdfProperty): String = {
     val key = r.uri.absolute.hashCode.toString
