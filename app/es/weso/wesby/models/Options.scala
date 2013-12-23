@@ -15,12 +15,12 @@ class Options(val partialUri: String) extends Configurable {
   val uri = UriFormatter.fullUri(partialUri)
 
   def query = QueryEngine.applyFilters(fallback, Seq("<" + uri + ">"))
-  
+
   def host = Options.host
   def endpoint = Options.endpoint
   def fallback = Options.fallback
   def baseUri = Options.baseUri
-  
+
   def title = Options.title
   def license = Options.license
 }
@@ -30,10 +30,11 @@ class Options(val partialUri: String) extends Configurable {
  */
 object Options extends Configurable {
   val host = conf.getString("sparql.actualuri")
+  val host_r = host.substring(0, host.length() - 1)
   val endpoint = conf.getString("sparql.endpoint")
   val baseUri = conf.getString("sparql.baseuri")
   val fallback = conf.getString("query.show.fallback")
-  
+
   val title = conf.getString("portal.title")
   val license = conf.getString("portal.license")
 }
