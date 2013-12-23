@@ -6,6 +6,14 @@ body {
 	font-family: 'trebuchet MS', verdana, arial, sans-serif;
 }
 
+header {
+	padding: 0.5em 1em;
+}
+
+header img{
+	width: 70%!important;
+}
+
 div.content {
 	background-color: #fff;
 	margin: 0;
