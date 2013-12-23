@@ -12,19 +12,19 @@
 		<meta name="viewport" content="width=device-width"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<title>@Options.title</title>
-		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/style.css").absoluteURL()"/>
-		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/pages.css").absoluteURL()"/>
-		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/sortable.css").absoluteURL()"/>
+		<link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/style.css")"/>
+		<link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/pages.css")"/>
+		<link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/sortable.css")"/>
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.png").absoluteURL()"/>
+        <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.png")"/>
     </head>
 	<body>
 		<div class="content">
 			<header>
 				<div class="leftHeader">
 					<a href="@routes.Application.index">
-						<img alt="World Wide Web Foundation" src="@routes.Assets.at("images/wesby-logo.png").absoluteURL()" class="W3F-logo" />
+						<img alt="World Wide Web Foundation" src="@Options.host_r@routes.Assets.at("images/wesby-logo.png")" class="W3F-logo" />
 					</a>
 				</div>
 				<div class="border"></div>
@@ -36,6 +36,6 @@
 				<div class="footer">&copy; @Options.license</div>
 			</footer>
 		</div>
-		<script src="@{routes.Assets.at("javascripts/richTable.js").absoluteURL()}"></script>
+		<script src="@Options.host_r@routes.Assets.at("javascripts/richTable.js")"></script>
 	</body>
 </html>
