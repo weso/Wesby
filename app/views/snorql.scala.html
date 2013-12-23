@@ -107,22 +107,22 @@
 							}
 						);
 						
+						$j("#submitQuery").click(function() {
+							editor.save();
+							snorql.submitQuery();
+						});
+						
+						$j("#resetQuery").click(function() {
+							snorql.resetQuery();
+						});
+						
+						$j('html, body').animate({
+							scrollTop : $j("div.CodeMirror").offset().top
+						}, 2000);
+						
 				    },
 				    url: '@Options.host_r@routes.Assets.at("javascripts/snorql/namespaces.json")'
 				});
-				
-				$j("#submitQuery").click(function() {
-					editor.save();
-					snorql.submitQuery();
-				});
-
-				$j("#resetQuery").click(function() {
-					snorql.resetQuery();
-				});
-				
-				$j('html, body').animate({
-					scrollTop : $j("div.CodeMirror").offset().top
-				}, 2000);
 
 			});
 		</script>
