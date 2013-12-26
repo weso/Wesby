@@ -66,10 +66,12 @@ object UriFormatter extends Configurable {
 
     val json = Json.toJson(prefixes).toString
 
-    val out = new BufferedWriter(new FileWriter("public/javascripts/snorql/namespaces.json"))
-
+    val out = new BufferedWriter(new FileWriter("public/javascripts/snorql/namespaces.js"))
+    
     try {
+      out.write("namespaces=")
       out.write(json)
+      out.write(";")
     } finally {
       out.close
     }
