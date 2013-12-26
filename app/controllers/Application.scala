@@ -1,18 +1,17 @@
 package controllers
-
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
-
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
-
 import es.weso.wesby.TemplateEgine
 import es.weso.wesby.sparql.ModelLoader
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api.mvc.RequestHeader
+import play.api.libs.ws.WS
+import play.api.libs.json.Json
 
 /**
  * Wesby's Controllers which Handles the different Web Services.
@@ -33,6 +32,10 @@ object Application extends Controller with TemplateEgine {
   charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE);
   charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 
+  implicit val context = scala.concurrent.ExecutionContext.Implicits.global
+
+  val endpointPath = conf.getString("sparql.endpoint")
+
   /**
    * Redirects to the default page.
    */
@@ -47,6 +50,21 @@ object Application extends Controller with TemplateEgine {
    */
   def snorql() = Action {
     implicit request => Ok(views.html.snorql())
+  }
+
+  /**
+   * Proxies the endpoint in order to be able to query it avoiding
+   * cross domain limitations. 
+   */
+  def endpoint() = Action.async {
+    implicit request =>
+      val params = request.body.asFormUrlEncoded.get
+      var nMap = Map.empty[String,Seq[String]]
+      nMap += "output" -> Seq("json")
+      nMap += "query" -> Seq(params("query").head.replace("[object Object]", ""))
+      WS.url(endpointPath).post(nMap).map { response =>
+        Ok(response.body).as("application/json; charset=UTF8")
+      }
   }
 
   /**
