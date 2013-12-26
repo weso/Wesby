@@ -10,7 +10,7 @@ String.prototype.startsWith = function(str) {
 
 function Snorql() {
     // modify this._endpoint to point to your SPARQL endpoint
-    this._endpoint = 'http://data.webfoundation.org/sparql'
+    this._endpoint = '/endpoint'
     	//document.location.href.match(/^([^?]*)snorql\//)[1] + 'sparql';
     // modify these to your likeing
     this._poweredByLink = 'http://www.openlinksw.com/dataspace/doc/dav/wiki/Main/';
