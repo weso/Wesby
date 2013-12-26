@@ -25,18 +25,23 @@ class ResultQuerySpec extends Specification {
       parents must beSome
     }
     
-//    "Be None when the Resource has no parents" in new WithApplication {
-//      val res = ModelLoader.loadUri("http://en.wikipedia.org/wiki/", "RDF")
-//      val parents = res.predicate
-////      Fails
-//      parents must beNone
-////      Passes
-////      parents.get.list.size must beEqualTo(0)
-//    }
-//    
-//    "Be None when the Resource has no childern" in new WithApplication {
-//    }
+    "Return an empty list when the Resource has no parents" in new WithApplication {
+      val res = ModelLoader.loadUri("http://en.wikipedia.org/wiki/", "RDF")
+      val parents = res.predicate.get.list
+      parents.size must beEqualTo(0)
+    }
     
+    "Return a populated list when it has parents" in new WithApplication {
+      val rq = ModelLoader.loadUri(wiCountry, "CZE")
+      val parents = rq.predicate.get.list
+      parents.size must beGreaterThan(0)
+    }
+    
+    "Return a populated list when it has children" in new WithApplication {
+      val rq = ModelLoader.loadUri(wiCountry, "CZE")
+      val children = rq.subject.get.list
+      children.size must beGreaterThan(0)
+    }
   }
 
 }
