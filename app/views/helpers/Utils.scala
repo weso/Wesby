@@ -1,11 +1,10 @@
 package views.helpers
 
 import es.weso.wesby.Configurable
-import es.weso.wesby.models.RdfLiteral
-import es.weso.wesby.models.RdfNode
 import es.weso.wesby.models.RdfProperty
 import es.weso.wesby.models.RdfResource
 import es.weso.wesby.models.ResultQuery
+import es.weso.wesby.sparql.Handlers.handleFirstLiteralAsValue
 import es.weso.wesby.sparql.Handlers.handleResourceAsString
 import es.weso.wesby.utils.CommonURIS.rdf
 import es.weso.wesby.utils.CommonURIS.rdfs
@@ -13,6 +12,9 @@ import play.api.Play.current
 import play.api.cache.Cache
 import play.api.templates.Html
 
+/**
+ * Includes template-oriented helpers and utility methods.
+ */
 object Utils extends Configurable {
 
   val Empty = ""
@@ -27,21 +29,40 @@ object Utils extends Configurable {
 
   def toLower(html: Html) = html.toString.toLowerCase
 
+  /**
+   * Retrieves a label from the cache, if the label is not within the
+   * cache, it returns it, and stores it back in the cache.
+   * @param r the target RdfProperty
+   */
   def cachedLabel(r: RdfProperty): String = {
     val key = r.uri.absolute.hashCode.toString
     Cache.getOrElse(key, cacheExpiration)(label(r.dss))
   }
 
+  /**
+   * Retrieves a label from the cache, if the label is not within the
+   * cache, it returns it, and stores it back in the cache.
+   * @param r the target RdfResource
+   */
   def cachedLabel(r: RdfResource): String = {
     val key = r.uri.absolute.hashCode.toString
     Cache.getOrElse(key, cacheExpiration)(label(r.dss))
   }
 
+  /**
+   * Retrieves a label from the cache, if the label is not within the
+   * cache, it returns it, and stores it back in the cache.
+   * @param r the target ResultQuery
+   */
   def cachedLabel(rs: ResultQuery): String = {
     val key = rs.pred.get.uri.absolute.hashCode.toString
     Cache.getOrElse(key, cacheExpiration)(label(rs))
   }
 
+  /**
+   * Returns the rdf:type from a ResultQuery.
+   * @param resultQuery the target ResultQuery
+   */
   def rdfType(resultQuery: ResultQuery): String = {
     val result = handleResourceAsString(resultQuery.subject.get,
       rdf, "type", (r: RdfResource) => { r.uri.relative })
@@ -50,24 +71,31 @@ object Utils extends Configurable {
     else result
   }
 
+  /**
+   * Returns the label of its rdf:type from a ResultQuery.
+   * @param resultQuery the target ResultQuery
+   */
   def rdfTypeLabel(resultQuery: ResultQuery): String = {
     handleResourceAsString(resultQuery.subject.get,
       rdf, "type",
       (r: RdfResource) => cachedLabel(r))
   }
 
+  /**
+   * Retrieves the rdfs:label from a given ResultQuery.
+   * @param resultQuery the target ResultQuery
+   */
   def label(resultQuery: ResultQuery): String = {
-    val label = resultQuery.subject match {
-      case Some(subject) =>
-        subject.get(rdfs, "label") match {
-          case Some(labels) => filterLabels(labels.nodes.toList)
-          case None => Empty
-        }
-      case None => Empty
-    }
-    label
+    handleFirstLiteralAsValue(resultQuery.subject.get,
+      rdfs, "label")
   }
 
+  /**
+   * Displays a label, if the label is empty or is not in English, it displays
+   * the URI.
+   * @param uri the URI of the RDF resource
+   * @param label the label to be display
+   */
   def showLabel(uri: String, label: String): String = {
     val chunks = label.split("@")
     if (chunks(0).isEmpty)
@@ -75,19 +103,6 @@ object Utils extends Configurable {
     else if (chunks.length > 1 && chunks(chunks.length - 1) == "en")
       chunks(0)
     else label
-  }
-
-  protected def filterLabels(nodes: List[RdfNode]): String = {
-    val labels = for {
-      label <- nodes
-      text = label match {
-        case l: RdfLiteral => l.value
-        case _ => Empty
-      }
-      if !text.isEmpty
-    } yield text
-
-    if (labels.length > 0) labels.head else Empty
   }
 
 }
