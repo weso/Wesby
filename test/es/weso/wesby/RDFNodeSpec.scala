@@ -63,6 +63,22 @@ class RDFNodeSpec extends Specification {
         val prop = getExampleRdfProperty
         prop.asRdfResource must beNone
       }
+      "RDFAnon to RDFLiteral must be None" in new WithApplication {
+        val anon = RdfAnon(getExampleRdfResource.resource)
+        anon.asRdfLiteral must beNone
+      }
+      "RDFAnon to RDFAnon must be Some" in new WithApplication {
+        val anon = RdfAnon(getExampleRdfResource.resource)
+        anon.asRdfAnon must beSome
+      }
+      "RDFAnon to RDFProperty must be None" in new WithApplication {
+        val anon = RdfAnon(getExampleRdfResource.resource)
+        anon.asRdfProperty must beNone
+      }
+      "RDFAnon to RDFResource must be None" in new WithApplication {
+        val anon = RdfAnon(getExampleRdfResource.resource)
+        anon.asRdfResource must beNone
+      }
     }
   }
 
@@ -113,6 +129,15 @@ class RDFNodeSpec extends Specification {
       val rdfProp = getExampleRdfProperty
       val parents = rdfProp.dataStores.predicate.get.list
       parents must have size (0)
+    }
+  }
+  
+  "RDFAnon" should {
+    "Throw an exception when it is created with an RDFResource" in new WithApplication {
+      {
+      val x = new RdfAnon(getExampleRdfResource.resource)
+      print(x)
+      } must throwA[UnsupportedOperationException]
     }
   }
 
