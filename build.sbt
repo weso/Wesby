@@ -1,6 +1,8 @@
 name := "wesby"
 
-version := "0.1.0-M3-SNAPSHOT"
+version := "0.1.0-M4-SNAPSHOT"
+
+play.Project.playScalaSettings
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -14,15 +16,18 @@ libraryDependencies ++= Seq(
 
 resolvers += "Spy Repository" at "http://files.couchbase.com/maven2"
 
-templatesImport += "es.weso.wfLodPortal.models._"
+templatesImport ++= Seq(
+  "app.models.OptionsHelper",
+  "app.models.OptionsHelper._",
+  "es.weso.wesby.models._",
+  "es.weso.wesby.sparql.Handlers._",
+  "es.weso.wesby.utils.CommonURIS._",
+  "views.helpers.Utils._",
+  "views.html.helpers._",
+  "views.html.helpers.utils._"
+)
 
-templatesImport += "es.weso.wfLodPortal.utils.CommonURIS._"
-
-templatesImport += "views.html.helpers._"
-
-templatesImport += "views.html.helpers.utils._"
-
-play.Project.playScalaSettings
+templatesImport ++= Seq()
 
 sourceGenerators in Compile <+= Def.task {
   val finder: PathFinder = (new File("app")/"views"/"lod") ** "*.scala.html"

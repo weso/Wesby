@@ -1,7 +1,5 @@
 @(endpoint:String, query:String)(implicit request:RequestHeader)
-@import es.weso.wesby.models.Options
 @import scala.util.Random
-@import views.html.helpers._
 @randomString = @{Random.alphanumeric.take(10).mkString}
 @defining(randomString) { randomString =>
 	<link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/codemirror.css")"/>

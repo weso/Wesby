@@ -6,8 +6,9 @@
 GET    /               controllers.Application.index
 HEAD   /               controllers.Application.index
 
-# Map static resources from the /public folder to the /assets URL path
+# Map your custom app routes
 
+# Wesby routes
 GET    /favicon.ico    controllers.Assets.at(path="/public", file="favicon.ico")
 HEAD   /favicon.ico    controllers.Assets.at(path="/public", file="favicon.ico")
 
