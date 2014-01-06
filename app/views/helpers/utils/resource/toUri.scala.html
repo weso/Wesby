@@ -1,6 +1,4 @@
-@(n: es.weso.wesby.models.RdfResource)
-@import es.weso.wesby.models._
-@import views.helpers.Utils._
+@(n: RdfResource)
 @cachedLabel(n).trim match {
   case label if !label.isEmpty =>  {<a class="breakable" href="@n.uri.relative">@showLabel(n.uri.absolute, label)</a>}
   case _ => {

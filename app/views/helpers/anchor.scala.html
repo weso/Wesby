@@ -1,6 +1,4 @@
-@(n: es.weso.wesby.models.RdfNode)
-@import es.weso.wesby.models._
-@import views.html.helpers.utils._
+@(n: RdfNode)
 @n match {
 	case r:RdfResource => {@resource.toUri(r)}
 	case p:RdfProperty => {@property.toUri(p)}

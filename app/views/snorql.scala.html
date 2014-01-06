@@ -1,8 +1,4 @@
 @(param: Any)(implicit request: RequestHeader)
-@import views.helpers.Utils._
-@import views.html.helpers._
-@import views.html.helpers.utils._
-@import es.weso.wesby.models.Options
 @main(None){
 <link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/codemirror.css")"></link>
 <link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/snorql.css")"></link>

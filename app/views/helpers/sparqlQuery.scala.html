@@ -1,5 +1,4 @@
-@(options: es.weso.wesby.models.Options)(implicit request: RequestHeader)
-@import views.html.helpers._
+@(options: Options)(implicit request: RequestHeader)
 <div class="sparql">
 	<h4>Data Source</h4>
 	@runSparqlQuery(options.endpoint, options.query)
