@@ -11,7 +11,7 @@ class OptionsHelper(options: Options) {
 }
 
 /**
- * OptionsHeelper Companion Object
+ * OptionsHelper Companion Object
  */
 object OptionsHelper {
   
