@@ -12,6 +12,7 @@ import play.api.mvc.Controller
 import play.api.mvc.RequestHeader
 import play.api.libs.ws.WS
 import play.api.libs.json.Json
+import es.weso.wesby.models.Options
 
 /**
  * Wesby's Controllers which Handles the different Web Services.
@@ -41,7 +42,7 @@ object Application extends Controller with TemplateEgine {
    */
   def index() = Action {
     implicit request =>
-      val default = conf.getString("sparql.index")
+      val default = Options.host_r + conf.getString("sparql.index")
       Redirect(default)
   }
 
