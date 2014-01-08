@@ -239,11 +239,11 @@ function Snorql() {
 
     this.submitQuery = function() {
         var mode = this._selectedOutputMode();
+        // Prefixes must be appended before the query
+        document.getElementById('query').value = this._getPrefixes() + document.getElementById('querytext').value;
         if (mode == 'browse') {
             document.getElementById('queryform').action = this._browserBase;
-            document.getElementById('query').value = document.getElementById('querytext').value;
         } else {
-            document.getElementById('query').value = this._getPrefixes() + document.getElementById('querytext').value;
             document.getElementById('queryform').action = this._endpoint;
         }
         document.getElementById('jsonoutput').disabled = (mode != 'json');
