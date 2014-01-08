@@ -41,3 +41,11 @@ RUNNING_PID
 
 # Git specific
 *.orig
+
+# IntelliJ IDEA specific
+.idea/
+*.ipr
+*.iws
+*.iml
+out/
+.idea_modules/
