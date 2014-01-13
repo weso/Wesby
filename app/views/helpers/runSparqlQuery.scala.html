@@ -25,7 +25,7 @@
 		
 			button.onclick = function() {
 				var query = editor.doc.getValue();
-				window.location.href = "@{routes.Application.snorql()}?default-graph-uri=&query=" + encodeURIComponent(query);
+				window.location.href = "@Options.host_r" + "@{routes.Application.snorql()}?default-graph-uri=&query=" + encodeURIComponent(query);
 			};
 	    }
 	    
