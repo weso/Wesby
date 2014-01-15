@@ -6,6 +6,8 @@
 	<script src="@Options.host_r@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
 	<script src="@Options.host_r@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
 	<script src="@Options.host_r@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
+    <script src="@Options.host_r@routes.Assets.at("javascripts/snorql/snorql.js")"></script>
+        <script>var snorql = new Snorql("@Options.host_r" + "/endpoint");</script>
 	<textarea id="query-@randomString">@{query.replace("\\n", "\n").replace("\\t", "\t")}</textarea>
 	<button id="test-query-@randomString">Test query</button>
 	<script>
