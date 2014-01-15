@@ -10,8 +10,14 @@ header {
 	padding: 0.5em 1em;
 }
 
-header img{
-	width: 70%!important;
+header img {
+        width: 100%;
+}
+
+@media all and (min-width: 30em) {
+        header img{
+                width: 70% !important;
+        }
 }
 
 div.content {
@@ -470,6 +476,7 @@ table.propertyBox td.property {
 	color: #333;
 	font-style: italic;
 	padding-right: 1em;
+	width: 40%;
 }
 
 table.propertyBox td.value ul {
@@ -489,6 +496,10 @@ a.breakable {
 
 table.children {
 	width: 100%;
+}
+
+table.children td {
+    word-break: break-word;
 }
 
 /* Select */
