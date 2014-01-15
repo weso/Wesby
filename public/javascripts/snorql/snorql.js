@@ -1,4 +1,4 @@
-var snorql = new Snorql();
+//var snorql = new Snorql();
 
 String.prototype.trim = function () {
     return this.replace(/^\s*/, "").replace(/\s*$/, "");
@@ -8,9 +8,10 @@ String.prototype.startsWith = function(str) {
 	return (this.match("^"+str) == str);
 }
 
-function Snorql() {
+function Snorql(endpoint) {
     // modify this._endpoint to point to your SPARQL endpoint
-    this._endpoint = '/endpoint'
+    //this._endpoint = '/endpoint'
+    this._endpoint = endpoint
     	//document.location.href.match(/^([^?]*)snorql\//)[1] + 'sparql';
     // modify these to your likeing
     this._poweredByLink = 'http://www.openlinksw.com/dataspace/doc/dav/wiki/Main/';
