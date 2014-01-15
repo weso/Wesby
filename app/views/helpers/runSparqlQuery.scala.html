@@ -24,7 +24,8 @@
 		    var button = document.getElementById("test-query-@randomString");
 		
 			button.onclick = function() {
-				var query = editor.doc.getValue();
+			    // The prefixes must be appended before the custom query
+				var query = snorql._getPrefixes() + editor.doc.getValue();
 				window.location.href = "@Options.host_r" + "@{routes.Application.snorql()}?default-graph-uri=&query=" + encodeURIComponent(query);
 			};
 	    }
