@@ -22,7 +22,7 @@ trait TemplateEgine extends Controller with Configurable {
 
   /**
    * Renders a template based on its rdf:type
-   * @param resulQuery the target ResultQuery
+   * @param resultQuery the target ResultQuery
    * @param uri the target URI
    * @param request the RequestHeader
    */
