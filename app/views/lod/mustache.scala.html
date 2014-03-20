@@ -5,12 +5,12 @@
 @import views.html.helpers.utils._
 
 @main(None) {
-	<!--<h1>@cachedLabel(rs)</h1>-->
-	<!--<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>-->
-    <div id="renderedHeader"></div>
-	@grill(rs)
-	@sparqlQuery(options)
-    <script type="text/javascript">
+<!--<h1>@cachedLabel(rs)</h1>-->
+<!--<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>-->
+<div id="renderedHeader"></div>
+@grill(rs)
+@sparqlQuery(options)
+<script type="text/javascript">
         $(function() {
             renderHeader('@rdfType(rs)', '@rdfTypeLabel(rs)', '@cachedLabel(rs)');
         });

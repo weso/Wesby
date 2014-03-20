@@ -29,12 +29,6 @@
 				<div class="border"></div>
 			</header>
 			<div class="body">
-                <h2>Mustache.js test</h2>
-                <ul>
-                    <li><a href="javascript:test1()">Country test</a></li>
-                    <li><a href="javascript:githubSample()">Github test</a></li>
-                </ul>
-                <div id="sampleArea"></div>
 				@content
 			</div>
 			<footer>
@@ -43,38 +37,33 @@
 		</div>
 		<script src="@Options.host_r@routes.Assets.at("javascripts/richTable.js")"></script>
 		<script src="@Options.host_r@routes.Assets.at("javascripts/mustache.js")"></script>
-
-        </script>
 		<script type="text/javascript">
-		    function test1() {
-                var country = {
-                    "country": "Spain",
-                    "observations": [
-                        {"value": 12 },
-                        {"value": 43 }
-                    ]
+
+            function renderHeader(rdfType, rdfTypeLabel, cachedLabel) {
+
+                var templateData = {
+                        "cachedLabel": cachedLabel,
+                        "rdfType": rdfType,
+                        "rdfTypeLabel": rdfTypeLabel
                 };
 
+                // Gets the Mustache template and renders the view
 
-
-                $.get('@Options.host_r@routes.Assets.at("mustache/test.mustache")', function(template) {
-                    var output = Mustache.render(template, country);
-                    $('#sampleArea').html(output);
+                $.getJSON('@Options.host_r@routes.Assets.at("mustache/templates.json")', function(templatesMap) {
+                   // var templatesMap = $.parseJSON(json);
+                    var templateName = templatesMap[rdfType];
+                    render(templateName, templateData);
                 });
 
+
             }
 
-            function githubSample() {
-                var view = {
-                  title: "Joe",
-                  calc: function () {
-                    return 2 + 4;
-                  }
-                };
-
-                var output = Mustache.render("{{title}} spends {{calc}}", view);
-                $('#sampleArea').html(output);
-            }
+            function render(templateName, templateData) {
+                $.get('@Options.host_r@routes.Assets.at("mustache/")'  + templateName + '.mustache', function(template) {
+                    var output = Mustache.render(template, templateData);
+                    $('#renderedHeader').html(output);
+                });
+            };
 		</script>
 
 

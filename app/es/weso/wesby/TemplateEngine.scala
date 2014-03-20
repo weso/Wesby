@@ -29,7 +29,8 @@ trait TemplateEgine extends Controller with Configurable {
   def renderAsTemplate(resultQuery: ResultQuery, uri: String)(implicit request: RequestHeader) = {
     implicit val options = new Options(uri)
     val currentType = rdfType(resultQuery)
-    val templateName = conf.getString(currentType, Undefined)
+//    val templateName = conf.getString(currentType, Undefined)
+    val templateName = "mustache"
     if (templateName == "OVERRIDE.TEMPLATE") {
       TemplateEngineHelper.renderAsTemplate(resultQuery, uri, currentType)
     } else {
