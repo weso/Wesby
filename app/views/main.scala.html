@@ -37,35 +37,5 @@
 		</div>
 		<script src="@Options.host_r@routes.Assets.at("javascripts/richTable.js")"></script>
 		<script src="@Options.host_r@routes.Assets.at("javascripts/mustache.js")"></script>
-		<script type="text/javascript">
-
-            function renderHeader(rdfType, rdfTypeLabel, cachedLabel) {
-
-                var templateData = {
-                        "cachedLabel": cachedLabel,
-                        "rdfType": rdfType,
-                        "rdfTypeLabel": rdfTypeLabel
-                };
-
-                // Gets the Mustache template and renders the view
-
-                $.getJSON('@Options.host_r@routes.Assets.at("mustache/templates.json")', function(templatesMap) {
-                   // var templatesMap = $.parseJSON(json);
-                    var templateName = templatesMap[rdfType];
-                    render(templateName, templateData);
-                });
-
-
-            }
-
-            function render(templateName, templateData) {
-                $.get('@Options.host_r@routes.Assets.at("mustache/")'  + templateName + '.mustache', function(template) {
-                    var output = Mustache.render(template, templateData);
-                    $('#renderedHeader').html(output);
-                });
-            };
-		</script>
-
-
 	</body>
 </html>

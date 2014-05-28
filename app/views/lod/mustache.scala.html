@@ -7,12 +7,43 @@
 @main(None) {
 <!--<h1>@cachedLabel(rs)</h1>-->
 <!--<h2><a href="@rdfType(rs)">@rdfTypeLabel(rs)</a></h2>-->
-<div id="renderedHeader"></div>
+<div id="mustacheRendered"></div>
 @grill(rs)
 @sparqlQuery(options)
-<script type="text/javascript">
-        $(function() {
-            renderHeader('@rdfType(rs)', '@rdfTypeLabel(rs)', '@cachedLabel(rs)');
-        });
-    </script>
 }
+
+<script type="text/javascript">
+    $(function() {
+        var template; // Mustache template
+        var data = {
+            "cachedLabel": '@cachedLabel(rs)',
+            "rdfType": '@rdfTypeLabel(rs)',
+            "rdfTypeLabel": '@rdfType(rs)'
+        } // Mustache server data
+        var mustacheURL = '@Options.host_r@routes.Assets.at("mustache/")';
+        var templatesMapURL = '@Options.host_r@routes.Assets.at("mustache/templates.json")';
+
+        var renderPage = function() {
+            // Get template names map
+            $.getJSON(templatesMapURL, function(templatesMap) {
+                var templateName = templatesMap[data.rdfType];
+                // Load template
+                $.get(mustacheURL + templateName + '.mustache', function(t) {
+                    template = t;
+                });
+            });
+
+            // Get server data
+            // $.getJSON("data.json", function(d) {
+            //   $.extend(data, d);
+            // })
+
+        }()
+
+        // Waits for AJAX calls to complete, then renders the page
+        $(document).ajaxStop(function(){
+            var renderedPage = Mustache.render(template, data);
+            $('#mustacheRendered').html(renderedPage);
+        })
+    })
+</script>

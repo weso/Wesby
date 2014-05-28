@@ -31,12 +31,14 @@ trait TemplateEgine extends Controller with Configurable {
     val currentType = rdfType(resultQuery)
 //    val templateName = conf.getString(currentType, Undefined)
     val templateName = "mustache"
-    if (templateName == "OVERRIDE.TEMPLATE") {
-      TemplateEngineHelper.renderAsTemplate(resultQuery, uri, currentType)
-    } else {
-      val template = TemplateMapping.templates.getOrElse(templateName, views.html.lod.fallback)
-      Ok(template.render(resultQuery, request, options))
-    }
+    val template = TemplateMapping.templates.getOrElse(templateName, views.html.lod.fallback)
+    Ok(template.render(resultQuery, request, options))
+//    if (templateName == "OVERRIDE.TEMPLATE") {
+//      TemplateEngineHelper.renderAsTemplate(resultQuery, uri, currentType)
+//    } else {
+//      val template = TemplateMapping.templates.getOrElse(templateName, views.html.lod.fallback)
+//      Ok(template.render(resultQuery, request, options))
+//    }
   }
 
   /**
