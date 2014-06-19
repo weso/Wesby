@@ -8,11 +8,12 @@ import es.weso.wesby.utils.CommonURIS.rdf
 import models.ResultQuery
 import play.api.mvc.Controller
 import play.api.mvc.RequestHeader
+import views.html
 
 /**
  * Adds the built-in rdf:type based template engine.
  */
-trait TemplateEgine extends Controller with Configurable {
+trait TemplateEngine extends Controller with Configurable {
 
   conf.append(new PropertiesConfiguration("conf/wesby/templates.properties"))
 
@@ -29,16 +30,7 @@ trait TemplateEgine extends Controller with Configurable {
   def renderAsTemplate(resultQuery: ResultQuery, uri: String)(implicit request: RequestHeader) = {
     implicit val options = new Options(uri)
     val currentType = rdfType(resultQuery)
-//    val templateName = conf.getString(currentType, Undefined)
-    val templateName = "mustache"
-    val template = TemplateMapping.templates.getOrElse(templateName, views.html.lod.fallback)
-    Ok(template.render(resultQuery, request, options))
-//    if (templateName == "OVERRIDE.TEMPLATE") {
-//      TemplateEngineHelper.renderAsTemplate(resultQuery, uri, currentType)
-//    } else {
-//      val template = TemplateMapping.templates.getOrElse(templateName, views.html.lod.fallback)
-//      Ok(template.render(resultQuery, request, options))
-//    }
+    Ok(html.lod.mustache(request, options))
   }
 
   /**

@@ -4,7 +4,7 @@ import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import es.weso.wesby.TemplateEgine
+import es.weso.wesby.TemplateEngine
 import es.weso.wesby.sparql.ModelLoader
 import play.api.mvc.Accepting
 import play.api.mvc.Action
@@ -17,7 +17,7 @@ import es.weso.wesby.models.Options
 /**
  * Wesby's Controllers which Handles the different Web Services.
  */
-object Application extends Controller with TemplateEgine {
+object Application extends Controller with TemplateEngine {
 
   val Html = Accepting("text/html")
   val PlainText = Accepting("text/plain")
