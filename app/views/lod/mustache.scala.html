@@ -1,4 +1,4 @@
-@(implicit request: RequestHeader, options: es.weso.wesby.models.Options)
+@(implicit request: RequestHeader, options: es.weso.wesby.models.Options, uri: String)
 
 @import views.helpers.Utils._
 @import views.html.helpers._
@@ -13,15 +13,18 @@
 <script type="text/javascript">
     $(function() {
         var template; // Mustache template
-        var data = {
-            "cachedLabel": 'cachedLabel',
-            "rdfType": 'rdfType',
-            "rdfTypeLabel": 'rdfTypeLabel'
-        } // Mustache server data
+        var data = {}; // Mustache server data
         var mustacheURL = '@Options.host_r@routes.Assets.at("mustache/")';
         var templatesMapURL = '@Options.host_r@routes.Assets.at("mustache/templates.json")';
+        var dataUrl = '@(Options.host)data/@uri';
 
         var renderPage = function() {
+
+            // Get server data
+            $.getJSON(dataUrl, function (d) {
+                $.extend(data, d);
+            });
+
             // Get template names map
             $.getJSON(templatesMapURL, function(templatesMap) {
                 var templateName = templatesMap[data.rdfType];
@@ -30,11 +33,6 @@
                     template = t;
                 });
             });
-
-            // Get server data
-            // $.getJSON("data.json", function(d) {
-            //   $.extend(data, d);
-            // })
 
         }()
 

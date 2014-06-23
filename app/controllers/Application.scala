@@ -11,8 +11,11 @@ import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api.mvc.RequestHeader
 import play.api.libs.ws.WS
-import play.api.libs.json.Json
+import play.api.libs.json._
 import es.weso.wesby.models.Options
+import views.helpers.Utils._
+
+import scala.collection.mutable.ListBuffer
 
 /**
  * Wesby's Controllers which Handles the different Web Services.
@@ -110,6 +113,30 @@ object Application extends Controller with TemplateEngine {
               Redirect(request.path + "?format=n-triples")
           }
       }
+  }
+
+  def templateJsonData(uri: String) = Action {
+    implicit request =>
+      val resultQuery = ModelLoader.loadUri(uri)
+      val json: JsValue = Json.obj(
+        "cachedLabel" -> JsString(cachedLabel(resultQuery)),
+        "rdfType" -> JsString(rdfType(resultQuery)),
+        "rdfTypeLabel" -> JsString(rdfTypeLabel(resultQuery)),
+        "subjects" -> {
+          resultQuery.subject match {
+            case Some(subject) => {
+              var subjects: ListBuffer[JsObject] = ListBuffer()
+              subject.list.foreach(s => subjects += Json.obj("property" -> JsString(s.property.toString)))
+              JsArray(subjects)
+            }
+            case None => {
+              JsNull
+            }
+          }
+        }
+      )
+
+      Ok(json)
   }
 
   /**
