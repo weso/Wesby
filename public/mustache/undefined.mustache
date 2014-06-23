@@ -1,2 +1,32 @@
 <h1>DEFAULT TEMPLATE - {{cachedLabel}}</h1>
 <h2><a href={{rdfType}}>{{rdfTypeLabel}}</a></h2>
+<table class="propertyBox sortable">
+    <thead>
+    <tr>
+        <th class="property">
+            Property
+        </th>
+        <th class="value">
+            Value
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#subjects}}
+        <tr>
+            {{#property}}
+                <td class="property">
+                    <a class="breakable" href={{uri}}>{{label}}</a>
+                </td>
+            {{/property}}
+            <td class="value">
+                <ul>
+
+                    <li></li>
+
+                </ul>
+            </td>
+        </tr>
+    {{/subjects}}
+    </tbody>
+</table>

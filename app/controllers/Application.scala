@@ -126,7 +126,14 @@ object Application extends Controller with TemplateEngine {
           resultQuery.subject match {
             case Some(subject) => {
               var subjects: ListBuffer[JsObject] = ListBuffer()
-              subject.list.foreach(s => subjects += Json.obj("property" -> JsString(s.property.toString)))
+              subject.list.foreach(
+                s => subjects += Json.obj(
+                  "property" -> Json.obj(
+                    "uri" -> JsString(s.property.uri.relative),
+                    "label" -> JsString(s.property.property.getLocalName)
+                  )
+                )
+              )
               JsArray(subjects)
             }
             case None => {
