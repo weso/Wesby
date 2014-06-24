@@ -6,13 +6,14 @@ import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import es.weso.wesby.TemplateEngine
 import es.weso.wesby.sparql.ModelLoader
+import play.api.libs.json.Json.JsValueWrapper
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api.mvc.RequestHeader
 import play.api.libs.ws.WS
 import play.api.libs.json._
-import es.weso.wesby.models.Options
+import es.weso.wesby.models.{Model, Options}
 import views.helpers.Utils._
 
 import scala.collection.mutable.ListBuffer
@@ -124,18 +125,7 @@ object Application extends Controller with TemplateEngine {
         "rdfTypeLabel" -> JsString(rdfTypeLabel(resultQuery)),
         "subjects" -> {
           resultQuery.subject match {
-            case Some(subject) => {
-              var subjects: ListBuffer[JsObject] = ListBuffer()
-              subject.list.foreach(
-                s => subjects += Json.obj(
-                  "property" -> Json.obj(
-                    "uri" -> JsString(s.property.uri.relative),
-                    "label" -> JsString(s.property.property.getLocalName)
-                  )
-                )
-              )
-              JsArray(subjects)
-            }
+            case Some(subject) => subjectToJsArray(subject)
             case None => {
               JsNull
             }
@@ -144,6 +134,34 @@ object Application extends Controller with TemplateEngine {
       )
 
       Ok(json)
+  }
+
+  private def subjectToJsArray(subject: Model): JsValueWrapper = {
+
+    var properties: ListBuffer[JsObject] = ListBuffer()
+
+
+    subject.list.foreach(
+      p => properties += Json.obj(
+        "property" -> Json.obj(
+          "uri" -> JsString(p.property.uri.relative),
+          "label" -> JsString(p.property.property.getLocalName)
+        ),
+        "value" -> {
+          var nodes: ListBuffer[JsObject] = ListBuffer()
+
+          p.nodes.foreach(
+            n => nodes += Json.obj(
+              "uri" -> JsString("node uri"),
+              "label" -> JsString("node label")
+            )
+          )
+          JsArray(nodes)
+        }
+      )
+    )
+    JsArray(properties)
+
   }
 
   /**
