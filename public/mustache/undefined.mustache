@@ -16,14 +16,27 @@
         <tr>
             {{#property}}
                 <td class="property">
-                    <a class="breakable" href={{uri}}>{{label}}</a>
+                    <a class="breakable" href="{{uri}}">{{label}}</a>
                 </td>
             {{/property}}
             <td class="value">
                 <ul>
-                    {{#value}}
-                        <li>{{uri}}{{label}}</li>
-                    {{/value}}
+                    {{#values}}{{#value}}
+                        <li>
+                            <a class="breakable" href="{{uri}}">{{label}}</a>
+                            {{#shortUri}}
+                                <span class="type">&#40;<span class="prefix"><a class="breakable"
+                                                                                href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                                        class="suffix"><a class="breakable"
+                                                          href="{{suffixUri}}">{{suffixLabel}}</a></span>&#41;</span>
+                            {{/shortUri}}
+                            {{#literal}}
+                                {{value}}<span class="type">&#40;<span class="prefix"><a class="breakable"
+                                                                                         href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                                    class="suffix"><a class="breakable" href="{{suffixUri}}">{{suffixLabel}}</a></span>&#41;</span>
+                            {{/literal}}
+                        </li>
+                    {{/value}}{{/values}}
                 </ul>
             </td>
         </tr>
