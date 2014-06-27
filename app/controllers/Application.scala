@@ -2,6 +2,7 @@ package controllers
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
+import app.models.JsonBuilder
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import es.weso.wesby.TemplateEngine
@@ -119,135 +120,14 @@ object Application extends Controller with TemplateEngine {
   def templateJsonData(uri: String) = Action {
     implicit request =>
       val resultQuery = ModelLoader.loadUri(uri)
-      val json: JsValue = Json.obj(
-        "cachedLabel" -> JsString(cachedLabel(resultQuery)),
-        "rdfType" -> JsString(rdfType(resultQuery)),
-        "rdfTypeLabel" -> JsString(rdfTypeLabel(resultQuery)),
-        "subjects" -> {
-          resultQuery.subject match {
-            case Some(subject) => subjectToJsArray(subject)
-            case None => {
-              JsNull
-            }
-          }
-        }
-      )
+      val json: JsValue = JsonBuilder.toJson(resultQuery)
 
       Ok(json)
   }
 
-  private def subjectToJsArray(subject: Model): JsValueWrapper = {
-
-    var properties: ListBuffer[JsObject] = ListBuffer()
 
 
-    subject.list.foreach(
-      p => properties += Json.obj(
-        "property" -> toJsonNode(p.property),
-        "values" -> {
-          var nodes: ListBuffer[JsObject] = ListBuffer()
 
-          p.nodes.foreach(
-            n => nodes += Json.obj("value" -> toJsonNode(n))
-          )
-          JsArray(nodes)
-        }
-      )
-    )
-    JsArray(properties)
-
-  }
-
-  private def toJsonNode(n: RdfNode): JsObject = {
-
-    n match {
-      case r: RdfResource => resourceToUri(r)
-      case p: RdfProperty => propertyToUri(p)
-      case l: RdfLiteral => literalToValue(l)
-      case a: RdfAnon => {
-        Json.obj("value" -> JsString("1 anonymous resource " + a.rdfNode.getId))
-      }
-    }
-  }
-
-  def literalToValue(n: RdfLiteral): JsObject = {
-    n.dataType match {
-      case Some(dataType) => {
-        dataType.short match {
-          case Some(short) => {
-            Json.obj(
-              "literal" -> Json.obj(
-                "value" -> JsString(n.value),
-                "prefixUri" -> short.prefix._1,
-                "prefixLabel" -> short.prefix._2,
-                "suffixUri" -> short.suffix._1,
-                "suffixLabel" -> short.suffix._2
-              ))
-          }
-          case None => {
-            Json.obj("value" -> dataType.absolute)
-          }
-        }
-      }
-      case None => {
-        Json.obj("value" -> JsNull)
-      }
-    }
-  }
-
-  def resourceToUri(n: RdfResource): JsObject = {
-    cachedLabel(n).trim match {
-      case label if !label.isEmpty => {
-        Json.obj(
-          "label" -> showLabel(n.uri.absolute, label),
-          "uri" -> n.uri.relative
-        )
-      }
-      case _ => {
-        n.uri.short match {
-          case Some(short) => {
-            Json.obj(
-              "shortUri" -> Json.obj(
-                "prefixUri" -> short.prefix._1,
-                "prefixLabel" -> short.prefix._2,
-                "suffixUri" -> short.suffix._1,
-                "suffixLabel" -> short.suffix._2
-              ))
-          }
-          case None => {
-            Json.obj("label" -> n.uri.absolute)
-          }
-        }
-      }
-    }
-  }
-
-  def propertyToUri(n: RdfProperty): JsObject = {
-    cachedLabel(n).trim match {
-      case label if !label.isEmpty => {
-        Json.obj(
-          "label" -> showLabel(n.uri.absolute, label),
-          "uri" -> n.uri.relative
-        )
-      }
-      case _ => {
-        n.uri.short match {
-          case Some(short) => {
-            Json.obj(
-              "shortUri" -> Json.obj(
-                "prefixUri" -> short.prefix._1,
-                "prefixLabel" -> short.prefix._2,
-                "suffixUri" -> short.suffix._1,
-                "suffixLabel" -> short.suffix._2
-              ))
-          }
-          case None => {
-            Json.obj("none" -> n.uri.absolute)
-          }
-        }
-      }
-    }
-  }
 
   /**
    * Download the resource in a given format
