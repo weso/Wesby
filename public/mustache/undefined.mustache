@@ -53,6 +53,32 @@
                                 class="suffix"><a class="breakable" href="{{suffixUri}}">{{suffixLabel}}</a></span>&#41;</span>
                     {{/shortUri}} of
                 </td>
+                <td class="value-parent">
+                    <table class="children pages">
+                        <thead><tr><td></td></tr></thead>
+                        <tbody>
+                        {{#values}}{{#value}}
+                            <tr>
+                                <td>
+                                    <a class="breakable" href="{{uri}}">{{label}}</a>
+                                    {{#shortUri}}
+                                        <span class="prefix"><a class="breakable"
+                                                                href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                                            class="suffix"><a class="breakable"
+                                                              href="{{suffixUri}}">{{suffixLabel}}</a>
+                                    {{/shortUri}}
+                                    {{#typedLiteral}}
+                                        {{value}} <span class="type">&#40;<span class="prefix"><a class="breakable"
+                                                                                                  href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                                            class="suffix"><a class="breakable" href="{{suffixUri}}">{{suffixLabel}}</a></span>&#41;</span>
+                                    {{/typedLiteral}}
+                                    {{simpleLiteral}}
+                                </td>
+                            </tr>
+                        {{/value}}{{/values}}
+                        </tbody>
+                    </table>
+                </td>
             {{/property}}
         </tr>
     {{/predicates}}

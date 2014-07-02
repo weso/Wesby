@@ -36,10 +36,10 @@ object JsonBuilder {
     )
   }
 
-  private def toJsArray(subject: DataStore): JsValueWrapper = {
+  private def toJsArray(nodes: DataStore): JsValueWrapper = {
     var properties: ListBuffer[JsObject] = ListBuffer()
 
-    subject.list.foreach(
+    nodes.list.foreach(
       p => properties += Json.obj(
         "property" -> toJsonNode(p.property),
         "values" -> {
