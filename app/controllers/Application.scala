@@ -125,10 +125,6 @@ object Application extends Controller with TemplateEngine {
       Ok(json)
   }
 
-
-
-
-
   /**
    * Download the resource in a given format
    * @param uri the supplied URI
