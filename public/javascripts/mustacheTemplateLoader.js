@@ -1,8 +1,8 @@
 function renderHeader(rdfType, rdfTypeLabel, cachedLabel) {
     var templateData = {
-            "cachedLabel": cachedLabel,
-            "rdfType": rdfType,
-            "rdfTypeLabel": rdfTypeLabel
+        "cachedLabel": cachedLabel,
+        "rdfType": rdfType,
+        "rdfTypeLabel": rdfTypeLabel
     };
 
     // Gets the Mustache template and renders the view
