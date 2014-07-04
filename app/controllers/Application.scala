@@ -2,22 +2,27 @@ package controllers
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
+import app.models.JsonBuilder
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import es.weso.wesby.TemplateEgine
+import es.weso.wesby.TemplateEngine
 import es.weso.wesby.sparql.ModelLoader
+import play.api.libs.json.Json.JsValueWrapper
 import play.api.mvc.Accepting
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api.mvc.RequestHeader
 import play.api.libs.ws.WS
-import play.api.libs.json.Json
-import es.weso.wesby.models.Options
+import play.api.libs.json._
+import es.weso.wesby.models._
+import views.helpers.Utils._
+
+import scala.collection.mutable.ListBuffer
 
 /**
  * Wesby's Controllers which Handles the different Web Services.
  */
-object Application extends Controller with TemplateEgine {
+object Application extends Controller with TemplateEngine {
 
   val Html = Accepting("text/html")
   val PlainText = Accepting("text/plain")
@@ -110,6 +115,14 @@ object Application extends Controller with TemplateEgine {
               Redirect(request.path + "?format=n-triples")
           }
       }
+  }
+
+  def templateJsonData(uri: String) = Action {
+    implicit request =>
+      val resultQuery = ModelLoader.loadUri(uri)
+      val json: JsValue = JsonBuilder.toJson(resultQuery)
+
+      Ok(json)
   }
 
   /**
