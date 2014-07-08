@@ -1,1 +1,99 @@
-<h3>Country: {{country}}</h3><ul><li>value: {{#observations}}{{value}}{{/observations}}</ul>
+<h1>{{cachedLabel}}</h1>
+<h2><a href={{rdfType}}>{{rdfTypeLabel}}</a></h2>
+<table class="propertyBox sortable">
+  <thead>
+  <tr>
+    <th class="property">
+      Property
+    </th>
+    <th class="value">
+      Value
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  {{#subjects}}
+    <tr>
+        {{#property}}
+          <td class="property">
+            <a class="breakable" href="{{uri}}">{{label}}</a>
+              {{#shortUri}}
+                <span class="prefix"><a class="breakable"
+                                        href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                  class="suffix"><a class="breakable"
+                                    href="{{suffixUri}}">{{suffixLabel}}</a></span>
+              {{/shortUri}}
+              {{#typedLiteral}}
+                  {{value}} <span class="type">&#40;<span class="prefix"><a class="breakable"
+                                                                            href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                  class="suffix"><a class="breakable" href="{{suffixUri}}">{{suffixLabel}}</a></span>&#41;</span>
+              {{/typedLiteral}}
+              {{simpleLiteral}}
+          </td>
+        {{/property}}
+      <td class="value">
+        <ul>
+            {{#values}}{{#value}}
+              <li>
+                  {{anon}}
+                <a class="breakable" href="{{uri}}">{{label}}</a>
+                  {{#shortUri}}
+                    <span class="prefix"><a class="breakable"
+                                            href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                      class="suffix"><a class="breakable"
+                                        href="{{suffixUri}}">{{suffixLabel}}</a></span>
+                  {{/shortUri}}
+                  {{#typedLiteral}}
+                      {{value}} <span class="type">&#40;<span class="prefix"><a class="breakable"
+                                                                                href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                      class="suffix"><a class="breakable" href="{{suffixUri}}">{{suffixLabel}}</a></span>&#41;</span>
+                  {{/typedLiteral}}
+                  {{simpleLiteral}}
+              </li>
+            {{/value}}{{/values}}
+        </ul>
+      </td>
+    </tr>
+  {{/subjects}}
+  {{#predicates}}
+    <tr>
+        {{#property}}
+          <td class="property">
+            Is <a class="breakable" href="{{uri}}">{{label}}</a>
+              {{#shortUri}}
+                <span class="prefix"><a class="breakable"
+                                        href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                  class="suffix"><a class="breakable" href="{{suffixUri}}">{{suffixLabel}}</a></span>
+              {{/shortUri}} of
+          </td>
+        {{/property}}
+      <td class="value-parent">
+        <table class="children pages">
+          <thead><tr><td></td></tr></thead>
+          <tbody>
+          {{#values}}{{#value}}
+            <tr>
+              <td>
+                <a class="breakable" href="{{uri}}">{{label}}</a>
+                  {{#shortUri}}
+                    <span class="prefix"><a class="breakable"
+                                            href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                      class="suffix"><a class="breakable"
+                                        href="{{suffixUri}}">{{suffixLabel}}</a></span>
+                  {{/shortUri}}
+                  {{#typedLiteral}}
+                      {{value}} <span class="type">&#40;<span class="prefix"><a class="breakable"
+                                                                                href="{{prefixUri}}">{{prefixLabel}}</a></span>:<span
+                      class="suffix"><a class="breakable" href="{{suffixUri}}">{{suffixLabel}}</a></span>&#41;</span>
+                  {{/typedLiteral}}
+                  {{simpleLiteral}}
+              </td>
+            </tr>
+          {{/value}}{{/values}}
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {{/predicates}}
+  </tbody>
+</table>

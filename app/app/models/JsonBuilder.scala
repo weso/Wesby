@@ -80,7 +80,7 @@ object JsonBuilder {
       case p: RdfProperty => propertyToUri(p)
       case l: RdfLiteral => literalToValue(l)
       case a: RdfAnon => {
-        Json.obj("value" -> JsString("1 anonymous resource " + a.rdfNode.getId))
+        Json.obj("anon" -> JsString("1 anonymous resource (" + a.rdfNode.getId + ")"))
       }
     }
   }
@@ -130,7 +130,11 @@ object JsonBuilder {
               ))
           }
           case None => {
-            Json.obj("label" -> n.uri.absolute)
+            //Json.obj("label" -> n.uri.absolute)
+            Json.obj(
+              "label" -> n.uri.absolute,
+              "uri" -> n.uri.relative
+            )
           }
         }
       }
