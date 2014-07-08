@@ -17,23 +17,27 @@ object JsonBuilder {
       "cachedLabel" -> JsString(cachedLabel(resultQuery)),
       "rdfType" -> JsString(rdfType(resultQuery)),
       "rdfTypeLabel" -> JsString(rdfTypeLabel(resultQuery)),
-      "subjects" -> {
-        resultQuery.subject match {
-          case Some(subject) => toJsArray(subject)
-          case None => {
-            JsNull
-          }
-        }
-      },
-      "predicates" -> {
-        resultQuery.predicate match {
-          case Some(predicate) => toJsArray(predicate)
-          case None => {
-            JsNull
-          }
-        }
-      }
+      "subjects" -> subjectsToJson(resultQuery),
+      "predicates" -> predicatesToJson(resultQuery)
     )
+  }
+
+  private def predicatesToJson(resultQuery: ResultQuery): JsValueWrapper = {
+    resultQuery.predicate match {
+      case Some(predicate) => toJsArray(predicate)
+      case None => {
+        JsNull
+      }
+    }
+  }
+
+  private def subjectsToJson(resultQuery: ResultQuery): JsValueWrapper = {
+    resultQuery.subject match {
+      case Some(subject) => toJsArray(subject)
+      case None => {
+        JsNull
+      }
+    }
   }
 
   private def toJsArray(nodes: DataStore): JsValueWrapper = {
@@ -42,18 +46,31 @@ object JsonBuilder {
     nodes.list.foreach(
       p => properties += Json.obj(
         "property" -> toJsonNode(p.property),
-        "values" -> {
-          var nodes: ListBuffer[JsObject] = ListBuffer()
-
-          p.nodes.foreach(
-            n => nodes += Json.obj("value" -> toJsonNode(n))
-          )
-          JsArray(nodes)
-        }
+        "values" -> nodesToJsArray(p)
       )
     )
     JsArray(properties)
 
+  }
+
+  private def nodesToJsArray(p: Property): JsValueWrapper = {
+
+    /*var nodes: ListBuffer[JsObject] = ListBuffer()
+
+    p.nodes.foreach(
+      n => nodes += Json.obj("value" -> toJsonNode(n))
+    )
+
+    JsArray(nodes)
+
+    */
+    p.nodes.foldLeft(JsArray())((acc, node) =>
+      acc ++ Json.arr(
+        Json.obj(
+          "value" -> toJsonNode(node)
+        )
+      )
+    )
   }
 
   private def toJsonNode(n: RdfNode): JsObject = {
