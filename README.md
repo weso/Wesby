@@ -6,7 +6,6 @@ Wesby is a linked data frontend that wraps your RDF resources with custom-built 
 [![Build Status](https://api.travis-ci.org/weso/Wesby.png?branch=develop)](https://travis-ci.org/weso/Wesby) by [WESO](www.weso.es)
 
 ## Features
-
 * RDF retrieval from SPARQL endpoint
 * Resource caching with [Memcached](http://memcached.org/)
 * Result queries conversion to Json for easy Javascript access to data
