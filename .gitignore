@@ -49,3 +49,11 @@ RUNNING_PID
 *.iml
 out/
 .idea_modules/
+
+# Activator specific
+activator-sbt-atmos-play-shim.sbt
+project/activator-sbt-atmos-play-shim.sbt
+project/activator-sbt-eclipse-shim.sbt
+project/activator-sbt-idea-shim.sbt
+
+activator-sbt-echo-play-shim.sbt

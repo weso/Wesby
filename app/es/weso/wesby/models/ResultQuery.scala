@@ -1,5 +1,8 @@
 package es.weso.wesby.models
 
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 /**
  * Contains the result from a Query
  * @param sub the children nodes
@@ -33,6 +36,11 @@ case class ResultQuery(
  * ResultQuery Companion Object
  */
 object ResultQuery {
+
+  //  implicit val resultQueryWrites: Writes[ResultQuery] = (
+  //    (JsPath \ "sub").write[Option[LazyDataStore[Model]]] and
+  //    (JsPath \ "pred").write[Option[LazyDataStore[InverseModel]]]
+  //  )(unlift(ResultQuery.unapply))
 
   /**
    * Returns the result of applying a LazyDataStore[Model]
