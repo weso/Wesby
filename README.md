@@ -20,5 +20,6 @@ Wesby is a linked data frontend that wraps your RDF resources with custom-built 
 5. `activator run`
 6. Read the [docs](https://github.com/weso/Wesby/wiki)
 
+###### :construction: This document is a work in progress :construction:
 
 
