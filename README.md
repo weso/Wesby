@@ -1,5 +1,5 @@
 ![Wesby logo]
-(https://github.com/weso/Wesby/raw/develop/public/images/wesby-logo.png
+(https://github.com/weso/Wesby/raw/develop/public/images/wesby-logo.png)
 Wesby is a linked data frontend that wraps your RDF resources with custom-built interfaces, effectively turning your SPARQL endpoints into rich HTML5 websites.
 
 [![Build Status](https://api.travis-ci.org/weso/Wesby.png?branch=develop)](https://travis-ci.org/weso/Wesby) by [WESO](www.weso.es)
