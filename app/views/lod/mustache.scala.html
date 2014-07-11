@@ -13,8 +13,8 @@
   $(function() {
     var template; // Mustache template
     var data = {}; // Mustache server data
-    var mustacheURL = '@Options.host_r@routes.Assets.at("mustache/")';
-    var templatesMapURL = '@Options.host_r@routes.Assets.at("mustache/templates.json")';
+    var mustacheURL = '@Options.host_r@routes.Assets.at("templates/")';
+    var templatesMapURL = '@Options.host_r@routes.Assets.at("templates/templates.json")';
     var dataUrl = '@(Options.host)data/@uri';
 
     var renderPage = function() {
