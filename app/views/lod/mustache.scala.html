@@ -13,9 +13,9 @@
   $(function() {
     var template; // Mustache template
     var data = {}; // Mustache server data
-    var mustacheURL = '@Options.host_r@routes.Assets.at("templates/")';
-    var templatesMapURL = '@Options.host_r@routes.Assets.at("templates/template-mapping.json")';
-    var dataUrl = '@(Options.host)data/@uri';
+    var mustacheURL = "@conf.getString("templates.uri")";
+    var templatesMapURL = "@conf.getString("templates.uri")" + "template-mapping.json";
+    var dataUrl = "@(Options.host)data/@uri";
 
     var renderPage = function() {
       // Get server data
