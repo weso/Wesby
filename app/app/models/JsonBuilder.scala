@@ -1,9 +1,12 @@
 package app.models
 
+import es.weso.wesby.models
 import es.weso.wesby.models._
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.libs.json._
 import views.helpers.Utils._
+import es.weso.wesby.utils.CommonURIS.rdf
+import models.ResultQuery
 
 import scala.collection.mutable.ListBuffer
 
@@ -11,6 +14,10 @@ import scala.collection.mutable.ListBuffer
  * Created by jorge on 27/06/14.
  */
 object JsonBuilder {
+
+  protected val RdfType = rdf + "type"
+  protected val Undefined = "UNDEFINED"
+
 
   def toJson(resultQuery: ResultQuery): JsObject = {
     Json.obj(
@@ -20,6 +27,19 @@ object JsonBuilder {
       "subjects" -> subjectsToJson(resultQuery),
       "predicates" -> predicatesToJson(resultQuery)
     )
+  }
+
+  /**
+   * Returns the rdf:type for a given ResultQuery
+   * @param resultQuery the target resultQuery
+   */
+  private def rdfType(resultQuery: ResultQuery): String = {
+    resultQuery.subject.get.get(RdfType) match {
+      case Some(r) => if (!r.nodes.isEmpty) {
+        r.nodes.head.rdfNode.asResource.getURI
+      } else Undefined
+      case None => Undefined
+    }
   }
 
   private def predicatesToJson(resultQuery: ResultQuery): JsValueWrapper = {
