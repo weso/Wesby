@@ -15,11 +15,12 @@
     var data = {}; // Mustache server data
     var mustacheURL = "@conf.getString("templates.uri")";
     var templatesMapURL = "@conf.getString("templates.uri")" + "template-mapping.json";
-    var dataUrl = "@(Options.host)data/@uri";
+    var uri = "@uri";
+    var r = jsRoutes.controllers.Application.templateJsonData(uri);
 
     var renderPage = function() {
       // Get server data
-      $.getJSON(dataUrl, function (d) {
+      $.getJSON(r.url, function (d) {
         $.extend(data, d);
 
         /**
@@ -31,7 +32,19 @@
           $.get(mustacheURL + templateName + '.mustache', function(t) {
             template = t;
           });
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+          alert(errorThrown);
         });
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+        alert(errorThrown);
       });
     }();
 
