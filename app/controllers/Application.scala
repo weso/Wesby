@@ -7,6 +7,7 @@ import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import es.weso.wesby.TemplateEngine
 import es.weso.wesby.sparql.ModelLoader
+import play.api.Routes
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.mvc.Accepting
 import play.api.mvc.Action
@@ -167,5 +168,13 @@ object Application extends Controller with TemplateEngine {
       (new StringBuilder(contentType._3)).append(" ; charset=")
         .append(contentType._2).toString
     }
+  }
+
+  def javascriptRoutes = Action { implicit request =>
+    Ok(
+      Routes.javascriptRouter("jsRoutes")(
+        routes.javascript.Application.templateJsonData
+      )
+    ).as("text/javascript")
   }
 }

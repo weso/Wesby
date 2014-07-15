@@ -22,6 +22,7 @@ POST   /endpoint                controllers.Application.endpoint()
 HEAD   /endpoint                controllers.Application.endpoint()
 
 GET    /data/*uri               controllers.Application.templateJsonData(uri: String)
+GET    /javascriptRoutes        controllers.Application.javascriptRoutes
 
 GET    /*path                   controllers.Application.fallback(path: String)
 HEAD   /*path                   controllers.Application.fallback(path: String)
