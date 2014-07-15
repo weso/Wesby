@@ -1,4 +1,4 @@
 {
-    "http://localhost:9000/ontology/Country" : "country",
-    "http://localhost:9000/ontology/Region" : "region"
+    "http://data.webfoundation.org/ontology/Country" : "country",
+    "http://data.webfoundation.org/ontology/Region" : "region"
 }
