@@ -17,8 +17,7 @@
     var templatesMapURL = "@conf.getString("templates.uri")" + "template-mapping.json";
     var uri = "@uri";
     var r = jsRoutes.controllers.Application.templateJsonData(uri);
-    var partialsNames = {};
-    var partials;
+    var partials = {};
 
     var renderPage = function() {
       // Get server data
@@ -29,9 +28,10 @@
          * Get partials names
          */
         $.getJSON(mustacheURL + "partials/partials.json", function(p) {
-          $.extend(partialsNames, p);
-          for (i = 0; i < partialsNames.length; i++) {
-              console.log(partialsNames[i]);
+          for (i = 0; i < p.length; i++) {
+              $.get(mustacheURL + "partials/" + p[i] +'.mustache', function(t) {
+                  partials[p[i]] = t;
+              });
           }
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
