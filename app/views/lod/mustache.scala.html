@@ -17,11 +17,29 @@
     var templatesMapURL = "@conf.getString("templates.uri")" + "template-mapping.json";
     var uri = "@uri";
     var r = jsRoutes.controllers.Application.templateJsonData(uri);
+    var partialsNames = {};
+    var partials;
 
     var renderPage = function() {
       // Get server data
       $.getJSON(r.url, function (d) {
         $.extend(data, d);
+
+        /**
+         * Get partials names
+         */
+        $.getJSON(mustacheURL + "partials/partials.json", function(p) {
+          $.extend(partialsNames, p);
+          for (i = 0; i < partialsNames.length; i++) {
+              console.log(partialsNames[i]);
+          }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+          alert(errorThrown);
+        });
 
         /**
          * Get template names in a map
@@ -52,7 +70,7 @@
      * Wait for AJAX calls to complete, then render the page.
      */
     $(document).ajaxStop(function(){
-      var renderedPage = Mustache.render(template, data);
+      var renderedPage = Mustache.render(template, data, partials);
       $('#mustacheRendered').html(renderedPage);
     });
   });
