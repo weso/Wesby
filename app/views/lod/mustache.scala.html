@@ -25,14 +25,17 @@
         $.extend(data, d);
 
         /**
-         * Get partials names
+         * Get partials
          */
         $.getJSON(mustacheURL + "partials/partials.json", function(p) {
-          for (i = 0; i < p.length; i++) {
-              $.get(mustacheURL + "partials/" + p[i] +'.mustache', function(t) {
-                  partials[p[i]] = t;
-              });
-          }
+
+          p.forEach(function(partialName){
+            $.get(mustacheURL + "partials/" + partialName +'.mustache', function(t) {
+
+              partials[partialName] = t;
+            });
+          });
+
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
           console.log(jqXHR);
