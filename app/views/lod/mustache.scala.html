@@ -11,25 +11,48 @@
 
 <script type="text/javascript">
   $(function() {
+    var routes = {
+      uri: "@uri",
+      templates: "@conf.getString("templates.uri")",
+      templatesMap: "@conf.getString("templates.uri")" + "template-mapping.json",
+      jsonService: jsRoutes.controllers.Application.templateJsonData("@uri").url
+    }
     var template; // Mustache template
     var data = {}; // Mustache server data
-    var mustacheURL = "@conf.getString("templates.uri")";
-    var templatesMapURL = "@conf.getString("templates.uri")" + "template-mapping.json";
-    var uri = "@uri";
-    var r = jsRoutes.controllers.Application.templateJsonData(uri);
+    var partials = {};
 
     var renderPage = function() {
       // Get server data
-      $.getJSON(r.url, function (d) {
+      $.getJSON(routes.jsonService, function (d) {
         $.extend(data, d);
+
+        /**
+         * Get partials
+         */
+        $.getJSON(routes.templates + "partials/partials.json", function(p) {
+
+          p.forEach(function(partialName){
+            $.get(routes.templates + "partials/" + partialName +'.mustache', function(t) {
+
+              partials[partialName] = t;
+            });
+          });
+
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+          alert(errorThrown);
+        });
 
         /**
          * Get template names in a map
          */
-        $.getJSON(templatesMapURL, function(templatesMap) {
+        $.getJSON(routes.templatesMap, function(templatesMap) {
           var templateName = templatesMap[data.rdfType];
           // Load template
-          $.get(mustacheURL + templateName + '.mustache', function(t) {
+          $.get(routes.templates + templateName + '.mustache', function(t) {
             template = t;
           });
         })
@@ -52,7 +75,7 @@
      * Wait for AJAX calls to complete, then render the page.
      */
     $(document).ajaxStop(function(){
-      var renderedPage = Mustache.render(template, data);
+      var renderedPage = Mustache.render(template, data, partials);
       $('#mustacheRendered').html(renderedPage);
     });
   });
