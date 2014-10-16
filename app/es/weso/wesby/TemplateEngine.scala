@@ -1,8 +1,6 @@
 package es.weso.wesby
 
 import org.apache.commons.configuration.PropertiesConfiguration
-
-import app.TemplateEngineHelper
 import es.weso.wesby.models.Options
 import es.weso.wesby.utils.CommonURIS.rdf
 import models.ResultQuery
