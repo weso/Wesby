@@ -1,6 +1,4 @@
-package app.models
-
-import es.weso.wesby.models.Options
+package es.weso.wesby.models
 
 /**
  * Extends an Options object

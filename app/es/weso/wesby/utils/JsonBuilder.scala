@@ -1,12 +1,11 @@
-package app.models
+package es.weso.wesby.utils
 
 import es.weso.wesby.models
-import es.weso.wesby.models._
+import es.weso.wesby.models.{ResultQuery, _}
+import es.weso.wesby.utils.CommonURIS.rdf
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.libs.json._
 import views.helpers.Utils._
-import es.weso.wesby.utils.CommonURIS.rdf
-import models.ResultQuery
 
 import scala.collection.mutable.ListBuffer
 

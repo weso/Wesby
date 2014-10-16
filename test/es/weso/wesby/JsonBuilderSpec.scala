@@ -1,7 +1,7 @@
 package es.weso.wesby
 
-import app.models.JsonBuilder
 import es.weso.wesby.sparql.ModelLoader
+import es.weso.wesby.utils.JsonBuilder
 import org.specs2.mutable.Specification
 import play.api.test.WithApplication
 

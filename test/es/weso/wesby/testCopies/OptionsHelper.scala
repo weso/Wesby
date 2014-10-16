@@ -3,7 +3,7 @@ package es.weso.wesby.testCopies
 import es.weso.wesby.models.Options
 
 /**
- * This class is a copy of app.models.OptionsHelper and used ONLY
+ * This class is a copy of es.weso.wesby.models.OptionsHelper and used ONLY
  * WITH TEST PURPOSES.
  */
 class OptionsHelper(options: Options) {

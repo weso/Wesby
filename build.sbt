@@ -17,8 +17,8 @@ libraryDependencies ++= Seq(
 resolvers += "Spy Repository" at "http://files.couchbase.com/maven2"
 
 templatesImport ++= Seq(
-  "app.models.OptionsHelper",
-  "app.models.OptionsHelper._",
+  "es.weso.wesby.models.OptionsHelper",
+  "es.weso.wesby.models.OptionsHelper._",
   "es.weso.wesby.models._",
   "es.weso.wesby.sparql.Handlers._",
   "es.weso.wesby.utils.CommonURIS._",

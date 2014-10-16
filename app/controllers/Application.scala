@@ -2,11 +2,11 @@ package controllers
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
-import app.models.JsonBuilder
 import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import es.weso.wesby.TemplateEngine
 import es.weso.wesby.sparql.ModelLoader
+import es.weso.wesby.utils.JsonBuilder
 import play.api.Routes
 import play.api.libs.json.Json.JsValueWrapper
 import play.api.mvc.Accepting
