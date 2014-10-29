@@ -87,9 +87,9 @@ trait Resource {
 
 /**
  * Wesby's representation of an RDF resource.
- * @uri the resource's URI
- * @dataStores the resource's ResultQuery
- * @rdfNode the Jena's Resource
+ * @param uri the resource's URI
+ * @param dataStores the resource's ResultQuery
+ * @param rdfNode the Jena's Resource
  */
 case class RdfResource(
   val uri: Uri,
@@ -113,9 +113,9 @@ case class RdfResource(
 
 /**
  * Wesby's representation of an RDF property.
- * @uri the property's URI
- * @dataStores the property's ResultQuery
- * @rdfNode the Jena's Property
+ * @param uri the property's URI
+ * @param dataStores the property's ResultQuery
+ * @param rdfNode the Jena's Property
  */
 case class RdfProperty(
   val uri: Uri,

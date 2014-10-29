@@ -29,3 +29,6 @@ templatesImport ++= Seq(
 
 templatesImport ++= Seq()
 
+scalacOptions in Compile in doc += "-diagrams"
+
+

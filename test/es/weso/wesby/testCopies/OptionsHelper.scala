@@ -1,6 +1,7 @@
 package es.weso.wesby.testCopies
 
 import es.weso.wesby.models.Options
+import scala.language.implicitConversions
 
 /**
  * This class is a copy of es.weso.wesby.models.OptionsHelper and used ONLY

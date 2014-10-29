@@ -1,5 +1,7 @@
 package es.weso.wesby.models
 
+import scala.language.implicitConversions
+
 /**
  * Extends an Options object
  * @param options the options to be extended
