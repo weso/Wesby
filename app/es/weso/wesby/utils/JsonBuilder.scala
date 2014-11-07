@@ -10,14 +10,20 @@ import views.helpers.Utils._
 import scala.collection.mutable.ListBuffer
 
 /**
+ * Serializes the ResultQuery in Wesby/JSON format.
+ *
  * Created by jorge on 27/06/14.
  */
 object JsonBuilder {
 
-  protected val RdfType = rdf + "type"
-  protected val Undefined = "UNDEFINED"
+  private val RdfType = rdf + "type"
+  private val Undefined = "UNDEFINED"
 
-
+  /**
+   * Returns a JSON object that represents the result query.
+   * @param resultQuery
+   * @return
+   */
   def toJson(resultQuery: ResultQuery): JsObject = {
     Json.obj(
       "cachedLabel" -> JsString(cachedLabel(resultQuery)),
@@ -104,7 +110,7 @@ object JsonBuilder {
     }
   }
 
-  def literalToValue(n: RdfLiteral): JsObject = {
+  private def literalToValue(n: RdfLiteral): JsObject = {
     n.dataType match {
       case Some(dataType) => {
         dataType.short match {
@@ -129,7 +135,7 @@ object JsonBuilder {
     }
   }
 
-  def resourceToUri(n: RdfResource): JsObject = {
+  private def resourceToUri(n: RdfResource): JsObject = {
     cachedLabel(n).trim match {
       case label if !label.isEmpty => {
         Json.obj(
@@ -160,7 +166,7 @@ object JsonBuilder {
     }
   }
 
-  def propertyToUri(n: RdfProperty): JsObject = {
+  private def propertyToUri(n: RdfProperty): JsObject = {
     cachedLabel(n).trim match {
       case label if !label.isEmpty => {
         Json.obj(

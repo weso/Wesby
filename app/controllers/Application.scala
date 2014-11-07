@@ -118,6 +118,13 @@ object Application extends Controller with TemplateEngine {
       }
   }
 
+  /**
+   * JSON webservice. Intercepts the data request URI and returns
+   * the JSON representation of the requested resource in
+   * Wesby/JSON format for the templates.
+   *
+   * @param uri JSON data request URI
+   */
   def templateJsonData(uri: String) = Action {
     implicit request =>
       val resultQuery = ModelLoader.loadUri(uri)
@@ -170,6 +177,9 @@ object Application extends Controller with TemplateEngine {
     }
   }
 
+  /**
+   * Embedded Javascript router. It generates the Javascript code to handle the routing.
+   */
   def javascriptRoutes = Action { implicit request =>
     Ok(
       Routes.javascriptRouter("jsRoutes")(

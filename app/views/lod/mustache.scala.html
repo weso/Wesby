@@ -10,73 +10,32 @@
 }
 
 <script type="text/javascript">
+
+  // global namespace
+  var WESBY = WESBY || {};
+  WESBY.routes = {
+    uri: "@uri",
+    templates: "@conf.getString("templates.uri")",
+    templatesMap: "@conf.getString("templates.uri")" + "template-mapping.json",
+    jsonService: jsRoutes.controllers.Application.templateJsonData("@uri").url
+  }
+
   $(function() {
-    var routes = {
-      uri: "@uri",
-      templates: "@conf.getString("templates.uri")",
-      templatesMap: "@conf.getString("templates.uri")" + "template-mapping.json",
-      jsonService: jsRoutes.controllers.Application.templateJsonData("@uri").url
-    }
-    var template; // Mustache template
-    var data = {}; // Mustache server data
-    var partials = {};
-
-    var renderPage = function() {
-      // Get server data
-      $.getJSON(routes.jsonService, function (d) {
-        $.extend(data, d);
-
-        /**
-         * Get partials
-         */
-        $.getJSON(routes.templates + "partials/partials.json", function(p) {
-
-          p.forEach(function(partialName){
-            $.get(routes.templates + "partials/" + partialName +'.mustache', function(t) {
-
-              partials[partialName] = t;
-            });
-          });
-
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR);
-          console.log(textStatus);
-          console.log(errorThrown);
-          alert(errorThrown);
-        });
-
-        /**
-         * Get template names in a map
-         */
-        $.getJSON(routes.templatesMap, function(templatesMap) {
-          var templateName = templatesMap[data.rdfType];
-          // Load template
-          $.get(routes.templates + templateName + '.mustache', function(t) {
-            template = t;
-          });
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR);
-          console.log(textStatus);
-          console.log(errorThrown);
-          alert(errorThrown);
-        });
-      })
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
-        console.log(textStatus);
-        console.log(errorThrown);
-        alert(errorThrown);
-      });
-    }();
-
-    /**
-     * Wait for AJAX calls to complete, then render the page.
-     */
-    $(document).ajaxStop(function(){
-      var renderedPage = Mustache.render(template, data, partials);
-      $('#mustacheRendered').html(renderedPage);
+    var templateEngine = new TemplateEngine();
+    templateEngine.loadData(function(s) {
+      console.log(s);
+    });
+    templateEngine.loadPartials(function(s) {
+      console.log(s);
+    });
+    templateEngine.loadTemplateNames(function(s) {
+      console.log(s);
+    });
+    templateEngine.loadTemplate(function(s) {
+      console.log(s);
+    });
+    templateEngine.render(function(s) {
+      console.log(s);
     });
   });
 </script>
