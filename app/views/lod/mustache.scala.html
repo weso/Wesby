@@ -20,22 +20,30 @@
     jsonService: jsRoutes.controllers.Application.templateJsonData("@uri").url
   }
 
+WESBY.template = "test"; // Mustache template
+WESBY.templateName = "undefined";
+WESBY.data = {}; // Mustache server data
+WESBY.partials = {}; // Template partials
+
   $(function() {
     var templateEngine = new TemplateEngine();
-    templateEngine.loadData(function(s) {
-      console.log(s);
-    });
+
     templateEngine.loadPartials(function(s) {
       console.log(s);
     });
-    templateEngine.loadTemplateNames(function(s) {
+    templateEngine.loadData(function(s) {
+      templateEngine.loadTemplateNames(function(s) {
+        templateEngine.loadTemplate(function(s) {
+          templateEngine.render(function(s) {
+          console.log(s);
+          });
+        console.log(s);
+        });
+      console.log(s);
+      });
       console.log(s);
     });
-    templateEngine.loadTemplate(function(s) {
-      console.log(s);
-    });
-    templateEngine.render(function(s) {
-      console.log(s);
-    });
+
+
   });
 </script>

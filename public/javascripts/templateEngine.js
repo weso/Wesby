@@ -2,10 +2,6 @@
  * Client side of the template engine.
  */
 
-var template = "test"; // Mustache template
-var templateName;
-var data = {}; // Mustache server data
-var partials = {}; // Template partials
 
 var TemplateEngine = function() {
     console.log("Template engine started");
@@ -18,7 +14,7 @@ TemplateEngine.prototype.render = function() {
      * Wait for AJAX calls to complete, then render the page.
      */
     $(document).ajaxStop(function(){
-        var renderedPage = Mustache.render(template, data, partials);
+        var renderedPage = Mustache.render(WESBY.template, WESBY.data, WESBY.partials);
         $('#mustacheRendered').html(renderedPage);
     });
 };
@@ -27,7 +23,8 @@ TemplateEngine.prototype.loadData = function(callback) {
     console.log("Loading data");
 
     $.getJSON(WESBY.routes.jsonService, function (d) {
-        $.extend(data, d);
+        $.extend(WESBY.data, d);
+        console.log(WESBY.data);
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
         console.log(jqXHR);
@@ -47,7 +44,7 @@ TemplateEngine.prototype.loadPartials = function(callback) {
         p.forEach(function(partialName){
             $.get(WESBY.routes.templates + "partials/" + partialName +'.mustache', function(t) {
 
-                partials[partialName] = t;
+                WESBY.partials[partialName] = t;
             });
         });
 
@@ -66,7 +63,8 @@ TemplateEngine.prototype.loadTemplateNames = function(callback) {
     console.log("Loading template names");
 
     $.getJSON(WESBY.routes.templatesMap, function(templatesMap) {
-        templateName = templatesMap[data.rdfType];
+        console.log(WESBY.data.rdfType)
+        WESBY.templateName = templatesMap[WESBY.data.rdfType];
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
         console.log(jqXHR);
@@ -79,8 +77,8 @@ TemplateEngine.prototype.loadTemplateNames = function(callback) {
 };
 
 TemplateEngine.prototype.loadTemplate = function(callback) {
-    $.get(WESBY.routes.templates + templateName + '.mustache', function(t) {
-        template = t;
+    $.get(WESBY.routes.templates + WESBY.templateName + '.mustache', function(t) {
+        WESBY.template = t;
     }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log(jqXHR);
         console.log(textStatus);

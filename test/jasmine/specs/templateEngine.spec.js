@@ -17,7 +17,7 @@ describe("TemplateEngine", function() {
     var templateEngine = new TemplateEngine();
     var originalTimeout;
 
-    beforeEach(function() {
+    /*beforeEach(function() {
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
     });
@@ -29,7 +29,7 @@ describe("TemplateEngine", function() {
                 done();
             }
         });
-    });
+    });*/
 
     it("should load the partials", function() {
         templateEngine.loadPartials();
