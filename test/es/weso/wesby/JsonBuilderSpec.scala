@@ -21,7 +21,7 @@ class JsonBuilderSpec extends Specification {
     "Return a JSON document that has a cachedLabel property" in new WithApplication {
       val rq = ModelLoader.loadUri("webindex/v2013/region/Africa")
       val json = JsonBuilder.toJson(rq)
-      json \ "cachedLabel" must beEqualTo("\"Africa\"")
+      (json \ "cachedLabel").as[String] must beEqualTo("Africa")
     }
   }
 
