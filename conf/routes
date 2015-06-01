@@ -3,26 +3,28 @@
 # ~~~~
 
 # Home page
-GET    /                        controllers.Application.index
-HEAD   /                        controllers.Application.index
+GET         /                        controllers.Application.index
+HEAD        /                        controllers.Application.index
 
 # Map your custom app routes
 
 # Wesby routes
-GET    /favicon.ico             controllers.Assets.at(path="/public", file="favicon.ico")
-HEAD   /favicon.ico             controllers.Assets.at(path="/public", file="favicon.ico")
+GET         /welcome                 controllers.Application.welcome
 
-GET    /assets/*file            controllers.Assets.at(path="/public", file)
-HEAD   /assets/*file            controllers.Assets.at(path="/public", file)
+GET         /favicon.ico             controllers.Assets.at(path="/public", file="favicon.ico")
+HEAD        /favicon.ico             controllers.Assets.at(path="/public", file="favicon.ico")
 
-GET    /snorql                  controllers.Application.snorql()
-HEAD   /snorql                  controllers.Application.snorql()
+GET         /assets/*file            controllers.Assets.at(path="/public", file)
+HEAD        /assets/*file            controllers.Assets.at(path="/public", file)
 
-POST   /endpoint                controllers.Application.endpoint()
-HEAD   /endpoint                controllers.Application.endpoint()
+GET         /snorql                  controllers.Application.snorql()
+HEAD        /snorql                  controllers.Application.snorql()
 
-GET    /data/*uri               controllers.Application.templateJsonData(uri: String)
-GET    /javascriptRoutes        controllers.Application.javascriptRoutes
+POST        /endpoint                controllers.Application.endpoint()
+HEAD        /endpoint                controllers.Application.endpoint()
 
-GET    /*path                   controllers.Application.fallback(path: String)
-HEAD   /*path                   controllers.Application.fallback(path: String)
+GET         /data/*uri               controllers.Application.templateJsonData(uri: String)
+GET         /javascriptRoutes        controllers.Application.javascriptRoutes
+
+GET         /*path                   controllers.Application.fallback(path: String)
+HEAD        /*path                   controllers.Application.fallback(path: String)

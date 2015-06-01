@@ -1,7 +1,11 @@
 PREFIX cex: <http://purl.org/weso/ontology/computex#> 
-PREFIX dbpedia: <http://dbpedia.org/resource/> 
-PREFIX dcterms: <http://purl.org/dc/terms/> 
-PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> 
+PREFIX dbpedia: <http://dbpedia.org/resource/>
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX grs: <http://www.georss.org/georss/>
 PREFIX odb: <http://data.webfoundation.org/odb/v2013/> 
 PREFIX odb-component: <http://data.webfoundation.org/odb/v2013/component/> 
 PREFIX odb-computation: <http://data.webfoundation.org/odb/v2013/computation/> 
@@ -14,7 +18,8 @@ PREFIX odb-ranking: <http://data.webfoundation.org/odb/v2013/ranking/>
 PREFIX odb-region: <http://data.webfoundation.org/odb/v2013/region/> 
 PREFIX odb-slice: <http://data.webfoundation.org/odb/v2013/slice/> 
 PREFIX odb-weightSchema: <http://data.webfoundation.org/odb/v2013/weightSchema/> 
-PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX qb: <http://purl.org/linked-data/cube#> 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
@@ -40,4 +45,5 @@ PREFIX wi-ranking: <http://data.webfoundation.org/webindex/v2013/ranking/>
 PREFIX wi-region: <http://data.webfoundation.org/webindex/v2013/region/> 
 PREFIX wi-slice: <http://data.webfoundation.org/webindex/v2013/slice/> 
 PREFIX wi-weightSchema: <http://data.webfoundation.org/webindex/v2013/weightSchema/> 
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX yago: <http://dbpedia.org/class/yago/>
