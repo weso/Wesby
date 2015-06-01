@@ -52,6 +52,10 @@ object Application extends Controller with TemplateEngine {
       Redirect(default)
   }
 
+  def welcome() = Action {
+    implicit request => Ok(views.html.welcome())
+  }
+
   /**
    * Renders the built-in Snorql
    */
