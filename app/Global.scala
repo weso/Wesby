@@ -1,17 +1,12 @@
+import es.weso.wesby.Configurable
+import play.api.libs.ws.{Response, WS}
+import play.api.mvc.WithFilters
+import play.api.{Application, GlobalSettings, Logger, Play}
+import play.filters.gzip.GzipFilter
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Failure
-import scala.util.Success
-import scala.util.Try
-import es.weso.wesby.Configurable
-import play.api.GlobalSettings
-import play.api.Logger
-import play.api.libs.ws.Response
-import play.api.libs.ws.WS
-import play.api.mvc.WithFilters
-import play.filters.gzip.GzipFilter
-import play.api.Play
-import play.api.Application
+import scala.util.{Failure, Success, Try}
 
 /**
  * Handles the start up settings of the application.

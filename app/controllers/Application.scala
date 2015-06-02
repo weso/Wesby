@@ -1,24 +1,16 @@
 package controllers
 import java.io.ByteArrayOutputStream
-import java.nio.charset.Charset
-import java.nio.charset.CodingErrorAction
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
-import com.hp.hpl.jena.rdf.model.ModelFactory
+import java.nio.charset.{Charset, CodingErrorAction}
+
+import com.hp.hpl.jena.rdf.model.{Model => JenaModel, ModelFactory}
 import es.weso.wesby.TemplateEngine
+import es.weso.wesby.models._
 import es.weso.wesby.sparql.ModelLoader
 import es.weso.wesby.utils.JsonBuilder
 import play.api.Routes
-import play.api.libs.json.Json.JsValueWrapper
-import play.api.mvc.Accepting
-import play.api.mvc.Action
-import play.api.mvc.Controller
-import play.api.mvc.RequestHeader
-import play.api.libs.ws.WS
 import play.api.libs.json._
-import es.weso.wesby.models._
-import views.helpers.Utils._
-
-import scala.collection.mutable.ListBuffer
+import play.api.libs.ws.WS
+import play.api.mvc.{Accepting, Action, Controller, RequestHeader}
 
 /**
  * Wesby's Controllers which Handles the different Web Services.
@@ -35,9 +27,9 @@ object Application extends Controller with TemplateEngine {
   val RdfXML = Accepting("application/rdf+xml")
   val RdfJSON = Accepting("application/rdf+json")
 
-  val charsetDecoder = Charset.forName("UTF-8").newDecoder();
-  charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE);
-  charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+  val charsetDecoder = Charset.forName("UTF-8").newDecoder()
+  charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE)
+  charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE)
 
   implicit val context = scala.concurrent.ExecutionContext.Implicits.global
 
@@ -176,8 +168,8 @@ object Application extends Controller with TemplateEngine {
     mergedModel.write(out, contentType._1)
 
     Ok(out.toString).as {
-      (new StringBuilder(contentType._3)).append(" ; charset=")
-        .append(contentType._2).toString
+      new StringBuilder(contentType._3).append(" ; charset=")
+        .append(contentType._2).toString()
     }
   }
 

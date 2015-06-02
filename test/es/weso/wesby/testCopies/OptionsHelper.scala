@@ -1,6 +1,7 @@
 package es.weso.wesby.testCopies
 
 import es.weso.wesby.models.Options
+
 import scala.language.implicitConversions
 
 /**

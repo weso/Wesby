@@ -1,13 +1,9 @@
 package views.helpers
 
 import es.weso.wesby.Configurable
-import es.weso.wesby.models.RdfProperty
-import es.weso.wesby.models.RdfResource
-import es.weso.wesby.models.ResultQuery
-import es.weso.wesby.sparql.Handlers.handleFirstLiteralAsValue
-import es.weso.wesby.sparql.Handlers.handleResourceAsString
-import es.weso.wesby.utils.CommonURIS.rdf
-import es.weso.wesby.utils.CommonURIS.rdfs
+import es.weso.wesby.models.{RdfProperty, RdfResource, ResultQuery}
+import es.weso.wesby.sparql.Handlers.{handleFirstLiteralAsValue, handleResourceAsString}
+import es.weso.wesby.utils.CommonURIS.{rdf, rdfs}
 import play.api.Play.current
 import play.api.cache.Cache
 import play.api.templates.Html

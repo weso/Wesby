@@ -1,11 +1,9 @@
 package es.weso.wesby
 
-import org.apache.commons.configuration.PropertiesConfiguration
-import es.weso.wesby.models.Options
+import es.weso.wesby.models.{Options, ResultQuery}
 import es.weso.wesby.utils.CommonURIS.rdf
-import models.ResultQuery
-import play.api.mvc.Controller
-import play.api.mvc.RequestHeader
+import org.apache.commons.configuration.PropertiesConfiguration
+import play.api.mvc.{Controller, RequestHeader}
 import views.html
 
 /**

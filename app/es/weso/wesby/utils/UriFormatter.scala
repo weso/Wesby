@@ -1,18 +1,15 @@
 package es.weso.wesby.utils
 
-import java.io.BufferedWriter
-import java.io.FileWriter
-import java.nio.charset.Charset
-import java.nio.charset.CodingErrorAction
+import java.io.{BufferedWriter, FileWriter}
+import java.nio.charset.{Charset, CodingErrorAction}
+
+import es.weso.wesby.Configurable
+import es.weso.wesby.models.{ShortUri, Uri}
+import play.api.Logger
+import play.api.libs.json.Json
 
 import scala.Option.option2Iterable
 import scala.io.Source
-
-import es.weso.wesby.Configurable
-import es.weso.wesby.models.ShortUri
-import es.weso.wesby.models.Uri
-import play.api.Logger
-import play.api.libs.json.Json
 
 /**
  * Handles the URIs performing transformation between local and base uri, and

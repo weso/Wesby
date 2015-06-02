@@ -1,12 +1,8 @@
 package es.weso.wesby
 
-import org.specs2.mutable.Specification
-
-import es.weso.wesby.models.RdfLiteral
-import es.weso.wesby.models.RdfResource
-import es.weso.wesby.sparql.Handlers
-import es.weso.wesby.sparql.ModelLoader
+import es.weso.wesby.sparql.{Handlers, ModelLoader}
 import es.weso.wesby.utils.CommonURIS._
+import org.specs2.mutable.Specification
 import play.api.test.WithApplication
 
 class HandlersSpec extends Specification {

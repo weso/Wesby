@@ -1,7 +1,6 @@
 package es.weso.wesby
 
-import org.apache.commons.configuration.CompositeConfiguration
-import org.apache.commons.configuration.PropertiesConfiguration
+import org.apache.commons.configuration.{CompositeConfiguration, PropertiesConfiguration}
 
 /**
  * Adds the basic configuration capability.

@@ -1,8 +1,6 @@
 package es.weso.wesby.models
 
-import com.hp.hpl.jena.rdf.model.{ Property => JenaProperty }
-import com.hp.hpl.jena.rdf.model.{ RDFNode => JenaRDFNode }
-import com.hp.hpl.jena.rdf.model.{ Resource => JenaResource }
+import com.hp.hpl.jena.rdf.model.{Property => JenaProperty, RDFNode => JenaRDFNode, Resource => JenaResource}
 
 /**
  * Wesby's representation of an RDF node.

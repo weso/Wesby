@@ -1,10 +1,8 @@
 package es.weso.wesby.models
 
-import scala.collection.mutable.HashMap
-import scala.collection.mutable.ListBuffer
-import scala.collection.mutable.Map
+import com.hp.hpl.jena.rdf.model.{Model => JenaModel}
 
-import com.hp.hpl.jena.rdf.model.{ Model => JenaModel }
+import scala.collection.mutable.{HashMap, ListBuffer, Map}
 
 /**
  * Stores the data for a given URI (Parents or children).

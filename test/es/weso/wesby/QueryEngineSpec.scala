@@ -1,10 +1,10 @@
 package es.weso.wesby
 
+import es.weso.wesby.sparql.QueryEngine
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
-import es.weso.wesby.sparql.QueryEngine
-import play.api.test.WithApplication
 import org.specs2.runner.JUnitRunner
+import play.api.test.WithApplication
 
 @RunWith(classOf[JUnitRunner])
 class QueryEngineSpec extends Specification with Configurable {

@@ -1,22 +1,10 @@
 package es.weso.wesby.sparql
 
-import com.hp.hpl.jena.query.QueryParseException
-import com.hp.hpl.jena.query.QuerySolution
-import com.hp.hpl.jena.rdf.model.ModelFactory
-import com.hp.hpl.jena.rdf.model.ResourceFactory
+import com.hp.hpl.jena.query.{QueryParseException, QuerySolution}
+import com.hp.hpl.jena.rdf.model.{ModelFactory, ResourceFactory}
 import com.hp.hpl.jena.sparql.resultset.ResultSetException
-
 import es.weso.wesby.Configurable
-import es.weso.wesby.models.InverseModel
-import es.weso.wesby.models.LazyDataStore
-import es.weso.wesby.models.Model
-import es.weso.wesby.models.RdfAnon
-import es.weso.wesby.models.RdfLiteral
-import es.weso.wesby.models.RdfNode
-import es.weso.wesby.models.RdfProperty
-import es.weso.wesby.models.RdfResource
-import es.weso.wesby.models.ResultQuery
-import es.weso.wesby.models.Uri
+import es.weso.wesby.models.{InverseModel, LazyDataStore, Model, RdfAnon, RdfLiteral, RdfNode, RdfProperty, RdfResource, ResultQuery, Uri}
 import es.weso.wesby.utils.UriFormatter
 import es.weso.wesby.utils.UriFormatter.uriToBaseURI
 import play.Logger
