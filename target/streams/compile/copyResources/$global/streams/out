@@ -1,4 +1,4 @@
-[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
-[0m[[0mdebug[0m] [0m	(/Users/jorge/Desarrollador/Wesby/conf/application.conf,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/application.conf)[0m
-[0m[[0mdebug[0m] [0m	(/Users/jorge/Desarrollador/Wesby/conf/logback.xml,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/logback.xml)[0m
-[0m[[0mdebug[0m] [0m	(/Users/jorge/Desarrollador/Wesby/conf/routes,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/routes)[0m
+[debug] Copy resource mappings: 
+[debug] 	(/Users/jorge/Desarrollador/Wesby/conf/application.conf,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/application.conf)
+[debug] 	(/Users/jorge/Desarrollador/Wesby/conf/logback.xml,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/logback.xml)
+[debug] 	(/Users/jorge/Desarrollador/Wesby/conf/routes,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/routes)

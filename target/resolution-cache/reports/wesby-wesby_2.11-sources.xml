@@ -4,10 +4,10 @@
 	<info
 		organisation="wesby"
 		module="wesby_2.11"
-		revision="1.0-SNAPSHOT"
+		revision="2.0-SNAPSHOT"
 		conf="sources"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
-		date="20150603185351"/>
+		date="20150603191013"/>
 	<dependencies>
 	</dependencies>
 </ivy-report>

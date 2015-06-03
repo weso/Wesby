@@ -1,2 +1,2 @@
-2015-06-03 18:42:47,091 [INFO] from play.api.libs.concurrent.ActorSystemProvider in pool-6-thread-9 - Starting application default Akka system: application
-2015-06-03 18:42:47,316 [INFO] from play.core.server.NettyServer$ in pool-6-thread-9 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2015-06-03 19:02:22,550 [INFO] from play.api.libs.concurrent.ActorSystemProvider in pool-4-thread-3 - Starting application default Akka system: application
+2015-06-03 19:02:22,785 [INFO] from play.core.server.NettyServer$ in pool-4-thread-3 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000

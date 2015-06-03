@@ -4,16 +4,16 @@
 	<info
 		organisation="wesby"
 		module="wesby_2.11"
-		revision="1.0-SNAPSHOT"
+		revision="2.0-SNAPSHOT"
 		conf="runtime"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
-		date="20150603185351"/>
+		date="20150603191013"/>
 	<dependencies>
 		<module organisation="com.typesafe.play" name="play-ws_2.11">
 			<revision name="2.4.0" status="release" pubdate="20150527071435" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://playframework.com" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="51">
 				<license name="Apache-2.0" url="http://www.apache.org/licenses/LICENSE-2.0.html"/>
 				<metadata-artifact status="no" details="" size="3989" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-ws_2.11/ivy-2.4.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/typesafe/play/play-ws_2.11/2.4.0/play-ws_2.11-2.4.0.pom"/>
-				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="1.0-SNAPSHOT"/>
+				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="2.0-SNAPSHOT"/>
 				<artifacts>
 					<artifact name="play-ws_2.11" type="jar" ext="jar" status="no" details="" size="592449" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-ws_2.11/jars/play-ws_2.11-2.4.0.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/com/typesafe/play/play-ws_2.11/2.4.0/play-ws_2.11-2.4.0.jar"/>
@@ -85,7 +85,7 @@
 			<revision name="2.4.0" status="release" pubdate="20150527071432" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://playframework.com" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="49">
 				<license name="Apache-2.0" url="http://www.apache.org/licenses/LICENSE-2.0.html"/>
 				<metadata-artifact status="no" details="" size="3308" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-cache_2.11/ivy-2.4.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/typesafe/play/play-cache_2.11/2.4.0/play-cache_2.11-2.4.0.pom"/>
-				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="1.0-SNAPSHOT"/>
+				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="2.0-SNAPSHOT"/>
 				<artifacts>
 					<artifact name="play-cache_2.11" type="jar" ext="jar" status="no" details="" size="74207" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-cache_2.11/jars/play-cache_2.11-2.4.0.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/com/typesafe/play/play-cache_2.11/2.4.0/play-cache_2.11-2.4.0.jar"/>
@@ -109,7 +109,7 @@
 			<revision name="2.4.0" status="release" pubdate="20150527071428" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://playframework.com" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="43">
 				<license name="Apache-2.0" url="http://www.apache.org/licenses/LICENSE-2.0.html"/>
 				<metadata-artifact status="no" details="" size="3840" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-jdbc_2.11/ivy-2.4.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/typesafe/play/play-jdbc_2.11/2.4.0/play-jdbc_2.11-2.4.0.pom"/>
-				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="1.0-SNAPSHOT"/>
+				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="2.0-SNAPSHOT"/>
 				<artifacts>
 					<artifact name="play-jdbc_2.11" type="jar" ext="jar" status="no" details="" size="102647" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-jdbc_2.11/jars/play-jdbc_2.11-2.4.0.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/com/typesafe/play/play-jdbc_2.11/2.4.0/play-jdbc_2.11-2.4.0.jar"/>
@@ -178,7 +178,7 @@
 			<revision name="2.4.0" status="release" pubdate="20150527071325" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://playframework.com" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="40">
 				<license name="Apache-2.0" url="http://www.apache.org/licenses/LICENSE-2.0.html"/>
 				<metadata-artifact status="no" details="" size="3358" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-netty-server_2.11/ivy-2.4.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/typesafe/play/play-netty-server_2.11/2.4.0/play-netty-server_2.11-2.4.0.pom"/>
-				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="1.0-SNAPSHOT"/>
+				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="2.0-SNAPSHOT"/>
 				<artifacts>
 					<artifact name="play-netty-server_2.11" type="jar" ext="jar" status="no" details="" size="213273" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-netty-server_2.11/jars/play-netty-server_2.11-2.4.0.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/com/typesafe/play/play-netty-server_2.11/2.4.0/play-netty-server_2.11-2.4.0.jar"/>
@@ -234,7 +234,7 @@
 			<revision name="2.4.0" status="release" pubdate="20150527071318" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://playframework.com" downloaded="false" searched="false" default="false" conf="default, compile, runtime(*), master(compile), runtime, default(compile), compile(*), master" position="4">
 				<license name="Apache-2.0" url="http://www.apache.org/licenses/LICENSE-2.0.html"/>
 				<metadata-artifact status="no" details="" size="3307" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-server_2.11/ivy-2.4.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/typesafe/play/play-server_2.11/2.4.0/play-server_2.11-2.4.0.pom"/>
-				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="1.0-SNAPSHOT"/>
+				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="2.0-SNAPSHOT"/>
 				<caller organisation="com.typesafe.play" name="play-netty-server_2.11" conf="default, compile, runtime, master" rev="2.4.0" rev-constraint-default="2.4.0" rev-constraint-dynamic="2.4.0" callerrev="2.4.0"/>
 				<artifacts>
 					<artifact name="play-server_2.11" type="jar" ext="jar" status="no" details="" size="251748" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/play-server_2.11/jars/play-server_2.11-2.4.0.jar">
@@ -287,7 +287,7 @@
 		</module>
 		<module organisation="com.google.inject.extensions" name="guice-assistedinject">
 			<revision name="4.0" status="release" pubdate="20150428223500" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="39">
-				<metadata-artifact status="successful" details="" size="549" time="398" location="/Users/jorge/.ivy2/cache/com.google.inject.extensions/guice-assistedinject/ivy-4.0.xml" searched="true" original-local-location="/Users/jorge/.ivy2/cache/com.google.inject.extensions/guice-assistedinject/ivy-4.0.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/google/inject/extensions/guice-assistedinject/4.0/guice-assistedinject-4.0.pom"/>
+				<metadata-artifact status="successful" details="" size="549" time="378" location="/Users/jorge/.ivy2/cache/com.google.inject.extensions/guice-assistedinject/ivy-4.0.xml" searched="true" original-local-location="/Users/jorge/.ivy2/cache/com.google.inject.extensions/guice-assistedinject/ivy-4.0.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/google/inject/extensions/guice-assistedinject/4.0/guice-assistedinject-4.0.pom"/>
 				<caller organisation="com.typesafe.play" name="play_2.11" conf="compile, runtime" rev="4.0" rev-constraint-default="4.0" rev-constraint-dynamic="4.0" callerrev="2.4.0"/>
 				<artifacts>
 					<artifact name="guice-assistedinject" type="jar" ext="jar" status="no" details="" size="43425" time="0" location="/Users/jorge/.ivy2/cache/com.google.inject.extensions/guice-assistedinject/jars/guice-assistedinject-4.0.jar">
@@ -772,8 +772,8 @@
 			<revision name="1.1.1" status="release" pubdate="20150514070045" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://github.com/playframework/twirl" downloaded="false" searched="false" default="false" conf="default, compile, runtime(*), master(compile), runtime, default(compile), compile(*), master" position="1">
 				<license name="Apache-2.0" url="http://www.apache.org/licenses/LICENSE-2.0.html"/>
 				<metadata-artifact status="no" details="" size="3330" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/twirl-api_2.11/ivy-1.1.1.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/typesafe/play/twirl-api_2.11/1.1.1/twirl-api_2.11-1.1.1.pom"/>
-				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="1.1.1" rev-constraint-default="1.1.1" rev-constraint-dynamic="1.1.1" callerrev="1.0-SNAPSHOT"/>
 				<caller organisation="com.typesafe.play" name="play_2.11" conf="compile, runtime" rev="1.1.1" rev-constraint-default="1.1.1" rev-constraint-dynamic="1.1.1" callerrev="2.4.0"/>
+				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="1.1.1" rev-constraint-default="1.1.1" rev-constraint-dynamic="1.1.1" callerrev="2.0-SNAPSHOT"/>
 				<artifacts>
 					<artifact name="twirl-api_2.11" type="jar" ext="jar" status="no" details="" size="60413" time="0" location="/Users/jorge/.ivy2/cache/com.typesafe.play/twirl-api_2.11/jars/twirl-api_2.11-1.1.1.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/com/typesafe/play/twirl-api_2.11/1.1.1/twirl-api_2.11-1.1.1.jar"/>
@@ -816,8 +816,8 @@
 				<caller organisation="com.typesafe.play" name="play-jdbc-api_2.11" conf="compile, runtime" rev="2.11.6" rev-constraint-default="2.11.6" rev-constraint-dynamic="2.11.6" callerrev="2.4.0"/>
 				<caller organisation="com.typesafe.play" name="twirl-api_2.11" conf="default, compile, runtime, master" rev="2.11.6" rev-constraint-default="2.11.6" rev-constraint-dynamic="2.11.6" callerrev="1.1.1"/>
 				<caller organisation="org.scala-lang.modules" name="scala-xml_2.11" conf="compile, runtime" rev="2.11.0" rev-constraint-default="2.11.0" rev-constraint-dynamic="2.11.0" callerrev="1.0.1"/>
-				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.11.6" rev-constraint-default="2.11.6" rev-constraint-dynamic="2.11.6" callerrev="1.0-SNAPSHOT"/>
 				<caller organisation="com.typesafe.play" name="play-iteratees_2.11" conf="compile, runtime" rev="2.11.6" rev-constraint-default="2.11.6" rev-constraint-dynamic="2.11.6" callerrev="2.4.0"/>
+				<caller organisation="wesby" name="wesby_2.11" conf="compile, runtime" rev="2.11.6" rev-constraint-default="2.11.6" rev-constraint-dynamic="2.11.6" callerrev="2.0-SNAPSHOT"/>
 				<caller organisation="org.scala-lang" name="scala-reflect" conf="compile, runtime" rev="2.11.6" rev-constraint-default="2.11.6" rev-constraint-dynamic="2.11.6" callerrev="2.11.6"/>
 				<caller organisation="org.scala-stm" name="scala-stm_2.11" conf="compile, runtime" rev="2.11.0" rev-constraint-default="2.11.0" rev-constraint-dynamic="2.11.0" callerrev="0.7"/>
 				<caller organisation="com.typesafe.play" name="play-server_2.11" conf="default, compile, runtime, master" rev="2.11.6" rev-constraint-default="2.11.6" rev-constraint-dynamic="2.11.6" callerrev="2.4.0"/>
