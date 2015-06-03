@@ -1,9 +1,14 @@
 package es.weso.wesby
 
+import scala.collection.Seq
+import org.specs2.mutable.Specification
+import org.specs2.specification.Fragments
+import org.specs2.main.ArgProperty
+import play.api.test.WithApplication
+import es.weso.wesby.models.ResultQuery
 import es.weso.wesby.sparql.ModelLoader
 import es.weso.wesby.utils.CommonURIS._
-import org.specs2.mutable.Specification
-import play.api.test.WithApplication
+import es.weso.wesby.sparql.Handlers
 
 class ResultQuerySpec extends Specification {
   

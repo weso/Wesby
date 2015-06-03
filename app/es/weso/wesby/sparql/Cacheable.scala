@@ -1,8 +1,11 @@
 package es.weso.wesby.sparql
 
 import com.github.mumoshu.play2.memcached.MemcachedPlugin
-import com.hp.hpl.jena.query.{ResultSet, ResultSetFactory, ResultSetFormatter}
+import com.hp.hpl.jena.query.ResultSet
+import com.hp.hpl.jena.query.ResultSetFactory
+import com.hp.hpl.jena.query.ResultSetFormatter
 import com.hp.hpl.jena.sparql.resultset.ResultSetException
+
 import play.api.Play.current
 import play.api.cache.Cache
 

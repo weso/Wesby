@@ -10,6 +10,7 @@ import es.weso.wesby.utils.UriFormatter
  * @param partialUri the relative URI (to the baseUri)
  */
 class Options(val partialUri: String) extends Configurable {
+  import Options._
 
   val uri = UriFormatter.fullUri(partialUri)
 

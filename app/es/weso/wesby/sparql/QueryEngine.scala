@@ -1,6 +1,10 @@
 package es.weso.wesby.sparql
 
-import com.hp.hpl.jena.query.{QueryExecutionFactory, QueryFactory, ResultSet, Syntax}
+import com.hp.hpl.jena.query.QueryExecutionFactory
+import com.hp.hpl.jena.query.QueryFactory
+import com.hp.hpl.jena.query.ResultSet
+import com.hp.hpl.jena.query.Syntax
+
 import es.weso.wesby.Configurable
 
 /**

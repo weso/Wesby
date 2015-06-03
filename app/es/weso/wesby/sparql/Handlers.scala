@@ -1,9 +1,12 @@
 package es.weso.wesby.sparql
 
-import es.weso.wesby.models.{DataStore, RdfLiteral, RdfNode, RdfResource}
-
 import scala.Option.option2Iterable
 import scala.reflect.ClassTag
+
+import es.weso.wesby.models.DataStore
+import es.weso.wesby.models.RdfLiteral
+import es.weso.wesby.models.RdfNode
+import es.weso.wesby.models.RdfResource
 
 /**
  * Handles information retrieval from a DataStore.

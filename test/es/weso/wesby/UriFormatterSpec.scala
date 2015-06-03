@@ -1,10 +1,11 @@
 package es.weso.wesby
 
-import es.weso.wesby.utils.UriFormatter
-import org.junit.runner._
 import org.specs2.mutable._
 import org.specs2.runner._
+import org.junit.runner._
 import play.api.test._
+import play.api.test.Helpers._
+import es.weso.wesby.utils.UriFormatter
 
 @RunWith(classOf[JUnitRunner])
 class UriFormatterSpec extends Specification {

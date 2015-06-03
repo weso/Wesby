@@ -1,5 +1,6 @@
 package es.weso.wesby.utils
 
+import es.weso.wesby.models
 import es.weso.wesby.models.{ResultQuery, _}
 import es.weso.wesby.utils.CommonURIS.rdf
 import play.api.libs.json.Json.JsValueWrapper

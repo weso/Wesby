@@ -1,10 +1,15 @@
 package es.weso.wesby
 
-import es.weso.wesby.models.{RdfResource, _}
-import es.weso.wesby.sparql.{Handlers, ModelLoader}
-import es.weso.wesby.utils.CommonURIS._
+import scala.collection.Seq
 import org.specs2.mutable.Specification
+import org.specs2.specification.Fragments
+import org.specs2.main.ArgProperty
 import play.api.test.WithApplication
+import es.weso.wesby.sparql.ModelLoader
+import es.weso.wesby.utils.CommonURIS._
+import es.weso.wesby.models.RdfResource
+import es.weso.wesby.sparql.Handlers
+import es.weso.wesby.models._
 
 class RDFNodeSpec extends Specification {
 

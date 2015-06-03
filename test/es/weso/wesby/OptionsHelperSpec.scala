@@ -1,9 +1,9 @@
 package es.weso.wesby
 
-import es.weso.wesby.models.Options
-import es.weso.wesby.testCopies.OptionsHelper._
 import org.specs2.mutable.Specification
 import play.api.test.WithApplication
+import es.weso.wesby.testCopies.OptionsHelper._
+import models.Options
 
 class OptionsHelperSpec extends Specification {
 

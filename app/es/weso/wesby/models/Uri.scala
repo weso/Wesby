@@ -1,8 +1,13 @@
 package es.weso.wesby.models
 
-import play.api.libs.functional.syntax.{functionalCanBuildApplicative, toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{Json, Reads, Writes, __}
-
+import play.api.libs.functional.syntax.functionalCanBuildApplicative
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.functional.syntax.unlift
+import play.api.libs.json.__
+import play.api.libs.json.Json
+import play.api.libs.json.Reads
+import play.api.libs.json.Writes
+import play.api.libs.functional.syntax._
 import scala.language.postfixOps
 
 /**
@@ -12,6 +17,7 @@ import scala.language.postfixOps
  * @param short the shortened version of the URI
  */
 case class Uri(val relative: String, val absolute: String, val short: Option[ShortUri]) {
+  import Uri._
 }
 
 /**
@@ -44,6 +50,7 @@ object Uri {
  * @param suffix the tuple comprised by the label and the URI
  */
 case class ShortUri(val prefix: (String, String), val suffix: (String, String)) {
+  import ShortUri._
 }
 
 /**

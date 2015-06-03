@@ -1,5 +1,8 @@
 package es.weso.wesby.models
 
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 /**
  * Contains the result from a Query
  * @param sub the children nodes
