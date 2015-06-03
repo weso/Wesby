@@ -1,4 +1,0 @@
-[debug] Copy resource mappings: 
-[debug] 	(/Users/jorge/Desarrollador/Wesby/conf/application.conf,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/application.conf)
-[debug] 	(/Users/jorge/Desarrollador/Wesby/conf/logback.xml,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/logback.xml)
-[debug] 	(/Users/jorge/Desarrollador/Wesby/conf/routes,/Users/jorge/Desarrollador/Wesby/target/scala-2.11/classes/routes)
