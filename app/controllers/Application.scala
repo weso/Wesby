@@ -2,9 +2,10 @@ package controllers
 
 import javax.inject.Inject
 
+import models.QueryEngineWithJena
 import play.Play
 import play.api.Logger
-import play.api.i18n.{Messages, I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
 
 class Application @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
@@ -45,7 +46,8 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
 
   def download(path: String, format: String) = Action {
     Logger.debug("Downloading: " + format)
-    Ok(format)
+    val resource = Play.application().configuration().getString("wesby.host") + path
+    Ok(QueryEngineWithJena.queryTest(resource))
   }
 
 }
