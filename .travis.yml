@@ -1,7 +1,7 @@
 language: scala
 scala:
    - 2.11.6
- jdk:
+jdk:
    - oraclejdk8
 env:
   - ACTIVATOR_VERSION=1.3.4
