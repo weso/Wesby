@@ -6,7 +6,7 @@ env:
 before_script:
   - wget http://downloads.typesafe.com/typesafe-activator/${ACTIVATOR_VERSION}/typesafe-activator-${ACTIVATOR_VERSION}-minimal.zip
   - unzip -q typesafe-activator-${ACTIVATOR_VERSION}-minimal.zip
-script: typesafe-activator-${ACTIVATOR_VERSION}-minimal/activator test
+script: activator-${ACTIVATOR_VERSION}-minimal/activator test
 notifications:
   webhooks:
     urls:
