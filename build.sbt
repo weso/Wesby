@@ -23,3 +23,5 @@ routesGenerator := InjectedRoutesGenerator
 libraryDependencies += "org.w3" %% "banana-rdf" % "0.8.1"
 
 libraryDependencies += "org.w3" %% "banana-jena" % "0.8.1"
+
+libraryDependencies += "org.w3" %% "banana-sesame" % "0.8.1"

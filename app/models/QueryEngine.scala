@@ -12,7 +12,7 @@ trait QueryEngineDependencies
   with SparqlHttpModule
   with RDFXMLWriterModule
   with TurtleWriterModule
-  
+
 
 /**
  * Created by jorge on 5/6/15.
