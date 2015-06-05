@@ -1,0 +1,49 @@
+@(implicit request: RequestHeader, options: es.weso.wesby.models.Options, uri: String)
+
+@import views.helpers.Utils._
+@import views.html.helpers._
+@import views.html.helpers.utils._
+
+@main(None) {
+  <div id="mustacheRendered"></div>
+  @sparqlQuery(options)
+}
+
+<script type="text/javascript">
+
+  // global namespace
+  var WESBY = WESBY || {};
+  WESBY.routes = {
+    uri: "@uri",
+    templates: "@conf.getString("templates.uri")",
+    templatesMap: "@conf.getString("templates.uri")" + "template-mapping.json",
+    jsonService: jsRoutes.controllers.Application.templateJsonData("@uri").url
+  }
+
+WESBY.template = "test"; // Mustache template
+WESBY.templateName = "undefined";
+WESBY.data = {}; // Mustache server data
+WESBY.partials = {}; // Template partials
+
+  $(function() {
+    var templateEngine = new TemplateEngine();
+
+    templateEngine.loadPartials(function(s) {
+      console.log(s);
+    });
+    templateEngine.loadData(function(s) {
+      templateEngine.loadTemplateNames(function(s) {
+        templateEngine.loadTemplate(function(s) {
+          templateEngine.render(function(s) {
+          console.log(s);
+          });
+        console.log(s);
+        });
+      console.log(s);
+      });
+      console.log(s);
+    });
+
+
+  });
+</script>

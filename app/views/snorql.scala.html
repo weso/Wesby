@@ -1,0 +1,109 @@
+@(param: Any)(implicit request: RequestHeader)
+@main(None){
+<link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/codemirror.css")"></link>
+<link rel="stylesheet" href="@Options.host_r@routes.Assets.at("stylesheets/snorql.css")"></link>
+  <div class="snorql">
+  	<nav class="breadcrumbs">
+		@hostLink(request) &gt; Snorql: A SPARQL Explorer
+	</nav>	
+	
+    <h1>Snorql: <span class="exploring" id="title"></span></h1>
+    
+    <div id="default-graph-section" class="section">
+      <h2 style="display: inline">GRAPH:</h2>
+      <p style="display: inline">
+        Default graph.
+        <a href="?browse=graphs">List named graphs</a>
+      </p>
+    </div>
+    
+    <div class="section">
+      <h2>browse:</h2>
+      <ul>
+        <li><a class="graph-link" href="?browse=superclasses">Super Classes</a></li>
+        <li><a class="graph-link" href="?browse=classes">Classes</a></li>
+        <li><a class="graph-link" href="?browse=properties">Properties</a></li>
+        <li id="browse-named-graphs-link"><a href="?browse=graphs">Named Graphs</a></li>
+      </ul>
+    </div>
+
+    <div id="named-graph-section" class="section">
+      <h2 style="display: inline">GRAPH:</h2>
+      <p style="display: inline">
+        <span id="selected-named-graph">Named graph goes here</span>.
+        <a href="javascript:snorql.switchToDefaultGraph()">Switch back to default graph</a>
+      </p>
+    </div>
+
+    <div class="section">
+      <pre id="prefixestext"></pre>
+      <form id="queryform" action="#" method="get"><div>
+        <input type="hidden" name="query" value="" id="query" />
+        <input type="hidden" name="output" value="json" id="jsonoutput" disabled="disabled" />
+        <input type="hidden" name="stylesheet" value="" id="stylesheet" disabled="disabled" />
+        <input type="hidden" name="graph" value="" id="graph-uri" disabled="disabled" />
+      </div></form>
+      <div class="wrapper">
+        <textarea name="query" rows="9" cols="80" id="querytext"></textarea>
+        <div class="clear">
+        	<div class="select">
+		        <div class="dropdown">
+			        <select id="selectoutput" onchange="snorql.updateOutputMode()">
+			          <option selected="selected" value="browse">Browse</option>
+			          <option value="json">as JSON</option>
+			          <option value="xml">as XML</option>
+			          <option value="xslt">as XML+XSLT</option>
+			        </select>
+		        </div>
+        	</div>
+        	<input id="submitQuery" type="button" value="TEST QUERY" />
+	        <input id="resetQuery" type="button" value="CLEAR" class="b-clear" />
+	        <span id="xsltcontainer"><span id="xsltinput">
+	          XSLT stylesheet URL:
+	          <input id="xsltstylesheet" type="text" value="snorql/xml-to-html.xsl" size="30" />
+	        </span></span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <div id="result"><span></span></div>
+    </div>
+
+    <div id="footer">Powered by <a id="poweredby" href="#">Snorql</a></div>
+  </div>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/snorql/prototype.js")"></script>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/snorql/scriptaculous/scriptaculous.js")"></script>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/snorql/sparql.js")"></script>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/snorql/snorql.js")"></script>
+        <script>var snorql = new Snorql("@Options.host_r" + "/endpoint");</script>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/snorql/namespaces.js")"></script>
+  <script>snorql.start(namespaces);</script>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/codemirror/codemirror.js")"></script>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/codemirror/matchbrackets.js")"></script>
+  <script src="@Options.host_r@routes.Assets.at("javascripts/codemirror/sparql.js")"></script>
+  <script>
+  	var editor = CodeMirror.fromTextArea(document.getElementById("querytext"), 
+  		  	{
+		  	mode : "application/x-sparql-query",
+		  	tabMode : "indent",
+		  	lineNumbers : true,
+		  	matchBrackets : true
+		  	}
+  	);
+	var $j = jQuery.noConflict();
+	$j(document).ready(function() {
+		$j('html, body').animate({
+			scrollTop : $j("div.CodeMirror").offset().top
+		}, 1500);
+		$j("#submitQuery").click(function() {
+			editor.save();
+			snorql.submitQuery();
+		});
+		$j("#resetQuery").click(function() {
+			snorql.resetQuery();
+		});
+	});
+	</script>
+}

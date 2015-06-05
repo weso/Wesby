@@ -1,0 +1,34 @@
+@(rs: ResultQuery)
+<table class="propertyBox sortable">
+	<thead>
+		<tr>
+			<th class="property">
+				Property
+			</th>
+			<th class="value">
+				Value
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	@rs.subject match {
+	  case Some(subject) => {
+	    @for(n <- subject.list){
+		  <tr>
+		  	<td class="property">
+				@anchor(n.property)
+			</td>
+			<td class="value">
+				<ul>
+				@for(a <- n.nodes){
+					<li>@anchor(a)</li>
+				}
+				</ul>
+			</td>
+		</tr>
+		}
+	  }
+	  case None => {}
+	}
+	</tbody>
+</table>

@@ -1,25 +1,47 @@
-name := """Wesby"""
+name := "wesby"
 
-version := "2.0-SNAPSHOT"
+version := "0.1.0-M4-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
-
-scalaVersion := "2.11.6"
+play.Project.playScalaSettings
 
 libraryDependencies ++= Seq(
   jdbc,
+  anorm,
   cache,
-  ws,
-  specs2 % Test
+  filters,
+  "org.apache.jena" % "jena-arq" % "2.11.0",
+  "commons-configuration" % "commons-configuration" % "1.9",
+  "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2"
 )
 
-resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+seq(jasmineSettings : _*)
 
-// Play provides two styles of routers, one expects its actions to be injected, the
-// other, legacy style, accesses its actions statically.
-routesGenerator := InjectedRoutesGenerator
+resolvers += "Spy Repository" at "http://files.couchbase.com/maven2"
 
-// Banana RDF
-libraryDependencies += "org.w3" %% "banana-rdf" % "0.8.1"
+templatesImport ++= Seq(
+  "es.weso.wesby.models.OptionsHelper",
+  "es.weso.wesby.models.OptionsHelper._",
+  "es.weso.wesby.models._",
+  "es.weso.wesby.sparql.Handlers._",
+  "es.weso.wesby.utils.CommonURIS._",
+  "views.helpers.Utils._",
+  "views.html.helpers._",
+  "views.html.helpers.utils._"
+)
 
-libraryDependencies += "org.w3" %% "banana-jena" % "0.8.1"
+templatesImport ++= Seq()
+
+scalacOptions in Compile in doc += "-diagrams"
+
+// jasmine configuration, overridden as we don't follow the default project structure sbt-jasmine expects
+appJsDir <+= baseDirectory  / "public/javascripts"
+
+appJsLibDir <+= baseDirectory  / "public/javascripts"
+
+jasmineTestDir <+= baseDirectory  / "test/jasmine"
+
+jasmineConfFile <+= baseDirectory  / "test/jasmine/test.dependencies.js"
+
+// link jasmine to the standard 'sbt test' action. Now when running 'test' jasmine tests will be run, and if they pass
+// then other Play tests will be executed.
+(test in Test) <<= (test in Test) dependsOn (jasmine)
