@@ -10,6 +10,9 @@ trait QueryEngineDependencies
   with RDFOpsModule
   with SparqlOpsModule
   with SparqlHttpModule
+  with RDFXMLWriterModule
+  with TurtleWriterModule
+  
 
 /**
  * Created by jorge on 5/6/15.
@@ -22,12 +25,16 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
   val endpoint = new URL(Play.application().configuration().getString("wesby.endpoint"))
 
-  def queryTest(resource: String): String = {
+  def queryTestSelect(resource: String): String = {
     Logger.debug("Querying: " + resource)
     val query = parseSelect(
       s"""
-        |SELECT DISTINCT ?v ?o WHERE {
-        |  <$resource> ?v ?o
+        |SELECT DISTINCT ?s ?v ?o WHERE {
+        |  {<$resource> ?v ?o .}
+        |  UNION
+        |  {?s <$resource> ?o .}
+        |  UNION
+        |  {?s ?v <$resource> .}
         |}
       """.stripMargin).get
 
@@ -42,6 +49,35 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     languages.to[List].toString()
   }
 
+  def queryTestConstructXml(resource: String) = {
+    Logger.debug("Querying: " + resource)
+    val query = parseConstruct(
+      s"""
+         |CONSTRUCT { ?s ?v ?o } WHERE {
+         |  	<$resource> ?v ?o .
+         |	?s ?v ?o.
+         |}
+      """.stripMargin).get
+
+    val resultGraph = endpoint.executeConstruct(query).get
+    val graphAsString = rdfXMLWriter.asString(resultGraph, base = "") getOrElse sys.error("coudn't serialize the graph")
+    graphAsString // TODO base?
+  }
+
+  def queryTestConstructTurtle(resource: String) = {
+    Logger.debug("Querying: " + resource)
+    val query = parseConstruct(
+      s"""
+         |CONSTRUCT { ?s ?v ?o } WHERE {
+         |  	<$resource> ?v ?o .
+        |	?s ?v ?o.
+        |}
+      """.stripMargin).get
+
+    val resultGraph = endpoint.executeConstruct(query).get
+    val graphAsString = turtleWriter.asString(resultGraph, base = "") getOrElse sys.error("coudn't serialize the graph")
+    graphAsString
+  }
 }
 
 import org.w3.banana.jena.JenaModule
