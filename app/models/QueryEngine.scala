@@ -3,7 +3,11 @@ package models
 import java.net.URL
 import org.w3.banana._
 import org.w3.banana.diesel._
+import org.w3.banana.io.{JsonLdExpanded, JsonLdFlattened, RDFWriter}
+import org.w3.banana.jena.Jena
 import play.{Logger, Play}
+
+import scala.util.Try
 
 trait QueryEngineDependencies
   extends RDFModule
@@ -12,7 +16,7 @@ trait QueryEngineDependencies
   with SparqlHttpModule
   with RDFXMLWriterModule
   with TurtleWriterModule
-
+  with JsonLDWriterModule
 
 /**
  * Created by jorge on 5/6/15.
@@ -82,4 +86,7 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
 import org.w3.banana.jena.JenaModule
 
-object QueryEngineWithJena extends QueryEngine with JenaModule
+object QueryEngineWithJena extends QueryEngine with JenaModule {
+  override implicit val jsonldExpandedWriter: RDFWriter[Jena, Try, JsonLdExpanded] = _
+  override implicit val jsonldFlattenedWriter: RDFWriter[Jena, Try, JsonLdFlattened] = _
+}
