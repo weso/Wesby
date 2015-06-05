@@ -1,0 +1,7 @@
+@(n: RdfNode)
+@n match {
+	case r:RdfResource => {@resource.toUri(r)}
+	case p:RdfProperty => {@property.toUri(p)}
+    case l:RdfLiteral => {@literal.toValue(l)}
+	case a:RdfAnon => {1 anonymous resource (@a.rdfNode.getId)}
+}

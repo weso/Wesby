@@ -3,10 +3,26 @@
 # ~~~~
 
 # Home page
-GET        /                    controllers.Application.index
-GET        /welcome             controllers.Application.welcome
-GET        /*path.:format        controllers.Application.download(path, format)
-GET        /*path               controllers.Application.dereference(path)
+GET    /                        controllers.Application.index
+HEAD   /                        controllers.Application.index
 
-# Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+# Map your custom app routes
+
+# Wesby routes
+GET    /favicon.ico             controllers.Assets.at(path="/public", file="favicon.ico")
+HEAD   /favicon.ico             controllers.Assets.at(path="/public", file="favicon.ico")
+
+GET    /assets/*file            controllers.Assets.at(path="/public", file)
+HEAD   /assets/*file            controllers.Assets.at(path="/public", file)
+
+GET    /snorql                  controllers.Application.snorql()
+HEAD   /snorql                  controllers.Application.snorql()
+
+POST   /endpoint                controllers.Application.endpoint()
+HEAD   /endpoint                controllers.Application.endpoint()
+
+GET    /data/*uri               controllers.Application.templateJsonData(uri: String)
+GET    /javascriptRoutes        controllers.Application.javascriptRoutes
+
+GET    /*path                   controllers.Application.fallback(path: String)
+HEAD   /*path                   controllers.Application.fallback(path: String)

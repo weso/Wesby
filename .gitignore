@@ -1,199 +1,59 @@
-# Created by https://www.gitignore.io
-
-### OSX ###
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-
-### Windows ###
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-
-### Linux ###
+# general
 *~
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-
-### PlayFramework ###
-# Ignore Play! working directory #
-bin/
-/db
-.eclipse
-/lib/
-/logs/
-/modules
-/project/project
-/project/target
-/target
-tmp/
-test-result
-server.pid
-*.iml
-*.eml
-/dist/
-.cache
-
-
-### Scala ###
-*.class
 *.log
+*.jar
+*.class
+.settings
+tmp
+dump
 
-# sbt specific
+
+# Eclipse
+.settings
 .cache
-.history
-.lib/
-dist/*
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
+.project
+.classpath
+.scala_dependencies
+bin
+.worksheet
+*.sc
 
 # Scala-IDE specific
 .scala_dependencies
-.worksheet
-
-
-### SBT ###
-# Simple Build Tool
-# http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
-
-target/
+.project
+.classpath
+.cache
+.DS_Store
+ 
+# SBT
+dist
+project/boot
+project/target
+project/plugins/target
+target
+.target
 lib_managed/
 src_managed/
-project/boot/
-.history
-.cache
 
+# Play
+logs
+RUNNING_PID
 
-### Intellij ###
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+# Git specific
+*.orig
 
-*.iml
-
-## Directory-based project format:
+# IntelliJ IDEA specific
 .idea/
-# if you remove the above rule, at least ignore the following:
-
-# User-specific stuff:
-# .idea/workspace.xml
-# .idea/tasks.xml
-# .idea/dictionaries
-
-# Sensitive or high-churn files:
-# .idea/dataSources.ids
-# .idea/dataSources.xml
-# .idea/sqlDataSources.xml
-# .idea/dynamic.xml
-# .idea/uiDesigner.xml
-
-# Gradle:
-# .idea/gradle.xml
-# .idea/libraries
-
-# Mongo Explorer plugin:
-# .idea/mongoSettings.xml
-
-## File-based project format:
 *.ipr
 *.iws
-
-## Plugin-specific files:
-
-# IntelliJ
-/out/
-
-# mpeltonen/sbt-idea plugin
+*.iml
+out/
 .idea_modules/
 
-# JIRA plugin
-atlassian-ide-plugin.xml
+# Activator specific
+activator-sbt-atmos-play-shim.sbt
+project/activator-sbt-atmos-play-shim.sbt
+project/activator-sbt-eclipse-shim.sbt
+project/activator-sbt-idea-shim.sbt
 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-
-
-### Eclipse ###
-*.pydevproject
-.metadata
-.gradle
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-
-# Eclipse Core
-.project
-
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
-
-# CDT-specific
-.cproject
-
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
-
-# PDT-specific
-.buildpath
-
-# sbteclipse plugin
-.target
-
-# TeXlipse plugin
-.texlipse
+activator-sbt-echo-play-shim.sbt
