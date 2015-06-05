@@ -27,6 +27,20 @@ class ApplicationSpec extends Specification {
       redirectLocation(home) must beSome.which(_ == "/welcome")
     }
 
+    "redirect resource to HTML document" in new WithApplication() {
+      val resource = route(FakeRequest(GET, "/resource/test")).get
+
+      status(resource) must equalTo(SEE_OTHER)
+      redirectLocation(resource) must beSome.which(_ == "/resource/test.html")
+    }
+
+    "retrieve resource as HTML document" in new WithApplication() {
+      val resource = route(FakeRequest(GET, "/resource/test.html")).get
+
+      status(resource) must equalTo(OK)
+      // TODO add contenttype
+    }
+
 //    "render the index page" in new WithApplication{
 //      val home = route(FakeRequest(GET, "/")).get
 //
