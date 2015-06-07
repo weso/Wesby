@@ -2,7 +2,7 @@ package models
 
 import java.net.URL
 import org.w3.banana._
-import org.w3.banana.diesel._
+
 import org.w3.banana.io.{JsonLdExpanded, JsonLdFlattened, RDFWriter}
 import org.w3.banana.jena.Jena
 import play.{Logger, Play}
@@ -16,7 +16,6 @@ trait QueryEngineDependencies
   with SparqlHttpModule
   with RDFXMLWriterModule
   with TurtleWriterModule
-  with JsonLDWriterModule
 
 /**
  * Created by jorge on 5/6/15.
@@ -26,6 +25,7 @@ trait QueryEngine extends QueryEngineDependencies { self =>
   import ops._
   import sparqlOps._
   import sparqlHttp.sparqlEngineSyntax._
+  import diesel._
 
   val endpoint = new URL(Play.application().configuration().getString("wesby.endpoint"))
 
@@ -78,15 +78,18 @@ trait QueryEngine extends QueryEngineDependencies { self =>
         |}
       """.stripMargin).get
 
-    val resultGraph = endpoint.executeConstruct(query).get
-    val graphAsString = turtleWriter.asString(resultGraph, base = "") getOrElse sys.error("coudn't serialize the graph")
-    graphAsString
+    val resultGraph: PointedGraph[Rdf] = endpoint.executeConstruct(query).toPointedGraph.as[]
+//    val graphAsString = turtleWriter.asString(resultGraph, base = "") getOrElse sys.error("coudn't serialize the graph")
+
+    val rdfs = RDFSPrefix[Rdf]
+    for (k <- resultGraph/rdfs.label) {
+      println(k.pointer)
+    }
+
+    "test"
   }
 }
 
 import org.w3.banana.jena.JenaModule
 
-object QueryEngineWithJena extends QueryEngine with JenaModule {
-  override implicit val jsonldExpandedWriter: RDFWriter[Jena, Try, JsonLdExpanded] = _
-  override implicit val jsonldFlattenedWriter: RDFWriter[Jena, Try, JsonLdFlattened] = _
-}
+object QueryEngineWithJena extends QueryEngine with JenaModule
