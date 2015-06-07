@@ -2,23 +2,38 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Welcome to MkDocs\n\n\nFor full documentation visit \nmkdocs.org\n.\n\n\nCommands\n\n\n\n\nmkdocs new [dir-name]\n - Create a new project.\n\n\nmkdocs serve\n - Start the live-reloading docs server.\n\n\nmkdocs build\n - Build the documentation site.\n\n\nmkdocs help\n - Print this help message.\n\n\n\n\nProject layout\n\n\nmkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
+            "text": "Wesby\n\n\n\nWesby is a linked data frontend that wraps your RDF resources with custom-built interfaces, effectively turning your SPARQL endpoints into rich HTML5 websites.\n\n\n\n\n\nby \nWESO\n\n\nFeatures\n\n\n\n\nRDF retrieval from SPARQL endpoint\n\n\nHTTP URI dereferencing with 303 redirections\n\n\nTODO More to come...\n\n\n\n\nInstallation\n\n\n\n\nInstall Play! Framework Activator\n\n\nInstall Git\n\n\ngit clone https://github.com/weso/Wesby.git\n\n\ncd Wesby\n\n\nactivator run\n\n\n\n\nContribute\n\n\n\n\nIssue Tracker: https://github.com/weso/Wesby/issues\n\n\nSource Code: https://github.com/weso/Wesby\n\n\n\n\nSupport\n\n\n\n\nDocumentation: https://readthedocs.org/projects/wesby/\n\n\nGitter chat: https://gitter.im/weso/Wesby\n\n\n\n\nLicense\n\n\nThe project is licensed under the MIT license.\n\n\n\ud83d\udea7 This document is a work in progress \ud83d\udea7", 
             "title": "Home"
         }, 
         {
-            "location": "/#welcome-to-mkdocs", 
-            "text": "For full documentation visit  mkdocs.org .", 
-            "title": "Welcome to MkDocs"
+            "location": "/#wesby", 
+            "text": "Wesby is a linked data frontend that wraps your RDF resources with custom-built interfaces, effectively turning your SPARQL endpoints into rich HTML5 websites.   \nby  WESO", 
+            "title": "Wesby"
         }, 
         {
-            "location": "/#commands", 
-            "text": "mkdocs new [dir-name]  - Create a new project.  mkdocs serve  - Start the live-reloading docs server.  mkdocs build  - Build the documentation site.  mkdocs help  - Print this help message.", 
-            "title": "Commands"
+            "location": "/#features", 
+            "text": "RDF retrieval from SPARQL endpoint  HTTP URI dereferencing with 303 redirections  TODO More to come...", 
+            "title": "Features"
         }, 
         {
-            "location": "/#project-layout", 
-            "text": "mkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
-            "title": "Project layout"
+            "location": "/#installation", 
+            "text": "Install Play! Framework Activator  Install Git  git clone https://github.com/weso/Wesby.git  cd Wesby  activator run", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/#contribute", 
+            "text": "Issue Tracker: https://github.com/weso/Wesby/issues  Source Code: https://github.com/weso/Wesby", 
+            "title": "Contribute"
+        }, 
+        {
+            "location": "/#support", 
+            "text": "Documentation: https://readthedocs.org/projects/wesby/  Gitter chat: https://gitter.im/weso/Wesby", 
+            "title": "Support"
+        }, 
+        {
+            "location": "/#license", 
+            "text": "The project is licensed under the MIT license.  \ud83d\udea7 This document is a work in progress \ud83d\udea7", 
+            "title": "License"
         }
     ]
 }
