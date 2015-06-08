@@ -16,7 +16,6 @@ trait QueryEngineDependencies
   with SparqlHttpModule
   with RDFXMLWriterModule
   with TurtleWriterModule
-  with JsonLDWriterModule
 
 /**
  * Created by jorge on 5/6/15.
@@ -29,28 +28,20 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
   val endpoint = new URL(Play.application().configuration().getString("wesby.endpoint"))
 
-  def queryTestSelect(resource: String): String = {
+  def queryTestSelect(resource: String, queryString: String): String = {
     Logger.debug("Querying: " + resource)
-    val query = parseSelect(
-      s"""
-        |SELECT DISTINCT ?s ?v ?o WHERE {
-        |  {<$resource> ?v ?o .}
-        |  UNION
-        |  {?s <$resource> ?o .}
-        |  UNION
-        |  {?s ?v <$resource> .}
-        |}
-      """.stripMargin).get
+    val selectQueryString = queryString.replace("$resource", resource)
+    val query = parseSelect(selectQueryString).get
 
     val answers: Rdf#Solutions = endpoint.executeSelect(query).get
 
-    val languages: Iterator[Rdf#URI] = answers.iterator map { row =>
+    val properties: Iterator[Rdf#URI] = answers.iterator map { row =>
       /* row is an Rdf#Solution, we can get an Rdf#Node from the variable name */
       /* both the #Rdf#Node projection and the transformation to Rdf#URI can fail in the Try type, hence the flatMap */
-      row("?v").get.as[Rdf#URI].get
+      row("v").get.as[Rdf#URI].get
     }
 
-    languages.to[List].toString()
+    properties.to[List].toString()
   }
 
   def queryTestConstructXml(resource: String) = {
@@ -86,7 +77,4 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
 import org.w3.banana.jena.JenaModule
 
-object QueryEngineWithJena extends QueryEngine with JenaModule {
-  override implicit val jsonldExpandedWriter: RDFWriter[Jena, Try, JsonLdExpanded] = _
-  override implicit val jsonldFlattenedWriter: RDFWriter[Jena, Try, JsonLdFlattened] = _
-}
+object QueryEngineWithJena extends QueryEngine with JenaModule

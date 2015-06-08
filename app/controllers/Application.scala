@@ -47,7 +47,8 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
   def download(path: String, format: String) = Action {
     Logger.debug("Downloading: " + format)
     val resource = Play.application().configuration().getString("wesby.host") + path
-    Ok(QueryEngineWithJena.queryTestConstructTurtle(resource))
+    val query = Play.application().configuration().getString("queries.q1")
+    Ok(QueryEngineWithJena.queryTestSelect(resource, query))
   }
 
 }
