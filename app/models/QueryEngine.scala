@@ -28,7 +28,11 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
   val endpoint = new URL(Play.application().configuration().getString("wesby.endpoint"))
 
-  def queryTestSelect(resource: String, queryString: String): String = {
+  def replace(resource: String, queryString: String) = {
+
+  }
+
+  def select(resource: String, queryString: String): String = {
     Logger.debug("Querying: " + resource)
     val selectQueryString = queryString.replace("$resource", resource)
     val query = parseSelect(selectQueryString).get
@@ -38,7 +42,7 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     val properties: Iterator[Rdf#URI] = answers.iterator map { row =>
       /* row is an Rdf#Solution, we can get an Rdf#Node from the variable name */
       /* both the #Rdf#Node projection and the transformation to Rdf#URI can fail in the Try type, hence the flatMap */
-      row("v").get.as[Rdf#URI].get
+      row("r1").get.as[Rdf#URI].get
     }
 
     properties.to[List].toString()

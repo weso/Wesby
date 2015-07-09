@@ -41,14 +41,33 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
       case AcceptsJSONLD() => Redirect(request.path + ".jsonld")
       case AcceptsN3() => Redirect(request.path + ".n3")
       case AcceptsRdfXML() => Redirect(request.path + ".rdf")
+      case _ => Redirect(request.path + ".rdf")
     }
   }
 
-  def download(path: String, format: String) = Action {
-    Logger.debug("Downloading: " + format)
+  def download(path: String, extension: String) = Action { implicit request =>
+    Logger.debug("Downloading: " + extension)
     val resource = Play.application().configuration().getString("wesby.host") + path
-    val query = Play.application().configuration().getString("queries.q1")
-    Ok(QueryEngineWithJena.queryTestSelect(resource, query))
+    val query = Play.application().configuration().getString("queries.s")
+
+//    val result = QueryEngineWithJena.select(resource, query)
+
+    val content = "test"
+
+    val result = request match { // TODO charset? etag
+      case AcceptsHtml() => Ok(content).as(HTML)
+      case AcceptsTurtle() => Ok(content).as(AcceptsTurtle.mimeType)
+      case AcceptsNTriples() => Ok(content).as(AcceptsNTriples.mimeType)
+      case AcceptsJSONLD() => Ok(content).as(AcceptsJSONLD.mimeType)
+      case AcceptsN3() => Ok(content).as(AcceptsN3.mimeType)
+      case AcceptsRdfXML() => Ok(content).as(AcceptsRdfXML.mimeType)
+      case _ => Ok(content)
+    }
+
+    result.withHeaders(ALLOW -> "GET")
+
+//    Ok(QueryEngineWithJena.select(resource, query))
+//    Ok(result)
   }
 
 }
