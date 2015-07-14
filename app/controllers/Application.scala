@@ -36,6 +36,7 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
     Logger.debug("Dereferencing: " + path)
     render {
       case AcceptsHtml() => Redirect(request.path + ".html")
+      case AcceptsPlainText() => Redirect(request.path + ".txt")
       case AcceptsTurtle() => Redirect(request.path + ".ttl")
       case AcceptsNTriples() => Redirect(request.path + ".nt")
       case AcceptsJSONLD() => Redirect(request.path + ".jsonld")
@@ -52,10 +53,11 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
 
 //    val result = QueryEngineWithJena.select(resource, query)
 
-    val content = "test"
+    val content = QueryEngineWithJena.select(resource, query)
 
     val result = request match { // TODO charset? etag
       case AcceptsHtml() => Ok(content).as(HTML)
+      case AcceptsPlainText() => Ok(content).as(TEXT)
       case AcceptsTurtle() => Ok(content).as(AcceptsTurtle.mimeType)
       case AcceptsNTriples() => Ok(content).as(AcceptsNTriples.mimeType)
       case AcceptsJSONLD() => Ok(content).as(AcceptsJSONLD.mimeType)
