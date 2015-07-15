@@ -32,41 +32,14 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
   }
 
-//  def select(resource: String, queryString: String): String = {
-//    Logger.debug("Querying: " + resource)
-//    val selectQueryString = queryString.replace("$resource", resource)
-//    val query = parseSelect(selectQueryString).get
-//
-//    val answers: Rdf#Solutions = endpoint.executeSelect(query).get
-//
-//    val properties: Iterator[Rdf#URI] = answers.iterator map { row =>
-//      /* row is an Rdf#Solution, we can get an Rdf#Node from the variable name */
-//      /* both the #Rdf#Node projection and the transformation to Rdf#URI can fail in the Try type, hence the flatMap */
-//      row("r1").get.as[Rdf#URI].get
-//    }
-//
-//    properties.to[List].toString()
-//  }
-
-  def select(resource: String, queryString: String) = {
+  def select(resource: String, queryString: String): Rdf#Solutions = {
     Logger.debug("Querying: " + resource)
     val selectQueryString = queryString.replace("$resource", resource)
     val query = parseSelect(selectQueryString).get
-//    val result = "Property\tSubject\n"
 
-    val answers: Rdf#Solutions = endpoint.executeSelect(query).get
+    val solutions: Rdf#Solutions = endpoint.executeSelect(query).get
 
-//    answers.iterator foreach { row =>
-//      val property = row("r1").get.as[Rdf#URI].get
-//      val subject = row("r2").get.as[Rdf#Node].get
-//
-//    }
-
-    val result = for (row <- answers.iterator) yield {
-      row("r1").get.as[Rdf#URI].get + "\t" + row("r2").get.as[Rdf#Node].get
-    }
-
-    result.mkString("\n")
+    solutions
   }
 
   def queryTestConstructXml(resource: String) = {

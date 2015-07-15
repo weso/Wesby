@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import models.QueryEngineWithJena
+import models.{PlainTextRenderer, QueryEngineWithJena}
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -51,13 +51,13 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
     val resource = Play.application().configuration().getString("wesby.host") + path
     val query = Play.application().configuration().getString("queries.s")
 
-//    val result = QueryEngineWithJena.select(resource, query)
+    val solutions = QueryEngineWithJena.select(resource, query)
 
-    val content = QueryEngineWithJena.select(resource, query)
+    val content = "TEST"
 
     val result = request match { // TODO charset? etag
       case AcceptsHtml() => Ok(content).as(HTML)
-      case AcceptsPlainText() => Ok(content).as(TEXT)
+      case AcceptsPlainText() => Ok(PlainTextRenderer.render(solutions, Messages("wesby.title"))).as(TEXT)
       case AcceptsTurtle() => Ok(content).as(AcceptsTurtle.mimeType)
       case AcceptsNTriples() => Ok(content).as(AcceptsNTriples.mimeType)
       case AcceptsJSONLD() => Ok(content).as(AcceptsJSONLD.mimeType)
@@ -67,9 +67,6 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
     }
 
     result.withHeaders(ALLOW -> "GET")
-
-//    Ok(QueryEngineWithJena.select(resource, query))
-//    Ok(result)
   }
 
 }
