@@ -7,6 +7,7 @@ import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
+import views.html.play20.welcome
 
 class Application @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
@@ -24,14 +25,27 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
   val AcceptsXml = Accepting("application/xml")
   val AcceptsRdfJSON = Accepting("application/rdf+json")
 
+  /**
+   * Redirects to the index page declared in `application.conf`
+   */
   def index = Action { implicit request =>
     Redirect(Play.application().configuration().getString("wesby.index"))
   }
 
+  /**
+   * It shows the defautl welcome page that is set as the index after the installation.
+   * You can change the index page in `application.conf`.
+   */
   def welcome = Action { implicit request =>
     Ok(Messages("welcome.test"))
   }
 
+  /**
+   * Redirects the resource request to the appropriate document depending on the `Accept` header field.
+   *
+   * @param path the resource path
+   * @return a 303 redirection
+   */
   def dereference(path: String) = Action { implicit request =>
     Logger.debug("Dereferencing: " + path)
     render {
@@ -46,6 +60,13 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
     }
   }
 
+  /**
+   * Renders the requested resource in the appropriate format depending on the `Accept` header field.
+   *
+   * @param path the resource path
+   * @param extension the document extension
+   * @return the HTTP response
+   */
   def download(path: String, extension: String) = Action { implicit request =>
     Logger.debug("Downloading: " + extension)
     val resource = Play.application().configuration().getString("wesby.host") + path
