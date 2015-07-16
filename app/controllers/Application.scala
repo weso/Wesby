@@ -3,14 +3,17 @@ package controllers
 import javax.inject.Inject
 
 import models.QueryEngineWithJena
+import models.http.CustomContentTypes
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
-import views.PlainTextRenderer
-import views.html.play20.welcome
+import views.ResourceSerialiser
 
-class Application @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
+class Application @Inject() (val messagesApi: MessagesApi)
+  extends Controller
+  with I18nSupport
+  with CustomContentTypes {
 
   // Custom request extractors
   val AcceptsHtml = Accepting("text/html")
@@ -79,18 +82,19 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
 
     val content = "TEST"
 
-    val result = request match { // TODO charset? etag
-      case AcceptsHtml() => Ok(content).as(HTML)
-      case AcceptsPlainText() => Ok(PlainTextRenderer.asPlainText(graph, Messages("wesby.title"))).as(TEXT)
-      case AcceptsTurtle() => Ok(content).as(AcceptsTurtle.mimeType)
-      case AcceptsNTriples() => Ok(content).as(AcceptsNTriples.mimeType)
-      case AcceptsJSONLD() => Ok(content).as(AcceptsJSONLD.mimeType)
-      case AcceptsN3() => Ok(content).as(AcceptsN3.mimeType)
-      case AcceptsRdfXML() => Ok(content).as(AcceptsRdfXML.mimeType)
-      case _ => Ok(content)
+    val result = extension match { // TODO charset, etag
+      case "html" => Ok(content).as(HTML)
+      case "txt" => Ok(ResourceSerialiser.asPlainText(graph, Messages("wesby.title"))).as(TEXT)
+      case "ttl" => Ok(ResourceSerialiser.asTurtle(graph, resource)).as(TURTLE)
+      case "nt" => Ok(content).as(NTRIPLES)
+      case "jsonld" => Ok(content).as(JSONLD)
+      case "n3" => Ok(content).as(N3)
+      case "rdf" => Ok(content).as(RDFXML)
+      case _ => NotFound
     }
 
     result.withHeaders(ALLOW -> "GET")
   }
 
 }
+

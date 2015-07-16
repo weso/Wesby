@@ -1,12 +1,16 @@
 package views
 
 import models.QueryEngineDependencies
+import org.apache.jena.riot.writer.TurtleWriter
+import org.w3.banana.TurtleWriterModule
 import org.w3.banana.jena.JenaModule
+
+
 
 /**
  * Created by jorge on 15/7/15.
  */
-trait PlainTextRendererTrait extends QueryEngineDependencies {
+trait ResourceSerialiserTrait extends QueryEngineDependencies with TurtleWriterModule {
   import ops._
   import sparqlOps._
 
@@ -38,11 +42,12 @@ trait PlainTextRendererTrait extends QueryEngineDependencies {
     sb.mkString
   }
 
-  def asTurtle(graph: Rdf#Graph, header: String) = {
-
+  def asTurtle(graph: Rdf#Graph, base: String) = { // TODO base?
+    val result = turtleWriter.asString(graph, base) getOrElse("coudn't serialize the graph")
+    result
   }
 
 }
 
-object PlainTextRenderer extends PlainTextRendererTrait with JenaModule
+object ResourceSerialiser extends ResourceSerialiserTrait with JenaModule
 
