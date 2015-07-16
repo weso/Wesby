@@ -5,9 +5,9 @@ import play.api.http.{ContentTypes, MimeTypes}
 /**
  * Defines custom HTTP Content-Type header values, according to the current available Codec.
  */
-object ContentTypes extends ContentTypes
+object CustomContentTypes extends CustomContentTypes
 
-trait CustomContentTypes extends ContentTypes {
+trait CustomContentTypes extends ContentTypes { // TODO add more values
   import play.api.mvc.Codec
 
   /**
