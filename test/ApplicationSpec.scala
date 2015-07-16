@@ -1,3 +1,5 @@
+import javax.swing.text.html.HTML
+
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
@@ -22,23 +24,34 @@ class ApplicationSpec extends Specification {
     "redirect home to /welcome when using the test endpoint" in new WithApplication() {
       val home = route(FakeRequest(GET, "/")).get
 
-
       status(home) must equalTo(SEE_OTHER)
       redirectLocation(home) must beSome.which(_ == "/welcome")
     }
 
-    "redirect resource to HTML document" in new WithApplication() {
-      val resource = route(FakeRequest(GET, "/resource/test")).get
+    "perform dereferencing in" in new WithApplication() {
 
+      val resource = route(FakeRequest(GET, "/resource/test").withHeaders(ACCEPT -> "text/html")).get
       status(resource) must equalTo(SEE_OTHER)
       redirectLocation(resource) must beSome.which(_ == "/resource/test.html")
+
+      val resource2 = route(FakeRequest(GET, "/resource/test").withHeaders(ACCEPT -> "text/plain")).get
+      status(resource2) must equalTo(SEE_OTHER)
+      redirectLocation(resource2) must beSome.which(_ == "/resource/test.txt")
+
     }
 
-    "retrieve resource as HTML document" in new WithApplication() {
-      val resource = route(FakeRequest(GET, "/resource/test.html")).get
+    "perform content negotiation" in new WithApplication() {
 
+      val resource = route(FakeRequest(GET, "/resource/test.html").withHeaders(ACCEPT -> "text/html")).get
       status(resource) must equalTo(OK)
-      // TODO add contenttype
+      contentType(resource) must beSome("text/html")
+      charset(resource) must beSome("utf-8")
+
+      val resource2 = route(FakeRequest(GET, "/resource/test.txt").withHeaders(ACCEPT -> "text/html")).get
+      status(resource2) must equalTo(OK)
+      contentType(resource2) must beSome("text/html")
+      charset(resource) must beSome("utf-8")
+
     }
 
 //    "render the index page" in new WithApplication{
