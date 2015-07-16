@@ -2,11 +2,12 @@ package controllers
 
 import javax.inject.Inject
 
-import models.{PlainTextRenderer, QueryEngineWithJena}
+import models.QueryEngineWithJena
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
+import views.PlainTextRenderer
 import views.html.play20.welcome
 
 class Application @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
@@ -80,8 +81,7 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
 
     val result = request match { // TODO charset? etag
       case AcceptsHtml() => Ok(content).as(HTML)
-//      case AcceptsPlainText() => Ok(PlainTextRenderer.render(solutions, Messages("wesby.title"))).as(TEXT)
-      case AcceptsPlainText() => Ok(PlainTextRenderer.renderConstruct(graph, Messages("wesby.title"))).as(TEXT)
+      case AcceptsPlainText() => Ok(PlainTextRenderer.asPlainText(graph, Messages("wesby.title"))).as(TEXT)
       case AcceptsTurtle() => Ok(content).as(AcceptsTurtle.mimeType)
       case AcceptsNTriples() => Ok(content).as(AcceptsNTriples.mimeType)
       case AcceptsJSONLD() => Ok(content).as(AcceptsJSONLD.mimeType)

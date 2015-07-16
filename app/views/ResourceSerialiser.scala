@@ -1,6 +1,6 @@
-package models
+package views
 
-import com.hp.hpl.jena.graph.Graph
+import models.QueryEngineDependencies
 import org.w3.banana.jena.JenaModule
 
 /**
@@ -9,9 +9,8 @@ import org.w3.banana.jena.JenaModule
 trait PlainTextRendererTrait extends QueryEngineDependencies {
   import ops._
   import sparqlOps._
-  import sparqlHttp.sparqlEngineSyntax._
 
-  def render(solutions: Rdf#Solutions, header: String): String = {
+  def asPlainText(solutions: Rdf#Solutions, header: String): String = {
     val sb = new StringBuilder
 
     sb.append(header)
@@ -25,7 +24,7 @@ trait PlainTextRendererTrait extends QueryEngineDependencies {
     sb.mkString
   }
 
-  def renderConstruct(graph: Rdf#Graph, header: String): String = {
+  def asPlainText(graph: Rdf#Graph, header: String): String = {
     val sb = new StringBuilder
 
     sb.append(header)
