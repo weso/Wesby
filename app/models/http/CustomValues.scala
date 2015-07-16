@@ -8,6 +8,7 @@ import play.api.http.{ContentTypes, MimeTypes}
 object CustomContentTypes extends CustomContentTypes
 
 trait CustomContentTypes extends ContentTypes { // TODO add more values
+  
   import play.api.mvc.Codec
 
   /**
@@ -67,5 +68,3 @@ trait CustomMimeTypes extends MimeTypes {
   val RDFXML = "application/rdf+xml"
 
 }
-
-
