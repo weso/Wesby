@@ -16,12 +16,11 @@ class Application @Inject() (val messagesApi: MessagesApi)
   with CustomContentTypes {
 
   // Custom request extractors
-  val AcceptsHtml = Accepting("text/html")
-  val AcceptsTurtle = Accepting("text/turtle")
-  val AcceptsNTriples = Accepting("application/n-triples")
-  val AcceptsJSONLD = Accepting("application/ld+json")
-  val AcceptsN3 = Accepting("text/n3")
-  val AcceptsRdfXML = Accepting("application/rdf+xml")
+  val AcceptsTurtle = Accepting(TURTLE)
+  val AcceptsNTriples = Accepting(NTRIPLES)
+  val AcceptsJSONLD = Accepting(JSONLD)
+  val AcceptsN3 = Accepting(N3)
+  val AcceptsRdfXML = Accepting(RDFXML)
   // TODO
   val AcceptsPlainText = Accepting("text/plain")
   val AcceptsRdfN3 = Accepting("text/rdf+n3")
@@ -53,7 +52,7 @@ class Application @Inject() (val messagesApi: MessagesApi)
   def dereference(path: String) = Action { implicit request =>
     Logger.debug("Dereferencing: " + path)
     render {
-      case AcceptsHtml() => Redirect(request.path + ".html")
+      case Accepts.Html() => Redirect(request.path + ".html")
       case AcceptsPlainText() => Redirect(request.path + ".txt")
       case AcceptsTurtle() => Redirect(request.path + ".ttl")
       case AcceptsNTriples() => Redirect(request.path + ".nt")
