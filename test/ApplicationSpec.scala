@@ -47,9 +47,9 @@ class ApplicationSpec extends Specification {
       contentType(resource) must beSome("text/html")
       charset(resource) must beSome("utf-8")
 
-      val resource2 = route(FakeRequest(GET, "/resource/test.txt").withHeaders(ACCEPT -> "text/html")).get
+      val resource2 = route(FakeRequest(GET, "/resource/test.txt").withHeaders(ACCEPT -> "text/plain")).get
       status(resource2) must equalTo(OK)
-      contentType(resource2) must beSome("text/html")
+      contentType(resource2) must beSome("text/plain")
       charset(resource) must beSome("utf-8")
 
     }
