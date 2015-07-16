@@ -10,7 +10,7 @@ trait PlainTextRendererTrait extends QueryEngineDependencies {
   import ops._
   import sparqlOps._
 
-  def asPlainText(solutions: Rdf#Solutions, header: String): String = {
+  def solutionsAsPlainText(solutions: Rdf#Solutions, header: String) = {
     val sb = new StringBuilder
 
     sb.append(header)
@@ -36,6 +36,10 @@ trait PlainTextRendererTrait extends QueryEngineDependencies {
 
     sb.append(result.mkString("\n"))
     sb.mkString
+  }
+
+  def asTurtle(graph: Rdf#Graph, header: String) = {
+
   }
 
 }
