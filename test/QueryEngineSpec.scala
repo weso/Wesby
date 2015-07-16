@@ -29,7 +29,7 @@ class QueryEngineSpec[Rdf <: RDF] extends Specification {
           val path = "resource/Asturias"
           val resource = Play.application().configuration().getString("wesby.host") + path
           val query = Play.application().configuration().getString("queries.s")
-          val solutions: Rdf#Solutions = QueryEngineWithJena.select(resource, query)
+//          val solutions: Rdf#Solutions = QueryEngineWithJena.select(resource, query)
 //
 ////          val pred: Iterable[String] = solutions.
         }
