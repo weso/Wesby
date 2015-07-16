@@ -71,14 +71,17 @@ class Application @Inject() (val messagesApi: MessagesApi) extends Controller wi
     Logger.debug("Downloading: " + extension)
     val resource = Play.application().configuration().getString("wesby.host") + path
     val query = Play.application().configuration().getString("queries.s")
+    val constructQuery = Play.application().configuration().getString("queries.construct.s")
 
     val solutions = QueryEngineWithJena.select(resource, query)
+    val graph = QueryEngineWithJena.construct(resource, constructQuery)
 
     val content = "TEST"
 
     val result = request match { // TODO charset? etag
       case AcceptsHtml() => Ok(content).as(HTML)
-      case AcceptsPlainText() => Ok(PlainTextRenderer.render(solutions, Messages("wesby.title"))).as(TEXT)
+//      case AcceptsPlainText() => Ok(PlainTextRenderer.render(solutions, Messages("wesby.title"))).as(TEXT)
+      case AcceptsPlainText() => Ok(PlainTextRenderer.renderConstruct(graph, Messages("wesby.title"))).as(TEXT)
       case AcceptsTurtle() => Ok(content).as(AcceptsTurtle.mimeType)
       case AcceptsNTriples() => Ok(content).as(AcceptsNTriples.mimeType)
       case AcceptsJSONLD() => Ok(content).as(AcceptsJSONLD.mimeType)

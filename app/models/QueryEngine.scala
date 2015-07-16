@@ -1,6 +1,7 @@
 package models
 
 import java.net.URL
+import org.w3.banana
 import org.w3.banana._
 import org.w3.banana.diesel._
 import org.w3.banana.io.{JsonLdExpanded, JsonLdFlattened, RDFWriter}
@@ -40,6 +41,16 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     val solutions: Rdf#Solutions = endpoint.executeSelect(query).get
 
     solutions
+  }
+
+  def construct(resource: String, queryString: String): Rdf#Graph = {
+    Logger.debug("Querying: " + resource)
+    Logger.debug("with: " + queryString)
+    val contructQueryString = queryString.replace("$resource", resource)
+    val query = parseConstruct(contructQueryString).get
+    val graph = endpoint.executeConstruct(query).get
+
+    graph
   }
 
   def queryTestConstructXml(resource: String) = {
