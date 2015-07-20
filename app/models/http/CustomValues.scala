@@ -1,6 +1,6 @@
 package models.http
 
-import play.api.http.{ContentTypes, MimeTypes}
+import play.api.http.{HeaderNames, ContentTypes, MimeTypes}
 
 /**
  * Defines custom HTTP Content-Type header values, according to the current available Codec.
@@ -66,5 +66,15 @@ trait CustomMimeTypes extends MimeTypes {
    * Content-Type of rdf-xml.
    */
   val RDFXML = "application/rdf+xml"
+
+}
+
+/** Defines standard LDP HTTP headers. */
+object CustomHeaderNames extends HeaderNames
+
+/** Defines standard LDP HTTP headers. */
+trait CustomHeaderNames {
+
+  val LINK = "Link"
 
 }
