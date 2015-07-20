@@ -3,7 +3,7 @@ package controllers
 import javax.inject.Inject
 
 import models.QueryEngineWithJena
-import models.http.CustomContentTypes
+import models.http.{CustomHeaderNames, CustomContentTypes}
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -13,7 +13,8 @@ import views.ResourceSerialiser
 class Application @Inject() (val messagesApi: MessagesApi)
   extends Controller
   with I18nSupport
-  with CustomContentTypes {
+  with CustomContentTypes
+  with CustomHeaderNames {
 
   // Custom request extractors
   val AcceptsTurtle = Accepting(TURTLE)
@@ -92,7 +93,11 @@ class Application @Inject() (val messagesApi: MessagesApi)
       case _ => NotFound
     }
 
-    result.withHeaders(ALLOW -> "GET")
+    // LDP support advertising
+    result.withHeaders(
+      LINK -> """<http://www.w3.org/ns/ldp#Resource>; rel="type"""",
+      ALLOW -> "GET"
+    )
   }
 
 }
