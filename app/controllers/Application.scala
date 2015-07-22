@@ -84,19 +84,21 @@ class Application @Inject()(val messagesApi: MessagesApi)
     //    val query = Play.application().configuration().getString("queries.s")
     //    val solutions = QueryEngineWithJena.select(resource, query)
 
-    val result = extension match {
-      // TODO charset, etag
-      case "html" => Ok("TODO").as(HTML)
-      case "txt" => Ok(ResourceSerialiser.asPlainText(graph, Messages("wesby.title"))).as(TEXT)
-      case "ttl" => Ok(ResourceSerialiser.asTurtle(graph, resource) getOrElse Messages("error.serialise")).as(TURTLE)
-      case "nt" => Ok(ResourceSerialiser.asTurtle(graph, resource) getOrElse Messages("error.serialise")).as(NTRIPLES)
-      case "jsonld" => Ok(ResourceSerialiser.asJsonLd(graph, resource) getOrElse Messages("error.serialise")).as(JSONLD)
-      // TODO      case "n3" => Ok(ResourceSerialiser.asN3(graph, resource) getOrElse Messages("error.serialise")).as(N3)
-      case "rdf" => Ok(ResourceSerialiser.asRdfXml(graph, resource) getOrElse Messages("error.serialise")).as(RDFXML)
-      case _ => NotFound
+    val result = graph match {
+      case Failure(f) => InternalServerError
+      case Success(g) => if (g.isEmpty) NotFound
+        else extension match {
+          case "html" => Ok("TODO").as(HTML)
+          case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
+          case "ttl" => Ok(ResourceSerialiser.asTurtle(g, resource) getOrElse Messages("error.serialise")).as(TURTLE)
+          case "nt" => Ok(ResourceSerialiser.asTurtle(g, resource) getOrElse Messages("error.serialise")).as(NTRIPLES)
+          case "jsonld" => Ok(ResourceSerialiser.asJsonLd(g, resource) getOrElse Messages("error.serialise")).as(JSONLD)
+          // TODO      case "n3" => Ok(ResourceSerialiser.asN3(g, resource) getOrElse Messages("error.serialise")).as(N3)
+          case "rdf" => Ok(ResourceSerialiser.asRdfXml(g, resource) getOrElse Messages("error.serialise")).as(RDFXML)
+          case _ => NotFound
+        }
     }
 
-    // LDP support advertising
     result.withHeaders(
       linkHeaders(),
       allowHeaders(),

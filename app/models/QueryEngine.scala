@@ -43,14 +43,13 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     solutions
   }
 
-  def construct(resource: String, queryString: String): Rdf#Graph = {
+  def construct(resource: String, queryString: String): Try[Rdf#Graph] = {
     Logger.debug("Querying: " + resource)
     Logger.debug("with: " + queryString)
-    val contructQueryString = queryString.replace("$resource", resource)
-    val query = parseConstruct(contructQueryString).get
-    val graph = endpoint.executeConstruct(query).get
+    val constructQueryString = queryString.replace("$resource", resource)
+    val query = parseConstruct(constructQueryString).get
 
-    graph
+    endpoint.executeConstruct(query)
   }
 
   def queryTestConstructXml(resource: String) = {
