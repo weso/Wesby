@@ -28,11 +28,6 @@ class Application @Inject()(val messagesApi: MessagesApi)
   val AcceptsJSONLD = Accepting(CustomMimeTypes.JSONLD)
   val AcceptsN3 = Accepting(CustomMimeTypes.N3)
   val AcceptsRdfXML = Accepting(CustomMimeTypes.RDFXML)
-  // TODO
-  val AcceptsRdfN3 = Accepting("text/rdf+n3")
-  val AcceptsXTurtle = Accepting("application/x-turtle")
-  val AcceptsXml = Accepting("application/xml")
-  val AcceptsRdfJSON = Accepting("application/rdf+json")
 
   /**
    * Redirects to the index page declared in `application.conf`
@@ -101,6 +96,15 @@ class Application @Inject()(val messagesApi: MessagesApi)
     }
   }
 
+  /**
+   * Builds a result for the given graph and MIME Type using the serialisation function provided.
+   *
+   * @param resource the resource URI
+   * @param graph the RDF graph of the resource
+   * @param mimeType the MIME type of the response
+   * @param asString the serialisation function
+   * @return the Result for the HTTP response
+   */
   private def buildResult(resource: String, graph: Graph, mimeType: String, asString: (Graph, String) => Try[String]): Result = {
     asString(graph, resource) match {
       case Failure(f) => InternalServerError
