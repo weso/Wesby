@@ -11,3 +11,6 @@ notifications:
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # default: never
 sudo: false
+before_script:
+  - mkdir -p $HOME/.sbt/launchers/0.13.8/
+  - curl -L -o $HOME/.sbt/launchers/0.13.8/sbt-launch.jar http://dl.bintray.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar
