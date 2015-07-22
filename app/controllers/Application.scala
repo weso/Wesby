@@ -3,27 +3,31 @@ package controllers
 import javax.inject.Inject
 
 import models.QueryEngineWithJena
-import models.http.{CustomHeaderNames, CustomContentTypes}
+import models.http.{CustomMimeTypes, CustomHeaderNames, CustomContentTypes}
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.libs.Codecs
+import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
 import views.ResourceSerialiser
 
-class Application @Inject() (val messagesApi: MessagesApi)
+import scala.util.{Failure, Success}
+
+class Application @Inject()(val messagesApi: MessagesApi)
   extends Controller
   with I18nSupport
   with CustomContentTypes
   with CustomHeaderNames {
 
   // Custom request extractors
-  val AcceptsTurtle = Accepting(TURTLE)
-  val AcceptsNTriples = Accepting(NTRIPLES)
-  val AcceptsJSONLD = Accepting(JSONLD)
-  val AcceptsN3 = Accepting(N3)
-  val AcceptsRdfXML = Accepting(RDFXML)
+  val AcceptsPlainText = Accepting(CustomMimeTypes.TEXT)
+  val AcceptsTurtle = Accepting(CustomMimeTypes.TURTLE)
+  val AcceptsNTriples = Accepting(CustomMimeTypes.NTRIPLES)
+  val AcceptsJSONLD = Accepting(CustomMimeTypes.JSONLD)
+  val AcceptsN3 = Accepting(CustomMimeTypes.N3)
+  val AcceptsRdfXML = Accepting(CustomMimeTypes.RDFXML)
   // TODO
-  val AcceptsPlainText = Accepting("text/plain")
   val AcceptsRdfN3 = Accepting("text/rdf+n3")
   val AcceptsXTurtle = Accepting("application/x-turtle")
   val AcceptsXml = Accepting("application/xml")
@@ -60,7 +64,7 @@ class Application @Inject() (val messagesApi: MessagesApi)
       case AcceptsJSONLD() => Redirect(request.path + ".jsonld")
       case AcceptsN3() => Redirect(request.path + ".n3")
       case AcceptsRdfXML() => Redirect(request.path + ".rdf")
-      case _ => Redirect(request.path + ".rdf")
+      case _ => UnsupportedMediaType
     }
   }
 
@@ -74,31 +78,44 @@ class Application @Inject() (val messagesApi: MessagesApi)
   def download(path: String, extension: String) = Action { implicit request =>
     Logger.debug("Downloading: " + extension)
     val resource = Play.application().configuration().getString("wesby.host") + path
-    val query = Play.application().configuration().getString("queries.s")
     val constructQuery = Play.application().configuration().getString("queries.construct.s")
-
-    val solutions = QueryEngineWithJena.select(resource, query)
     val graph = QueryEngineWithJena.construct(resource, constructQuery)
 
-    val content = "TEST"
+    //    val query = Play.application().configuration().getString("queries.s")
+    //    val solutions = QueryEngineWithJena.select(resource, query)
 
-    val result = extension match { // TODO charset, etag
-      case "html" => Ok(content).as(HTML)
+    val result = extension match {
+      // TODO charset, etag
+      case "html" => Ok("TODO").as(HTML)
       case "txt" => Ok(ResourceSerialiser.asPlainText(graph, Messages("wesby.title"))).as(TEXT)
-      case "ttl" => Ok(ResourceSerialiser.asTurtle(graph, resource)).as(TURTLE)
-      case "nt" => Ok(content).as(NTRIPLES)
-      case "jsonld" => Ok(content).as(JSONLD)
-      case "n3" => Ok(content).as(N3)
-      case "rdf" => Ok(content).as(RDFXML)
+      case "ttl" => Ok(ResourceSerialiser.asTurtle(graph, resource) getOrElse Messages("error.serialise")).as(TURTLE)
+      case "nt" => Ok(ResourceSerialiser.asTurtle(graph, resource) getOrElse Messages("error.serialise")).as(NTRIPLES)
+      case "jsonld" => Ok(ResourceSerialiser.asJsonLd(graph, resource) getOrElse Messages("error.serialise")).as(JSONLD)
+      // TODO      case "n3" => Ok(ResourceSerialiser.asN3(graph, resource) getOrElse Messages("error.serialise")).as(N3)
+      case "rdf" => Ok(ResourceSerialiser.asRdfXml(graph, resource) getOrElse Messages("error.serialise")).as(RDFXML)
       case _ => NotFound
     }
 
     // LDP support advertising
     result.withHeaders(
-      LINK -> """<http://www.w3.org/ns/ldp#Resource>; rel="type"""",
-      ALLOW -> "GET"
+      linkHeaders(),
+      allowHeaders(),
+      etagHeader("TODO")
     )
   }
 
+  private def linkHeaders() = {
+    LINK -> """<http://www.w3.org/ns/ldp#Resource>; rel="type""""
+  }
+
+  private def allowHeaders() = {
+    ALLOW -> "GET"
+  }
+
+  private def etagHeader(content: String) = {
+    ETAG -> {
+      "W/\"" + Codecs.sha1(content) + "\""
+    }
+  }
 }
 

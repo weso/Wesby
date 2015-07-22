@@ -6,3 +6,5 @@ wesby.title=\n\
                   |___|             \n\
                              by WESO
 welcome.test=Welcome to Wesby.
+
+error.serialise=Coudn't serialize the graph.

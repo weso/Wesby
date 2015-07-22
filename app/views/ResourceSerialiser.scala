@@ -1,16 +1,23 @@
 package views
 
 import models.QueryEngineDependencies
-import org.apache.jena.riot.writer.TurtleWriter
-import org.w3.banana.TurtleWriterModule
-import org.w3.banana.jena.JenaModule
+import org.w3.banana.io.{JsonLdExpanded, JsonLdFlattened, RDFWriter}
+import org.w3.banana.jena.{Jena, JenaModule}
+import org.w3.banana.{JsonLDWriterModule, NTriplesWriterModule, RDFXMLWriterModule, TurtleWriterModule}
 
+import scala.util.Try
 
 
 /**
  * Created by jorge on 15/7/15.
  */
-trait ResourceSerialiserTrait extends QueryEngineDependencies with TurtleWriterModule {
+trait ResourceSerialiserTrait
+  extends QueryEngineDependencies
+  with TurtleWriterModule
+  with NTriplesWriterModule
+  with JsonLDWriterModule
+  with RDFXMLWriterModule {
+
   import ops._
   import sparqlOps._
 
@@ -42,12 +49,39 @@ trait ResourceSerialiserTrait extends QueryEngineDependencies with TurtleWriterM
     sb.mkString
   }
 
-  def asTurtle(graph: Rdf#Graph, base: String) = { // TODO base?
-    val result = turtleWriter.asString(graph, base) getOrElse("coudn't serialize the graph")
+  def asTurtle(graph: Rdf#Graph, base: String): Try[String] = {
+    // TODO base?
+    val result = turtleWriter.asString(graph, base)
+    result
+  }
+
+  def asNTriples(graph: Rdf#Graph, base: String): Try[String] = {
+    // TODO base?
+    val result = ntriplesWriter.asString(graph, base)
+    result
+  }
+
+  def asJsonLd(graph: Rdf#Graph, base: String): Try[String] = {
+    // TODO base?
+    val result = jsonldCompactedWriter.asString(graph, base)
+    result
+  }
+
+  def asN3(graph: Rdf#Graph, base: String): Try[String] = ???
+
+  def asRdfXml(graph: Rdf#Graph, base: String): Try[String] = {
+    // TODO base?
+    val result = rdfXMLWriter.asString(graph, base)
     result
   }
 
 }
 
-object ResourceSerialiser extends ResourceSerialiserTrait with JenaModule
+object ResourceSerialiser extends ResourceSerialiserTrait with JenaModule {
+  // From github.com/pixelhumain/cityData/cityData_server_scala/app/models/SPARQLDatabaseJena.scala
+  override implicit val jsonldExpandedWriter: RDFWriter[Jena, Try, JsonLdExpanded] =
+    jsonldCompactedWriter.asInstanceOf[RDFWriter[Rdf, Try, JsonLdExpanded]]
+  override implicit val jsonldFlattenedWriter: RDFWriter[Jena, Try, JsonLdFlattened] =
+    jsonldCompactedWriter.asInstanceOf[RDFWriter[Rdf, Try, JsonLdFlattened]]
+}
 
