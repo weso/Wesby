@@ -17,9 +17,9 @@ class ApplicationSpec extends Specification {
 
   "Application" should {
 
-//    "send 404 on a bad request" in new WithApplication{
-//      route(FakeRequest(GET, "/boum")) must beSome.which (status(_) == NOT_FOUND)
-//    } TODO
+    "send 404 on a bad request" in new WithApplication{
+      route(FakeRequest(GET, "/resource/boum.rdf")) must beSome.which (status(_) == NOT_FOUND)
+    }
 
     "redirect home to /welcome when using the test endpoint" in new WithApplication() {
       val home = route(FakeRequest(GET, "/")).get
@@ -30,24 +30,24 @@ class ApplicationSpec extends Specification {
 
     "perform dereferencing in" in new WithApplication() {
 
-      val resource = route(FakeRequest(GET, "/resource/test").withHeaders(ACCEPT -> "text/html")).get
+      val resource = route(FakeRequest(GET, "/resource/Asturias").withHeaders(ACCEPT -> "text/html")).get
       status(resource) must equalTo(SEE_OTHER)
-      redirectLocation(resource) must beSome.which(_ == "/resource/test.html")
+      redirectLocation(resource) must beSome.which(_ == "/resource/Asturias.html")
 
-      val resource2 = route(FakeRequest(GET, "/resource/test").withHeaders(ACCEPT -> "text/plain")).get
+      val resource2 = route(FakeRequest(GET, "/resource/Asturias").withHeaders(ACCEPT -> "text/plain")).get
       status(resource2) must equalTo(SEE_OTHER)
-      redirectLocation(resource2) must beSome.which(_ == "/resource/test.txt")
+      redirectLocation(resource2) must beSome.which(_ == "/resource/Asturias.txt")
 
     }
 
     "perform content negotiation" in new WithApplication() {
 
-      val resource = route(FakeRequest(GET, "/resource/test.html").withHeaders(ACCEPT -> "text/html")).get
+      val resource = route(FakeRequest(GET, "/resource/Asturias.html").withHeaders(ACCEPT -> "text/html")).get
       status(resource) must equalTo(OK)
       contentType(resource) must beSome("text/html")
       charset(resource) must beSome("utf-8")
 
-      val resource2 = route(FakeRequest(GET, "/resource/test.txt").withHeaders(ACCEPT -> "text/plain")).get
+      val resource2 = route(FakeRequest(GET, "/resource/Asturias.txt").withHeaders(ACCEPT -> "text/plain")).get
       status(resource2) must equalTo(OK)
       contentType(resource2) must beSome("text/plain")
       charset(resource) must beSome("utf-8")
