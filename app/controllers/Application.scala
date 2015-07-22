@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
+import com.hp.hpl.jena.graph.Graph
 import models.QueryEngineWithJena
 import models.http.{CustomMimeTypes, CustomHeaderNames, CustomContentTypes}
 import play.Play
@@ -12,7 +13,7 @@ import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
 import views.ResourceSerialiser
 
-import scala.util.{Failure, Success}
+import scala.util.{Try, Failure, Success}
 
 class Application @Inject()(val messagesApi: MessagesApi)
   extends Controller
@@ -84,26 +85,32 @@ class Application @Inject()(val messagesApi: MessagesApi)
     //    val query = Play.application().configuration().getString("queries.s")
     //    val solutions = QueryEngineWithJena.select(resource, query)
 
-    val result = graph match {
+    graph match {
       case Failure(f) => InternalServerError
       case Success(g) => if (g.isEmpty) NotFound
         else extension match {
           case "html" => Ok("TODO").as(HTML)
           case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
-          case "ttl" => Ok(ResourceSerialiser.asTurtle(g, resource) getOrElse Messages("error.serialise")).as(TURTLE)
-          case "nt" => Ok(ResourceSerialiser.asTurtle(g, resource) getOrElse Messages("error.serialise")).as(NTRIPLES)
-          case "jsonld" => Ok(ResourceSerialiser.asJsonLd(g, resource) getOrElse Messages("error.serialise")).as(JSONLD)
-          // TODO      case "n3" => Ok(ResourceSerialiser.asN3(g, resource) getOrElse Messages("error.serialise")).as(N3)
-          case "rdf" => Ok(ResourceSerialiser.asRdfXml(g, resource) getOrElse Messages("error.serialise")).as(RDFXML)
+          case "ttl" => buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
+          case "nt" => buildResult(resource, g, NTRIPLES, ResourceSerialiser.asNTriples)
+          case "jsonld" => buildResult(resource, g, JSONLD, ResourceSerialiser.asJsonLd)
+          // TODO      case "n3" =>
+          case "rdf" => buildResult(resource, g, RDFXML, ResourceSerialiser.asRdfXml)
           case _ => NotFound
         }
     }
+  }
 
-    result.withHeaders(
-      linkHeaders(),
-      allowHeaders(),
-      etagHeader("TODO")
-    )
+  private def buildResult(resource: String, graph: Graph, mimeType: String, asString: (Graph, String) => Try[String]): Result = {
+    asString(graph, resource) match {
+      case Failure(f) => InternalServerError
+      case Success(c) =>
+        val headers = linkHeaders() :: allowHeaders() :: etagHeader(c) :: Nil
+        Result(
+          header = ResponseHeader(200, Map(headers: _*)),
+          body = Enumerator(c.getBytes)
+        ).as(mimeType)
+    }
   }
 
   private def linkHeaders() = {
