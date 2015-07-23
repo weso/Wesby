@@ -71,7 +71,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param extension the document extension
    * @return the HTTP response
    */
-  def download(path: String, extension: String) = Action { implicit request =>
+  def getLDPR(path: String, extension: String) = Action { implicit request =>
     Logger.debug("Downloading: " + extension)
     val resource = Play.application().configuration().getString("wesby.host") + path
     val constructQuery = Play.application().configuration().getString("queries.construct.s")
@@ -102,7 +102,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param path the resource path
    * @return the HTTP response
    */
-  def getContainer(path: String) = Action { implicit request =>
+  def getLDPC(path: String) = Action { implicit request =>
     Logger.debug("Container: " + path)
     NotImplemented
   }
