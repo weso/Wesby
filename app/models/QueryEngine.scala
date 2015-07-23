@@ -51,36 +51,6 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
     endpoint.executeConstruct(query)
   }
-
-  def queryTestConstructXml(resource: String) = {
-    Logger.debug("Querying: " + resource)
-    val query = parseConstruct(
-      s"""
-         |CONSTRUCT { ?s ?v ?o } WHERE {
-         |  	<$resource> ?v ?o .
-         |	?s ?v ?o.
-         |}
-      """.stripMargin).get
-
-    val resultGraph = endpoint.executeConstruct(query).get
-    val graphAsString = rdfXMLWriter.asString(resultGraph, base = "") getOrElse sys.error("coudn't serialize the graph")
-    graphAsString // TODO base?
-  }
-
-  def queryTestConstructTurtle(resource: String) = {
-    Logger.debug("Querying: " + resource)
-    val query = parseConstruct(
-      s"""
-         |CONSTRUCT { ?s ?v ?o } WHERE {
-         |  	<$resource> ?v ?o .
-        |	?s ?v ?o.
-        |}
-      """.stripMargin).get
-
-    val resultGraph = endpoint.executeConstruct(query).get
-    val graphAsString = turtleWriter.asString(resultGraph, base = "") getOrElse sys.error("coudn't serialize the graph")
-    graphAsString
-  }
 }
 
 import org.w3.banana.jena.JenaModule

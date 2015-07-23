@@ -7,7 +7,7 @@ import play.api.http.{HeaderNames, ContentTypes, MimeTypes}
  */
 object CustomContentTypes extends CustomContentTypes
 
-trait CustomContentTypes extends ContentTypes { // TODO add more values
+trait CustomContentTypes extends ContentTypes {
   
   import play.api.mvc.Codec
 

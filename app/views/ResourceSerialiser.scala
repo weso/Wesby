@@ -50,29 +50,21 @@ trait ResourceSerialiserTrait
   }
 
   def asTurtle(graph: Rdf#Graph, base: String): Try[String] = {
-    // TODO base?
-    val result = turtleWriter.asString(graph, base)
-    result
+    turtleWriter.asString(graph, base)
   }
 
   def asNTriples(graph: Rdf#Graph, base: String): Try[String] = {
-    // TODO base?
-    val result = ntriplesWriter.asString(graph, base)
-    result
+    ntriplesWriter.asString(graph, base)
   }
 
   def asJsonLd(graph: Rdf#Graph, base: String): Try[String] = {
-    // TODO base?
-    val result = jsonldCompactedWriter.asString(graph, base)
-    result
+    jsonldCompactedWriter.asString(graph, base)
   }
 
   def asN3(graph: Rdf#Graph, base: String): Try[String] = ???
 
   def asRdfXml(graph: Rdf#Graph, base: String): Try[String] = {
-    // TODO base?
-    val result = rdfXMLWriter.asString(graph, base)
-    result
+    rdfXMLWriter.asString(graph, base)
   }
 
 }
