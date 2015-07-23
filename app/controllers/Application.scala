@@ -54,10 +54,10 @@ class Application @Inject()(val messagesApi: MessagesApi)
     Logger.debug("Dereferencing: " + path)
     render {
       case Accepts.Html() => Redirect(request.path + ".html")
-      case AcceptsPlainText() => Redirect(request.path + ".txt")
       case AcceptsTurtle() => Redirect(request.path + ".ttl")
-      case AcceptsNTriples() => Redirect(request.path + ".nt")
       case AcceptsJSONLD() => Redirect(request.path + ".jsonld")
+      case AcceptsPlainText() => Redirect(request.path + ".txt")
+      case AcceptsNTriples() => Redirect(request.path + ".nt")
       case AcceptsN3() => Redirect(request.path + ".n3")
       case AcceptsRdfXML() => Redirect(request.path + ".rdf")
       case _ => UnsupportedMediaType
@@ -85,8 +85,8 @@ class Application @Inject()(val messagesApi: MessagesApi)
       case Success(g) => if (g.isEmpty) NotFound
         else extension match {
           case "html" => Ok("TODO").as(HTML)
-          case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
           case "ttl" => buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
+          case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
           case "nt" => buildResult(resource, g, NTRIPLES, ResourceSerialiser.asNTriples)
           case "jsonld" => buildResult(resource, g, JSONLD, ResourceSerialiser.asJsonLd)
           // TODO      case "n3" =>
@@ -94,6 +94,17 @@ class Application @Inject()(val messagesApi: MessagesApi)
           case _ => NotFound
         }
     }
+  }
+
+  /**
+   * Renders the requested LDPC resource.
+   *
+   * @param path the resource path
+   * @return the HTTP response
+   */
+  def getContainer(path: String) = Action { implicit request =>
+    Logger.debug("Container: " + path)
+    NotImplemented
   }
 
   /**
