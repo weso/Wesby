@@ -104,7 +104,18 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def getLDPC(path: String) = Action { implicit request =>
     Logger.debug("Container: " + path)
-    NotImplemented
+    val resource = Play.application().configuration().getString("wesby.host") + path + "/"
+    val constructQuery = Play.application().configuration().getString("queries.construct.s")
+    val graph = QueryEngineWithJena.construct(resource, constructQuery)
+
+    //    val query = Play.application().configuration().getString("queries.s")
+    //    val solutions = QueryEngineWithJena.select(resource, query)
+
+    graph match {
+      case Failure(f) => InternalServerError
+      case Success(g) => if (g.isEmpty) NotFound
+      else buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
+    }
   }
 
   /**
