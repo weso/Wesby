@@ -1,5 +1,6 @@
 import javax.swing.text.html.HTML
 
+import org.specs2.matcher.MatchResult
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
@@ -30,28 +31,39 @@ class ApplicationSpec extends Specification {
 
     "perform dereferencing in" in new WithApplication() {
 
-      val resource = route(FakeRequest(GET, "/resource/Asturias").withHeaders(ACCEPT -> "text/html")).get
-      status(resource) must equalTo(SEE_OTHER)
-      redirectLocation(resource) must beSome.which(_ == "/resource/Asturias.html")
+      dereference("html", "text/html")
+      dereference("ttl", "text/turtle")
+      dereference("jsonld", "application/ld+json")
+      dereference("txt", "text/plain")
+      dereference("rdf", "application/rdf+xml")
+      dereference("nt", "application/n-triples")
+//      dereference("n3", "text/n3")
 
-      val resource2 = route(FakeRequest(GET, "/resource/Asturias").withHeaders(ACCEPT -> "text/plain")).get
-      status(resource2) must equalTo(SEE_OTHER)
-      redirectLocation(resource2) must beSome.which(_ == "/resource/Asturias.txt")
+      def dereference(extension: String, mimeType: String): MatchResult[Option[String]] = {
+        val resource = route(FakeRequest(GET, "/resource/Asturias").withHeaders(ACCEPT -> mimeType)).get
+        status(resource) must equalTo(SEE_OTHER)
+        redirectLocation(resource) must beSome.which(_ == s"/resource/Asturias.$extension")
+      }
+
 
     }
 
     "perform content negotiation" in new WithApplication() {
 
-      val resource = route(FakeRequest(GET, "/resource/Asturias.html").withHeaders(ACCEPT -> "text/html")).get
-      status(resource) must equalTo(OK)
-      contentType(resource) must beSome("text/html")
-      charset(resource) must beSome("utf-8")
+      negotiate("html", "text/html")
+      negotiate("ttl", "text/turtle")
+      negotiate("jsonld", "application/ld+json")
+      negotiate("txt", "text/plain")
+      negotiate("rdf", "application/rdf+xml")
+      negotiate("nt", "application/n-triples")
+//      negotiate("n3", "text/n3")
 
-      val resource2 = route(FakeRequest(GET, "/resource/Asturias.txt").withHeaders(ACCEPT -> "text/plain")).get
-      status(resource2) must equalTo(OK)
-      contentType(resource2) must beSome("text/plain")
-      charset(resource) must beSome("utf-8")
-
+      private def negotiate(extension: String, mimeType: String): MatchResult[Option[String]] = {
+        val resource = route(FakeRequest(GET, s"/resource/Asturias.$extension").withHeaders(ACCEPT -> mimeType)).get
+        status(resource) must equalTo(OK)
+        contentType(resource) must beSome(mimeType)
+        charset(resource) must beSome("utf-8")
+      }
     }
 
 //    "render the index page" in new WithApplication{
