@@ -29,3 +29,8 @@ libraryDependencies += "org.w3" %% "banana-sesame" % "0.8.1"
 libraryDependencies += "org.w3" %% "banana-plantain" % "0.8.1"
 
 libraryDependencies += "org.w3" % "ldp-testsuite" % "0.1.1"
+
+// code coverage
+ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 80
+
+ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := false

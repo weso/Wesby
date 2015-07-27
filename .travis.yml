@@ -11,3 +11,7 @@ notifications:
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # default: never
 sudo: false
+script:
+  - sbt clean coverage test
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
