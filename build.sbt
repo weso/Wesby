@@ -15,6 +15,8 @@ libraryDependencies ++= Seq(
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
+resolvers += "Bintray" at "http://dl.bintray.com/weso/weso-releases"
+
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
@@ -34,3 +36,6 @@ libraryDependencies += "org.w3" % "ldp-testsuite" % "0.1.1"
 ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 80
 
 ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := false
+
+// ShExcala
+libraryDependencies += "es.weso" % "shexcala_2.11" % "0.3.4"
