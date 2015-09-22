@@ -1,28 +1,24 @@
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix : <http://example.org/> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix : <http://example.org/>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix shex: <http://www.w3.org/2013/ShEx/ns#>
 
-:issue1
- :state        :unassigned ;
- :reportedBy   :Bob ;
- :reportedOn   "2013-01-23"^^xsd:date ;
- :reproducedBy :Thompson.J ;
- :reproducedOn "2013-01-23"^^xsd:date ;
- :related :issue2 .
+ <IssueShape> {                            # A Issue shape
+     :state ( :unassigned :assigned ),     #   has a state with 2 possible values
+     :reportedBy @<UserShape>,             #   is reported by a user
+     :reportedOn xsd:date,                 #   is reported on a date
+     ( :reproducedBy @<UserShape>          #   can optionally have 2 properties
+     , :reproducedOn xsd:date              #     reproducedBy/On
+     )?,
+     :related @<IssueShape>*               #   is related to several other issues
+ }
 
-:issue2 :state :assigned ;
- :reportedBy :Mary ;
- :reportedOn "2013-06-12"^^xsd:date .
-
-:Bob
- foaf:givenName "Bob" ;
- foaf:familyName "Smith" ;
- foaf:mbox <mail:bob@example.org> .
-
-:Thompson.J
- foaf:givenName "Joe", "Joseph" ;
- foaf:familyName "Thompson" ;
- foaf:mbox <mail:joe@example.org> .
-
-:Mary foaf:name "Mary" .
+ <UserShape> {                             # A user shape can have either
+     ( foaf:name xsd:string                #  name or
+     | foaf:givenName xsd:string+ ,        #  several given names and
+       foaf:familyName xsd:string          #   family name
+     ),
+     foaf:mbox shex:IRI ?                  # mbox Optional, any IRI
+ }
+ 

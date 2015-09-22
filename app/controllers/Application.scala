@@ -2,8 +2,17 @@ package controllers
 
 import javax.inject.Inject
 
+import arq.iri
+import com.google.common.base.Charsets
+import com.google.common.io.Files
 import com.hp.hpl.jena.graph.Graph
-import models.QueryEngineWithJena
+import es.weso.monads
+import es.weso.monads.Passed
+import es.weso.rdf.RDFTriples
+import es.weso.rdfgraph.nodes.{RDFNode, IRI}
+import es.weso.shacl.{SchemaFormats}
+import es.weso.shex.{Typing, Schema, ShExMatcher}
+import models.{ShapeMatcher, QueryEngineWithJena}
 import models.http.{CustomMimeTypes, CustomHeaderNames, CustomContentTypes}
 import play.Play
 import play.api.Logger
@@ -37,7 +46,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
   }
 
   /**
-   * It shows the defautl welcome page that is set as the index after the installation.
+   * It shows the default welcome page that is set as the index after the installation.
    * You can change the index page in `application.conf`.
    */
   def welcome = Action { implicit request =>
@@ -77,14 +86,11 @@ class Application @Inject()(val messagesApi: MessagesApi)
     val constructQuery = Play.application().configuration().getString("queries.construct.s")
     val graph = QueryEngineWithJena.construct(resource, constructQuery)
 
-    //    val query = Play.application().configuration().getString("queries.s")
-    //    val solutions = QueryEngineWithJena.select(resource, query)
-
     graph match {
       case Failure(f) => InternalServerError
       case Success(g) => if (g.isEmpty) NotFound
         else extension match {
-          case "html" => Ok("TODO").as(HTML)
+          case "html" => buildHTMLResult(resource, g)
           case "ttl" => buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
           case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
           case "nt" => buildResult(resource, g, NTRIPLES, ResourceSerialiser.asNTriples)
@@ -119,6 +125,22 @@ class Application @Inject()(val messagesApi: MessagesApi)
   }
 
   /**
+   * TODO temporary
+   */
+  def buildHTMLResult(resource: String, graph: Graph): Result = {
+    val strRDF = ResourceSerialiser.asTurtle(graph, resource).get
+    val rdf = RDFTriples.parse(strRDF).get
+
+    val shexShape = ShapeMatcher.matchWithShex(rdf, resource)
+    val shaclShape = ShapeMatcher.matchWithShacl(rdf)
+    val typings = shexShape.toList
+    val firstTyping = typings.head
+    val shape = firstTyping.map.get(IRI("http://example.org/Bob")).get.head
+
+    Ok(views.html.resource(resource, strRDF, typings.toString, shape.toString)).as(HTML)
+  }
+
+  /**
    * Builds a result for the given graph and MIME Type using the serialisation function provided.
    *
    * @param resource the resource URI
@@ -128,6 +150,13 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @return the Result for the HTTP response
    */
   private def buildResult(resource: String, graph: Graph, mimeType: String, asString: (Graph, String) => Try[String]): Result = {
+
+    val strRDF = ResourceSerialiser.asTurtle(graph, resource).get
+    val rdf = RDFTriples.parse(strRDF).get
+
+    val shexShape = ShapeMatcher.matchWithShex(rdf, resource)
+    val shaclShape = ShapeMatcher.matchWithShacl(rdf)
+
     asString(graph, resource) match {
       case Failure(f) => InternalServerError
       case Success(c) =>
@@ -137,6 +166,20 @@ class Application @Inject()(val messagesApi: MessagesApi)
           body = Enumerator(c.getBytes)
         ).as(mimeType)
     }
+  }
+
+  private def nodeToString(node: RDFNode): String = {
+    if (node.isIRI) node.toIRI.str
+    else node.toString
+  }
+
+  def nodesToString(nodes: Set[RDFNode]): String = {
+    val sb = new StringBuilder
+    for (node <- nodes) {
+      sb.append(nodeToString(node))
+    }
+    sb.append("\n")
+    sb.toString
   }
 
   private def linkHeaders() = {

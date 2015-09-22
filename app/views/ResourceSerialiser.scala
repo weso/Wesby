@@ -4,6 +4,7 @@ import models.QueryEngineDependencies
 import org.w3.banana.io.{JsonLdExpanded, JsonLdFlattened, RDFWriter}
 import org.w3.banana.jena.{Jena, JenaModule}
 import org.w3.banana.{JsonLDWriterModule, NTriplesWriterModule, RDFXMLWriterModule, TurtleWriterModule}
+import play.Logger
 
 import scala.util.Try
 
@@ -50,7 +51,7 @@ trait ResourceSerialiserTrait
   }
 
   def asTurtle(graph: Rdf#Graph, base: String): Try[String] = {
-    turtleWriter.asString(graph, base)
+    turtleWriter.asString(graph, "") // TODO base?
   }
 
   def asNTriples(graph: Rdf#Graph, base: String): Try[String] = {
