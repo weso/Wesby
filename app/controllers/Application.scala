@@ -131,13 +131,9 @@ class Application @Inject()(val messagesApi: MessagesApi)
     val strRDF = ResourceSerialiser.asTurtle(graph, resource).get
     val rdf = RDFTriples.parse(strRDF).get
 
-    val shexShape = ShapeMatcher.matchWithShex(rdf, resource)
-    val shaclShape = ShapeMatcher.matchWithShacl(rdf)
-    val typings = shexShape.toList
-    val firstTyping = typings.head
-    val shape = firstTyping.map.get(IRI("http://example.org/Bob")).get.head
+    val shape = ShapeMatcher.matchWithShex(rdf, resource).getOrElse("No shape found")
 
-    Ok(views.html.resource(resource, strRDF, typings.toString, shape.toString)).as(HTML)
+    Ok(views.html.resource(resource, strRDF, shape)).as(HTML)
   }
 
   /**
@@ -155,7 +151,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
     val rdf = RDFTriples.parse(strRDF).get
 
     val shexShape = ShapeMatcher.matchWithShex(rdf, resource)
-    val shaclShape = ShapeMatcher.matchWithShacl(rdf)
+//    val shaclShape = ShapeMatcher.matchWithShacl(rdf)
 
     asString(graph, resource) match {
       case Failure(f) => InternalServerError
