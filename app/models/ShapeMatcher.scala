@@ -1,19 +1,13 @@
 package models
 
-import com.google.common.base.Charsets
-import com.google.common.io.Files
 import es.weso.monads.Result
-import es.weso.rdf.validator.ValidationResult
-import es.weso.rdf.{PrefixMap, RDFReader, RDFTriples}
-import es.weso.rdfgraph.nodes.{RDFNode, IRI}
-import es.weso.shacl.{Schema => ShaclSchema, ShaclResult, ShaclMatcher, SchemaFormats}
-import es.weso.shex.{Schema => ShexSchema, Typing, ShExMatcher}
-import play.Play
+import es.weso.rdf.{PrefixMap, RDFReader}
+import es.weso.rdfgraph.nodes.RDFNode
+import es.weso.shacl.{Schema => ShaclSchema, SchemaFormats, ShaclMatcher}
+import es.weso.shex.{Schema => ShexSchema, ShExMatcher, Typing}
 import play.api.Logger
-import views.ResourceSerialiser
 
-import scala.util.{Try, Failure, Success}
-import scalaz.Alpha.L
+import scala.util.{Failure, Success, Try}
 
 object ShapeMatcher {
 
@@ -35,7 +29,7 @@ object ShapeMatcher {
 
     result match {
       case Success((validationResult: Result[Typing], pm)) => {
-        val typings: Stream[Typing] = validationResult.run.get
+        val typings: Stream[Typing] = validationResult.run().get
         val firstTyping: Typing = typings.head
         val shape: String = firstTyping.showTyping(pm)
         Option(shape)

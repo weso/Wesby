@@ -2,18 +2,11 @@ package controllers
 
 import javax.inject.Inject
 
-import arq.iri
-import com.google.common.base.Charsets
-import com.google.common.io.Files
 import com.hp.hpl.jena.graph.Graph
-import es.weso.monads
-import es.weso.monads.Passed
 import es.weso.rdf.RDFTriples
-import es.weso.rdfgraph.nodes.{RDFNode, IRI}
-import es.weso.shacl.{SchemaFormats}
-import es.weso.shex.{Typing, Schema, ShExMatcher}
-import models.{ShapeMatcher, QueryEngineWithJena}
-import models.http.{CustomMimeTypes, CustomHeaderNames, CustomContentTypes}
+import es.weso.rdfgraph.nodes.RDFNode
+import models.http.{CustomContentTypes, CustomHeaderNames, CustomMimeTypes}
+import models.{QueryEngineWithJena, ShapeMatcher}
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -22,7 +15,7 @@ import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
 import views.ResourceSerialiser
 
-import scala.util.{Try, Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 class Application @Inject()(val messagesApi: MessagesApi)
   extends Controller
@@ -175,7 +168,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
       sb.append(nodeToString(node))
     }
     sb.append("\n")
-    sb.toString
+    sb.toString()
   }
 
   private def linkHeaders() = {
