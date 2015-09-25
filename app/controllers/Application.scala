@@ -124,9 +124,12 @@ class Application @Inject()(val messagesApi: MessagesApi)
     val strRDF = ResourceSerialiser.asTurtle(graph, resource).get
     val rdf = RDFTriples.parse(strRDF).get
 
-    val shape = ShapeMatcher.matchWithShex(rdf, resource).getOrElse("No shape found")
+//    val shape = ShapeMatcher.matchWithShex(rdf, resource).getOrElse("No shape found")
+    val shape2 = ShapeMatcher.matchWithShacl(rdf, resource).getOrElse("No shape found")
 
-    Ok(views.html.resource(resource, strRDF, shape)).as(HTML)
+//    Logger.debug("SHACL SHAPE: " + shape2)
+
+    Ok(views.html.resource(resource, strRDF, shape2)).as(HTML)
   }
 
   /**
@@ -143,7 +146,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
     val strRDF = ResourceSerialiser.asTurtle(graph, resource).get
     val rdf = RDFTriples.parse(strRDF).get
 
-    val shexShape = ShapeMatcher.matchWithShex(rdf, resource)
+//    val shexShape = ShapeMatcher.matchWithShex(rdf, resource)
 //    val shaclShape = ShapeMatcher.matchWithShacl(rdf)
 
     asString(graph, resource) match {

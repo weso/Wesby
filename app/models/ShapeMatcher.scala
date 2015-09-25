@@ -2,9 +2,10 @@ package models
 
 import es.weso.monads.Result
 import es.weso.rdf.{PrefixMap, RDFReader}
-import es.weso.rdfgraph.nodes.RDFNode
-import es.weso.shacl.{Schema => ShaclSchema, SchemaFormats, ShaclMatcher}
+import es.weso.rdfgraph.nodes.{IRI, RDFNode}
+import es.weso.shacl.{Schema => ShaclSchema, Label, ShaclResult, SchemaFormats, ShaclMatcher}
 import es.weso.shex.{Schema => ShexSchema, ShExMatcher, Typing}
+import es.weso.typing.PosNegTyping
 import play.api.Logger
 
 import scala.util.{Failure, Success, Try}
@@ -13,7 +14,7 @@ object ShapeMatcher {
 
 
 
-  def matchWithShex(rdf: RDFReader, resourceUri: String): Option[String] = {
+  def matchWithShex(rdf: RDFReader, node: String): Option[String] = {
 //    val shapeFile = Play.application().getFile("public/shapes/issue-simple.shex")
 //    val strShape = Files.toString(shapeFile, Charsets.UTF_8)
     val schemaFormat = SchemaFormats.default
@@ -22,8 +23,8 @@ object ShapeMatcher {
     val result = for (
       (schema, pm) <- shexSchema
     ) yield {
-        val validator = ShExMatcher(shexSchema.get._1, rdf)
-        val r = validator.matchAllIRIs_AllLabels()
+        val validator = ShExMatcher(schema, rdf)
+        val r = validator.matchIRI_AllLabels(IRI(node))
         (r, pm)
       }
 
@@ -31,41 +32,81 @@ object ShapeMatcher {
       case Success((validationResult: Result[Typing], pm)) => {
         val typings: Stream[Typing] = validationResult.run().get
         val firstTyping: Option[Typing] = typings.headOption
-
+    
         firstTyping match {
           case Some(typing) => Option(typing.showTyping(pm))
           case None => {
             Logger.debug("Shex: empty stream")
+            Logger.debug("Node: " + node)
+            Logger.debug("RDF: " + rdf)
             None
           }
         }
       }
       case Failure(f) => {
         Logger.debug("Matching failed: " + f)
+        Logger.debug("Node: " + node)
+        Logger.debug("RDF: " + rdf)
         None
       }
     }
   }
 
-  def matchWithShacl(rdf: RDFReader) = {
-    val schemaFormat = "TURTLE"
-    Logger.debug("Available formats: " + SchemaFormats.toString)
-    val shaclSchema: Try[(ShaclSchema, PrefixMap)] = ShaclSchema.fromFile("public/shapes/issue-simple.shc", schemaFormat)
+  def matchWithShacl(rdf: RDFReader, node: String) = {
+    val schemaFormat = SchemaFormats.default
+    Logger.debug("Available formats: " + SchemaFormats.toString + ". Choosing: " + schemaFormat)
+    val shaclSchema: Try[(ShaclSchema, PrefixMap)] = ShaclSchema.fromFile("public/shapes/issue-simple.shex", schemaFormat)
+
 
     val result = for (
       (schema, pm) <- shaclSchema
     ) yield {
-        val validator = ShaclMatcher(shaclSchema.get._1, rdf)
-        val r = validator.matchAllNodes_AllLabels
+        val validator = ShaclMatcher(schema, rdf)
+        val r = validator.match_node_AllLabels(IRI(node))
+        Logger.debug("VALIDATOR: " + r)
         (r, pm)
       }
 
+    Logger.debug("RESULT: " + result)
+
+    None
+
     result match {
-      case Success((validationResult, pm)) => {
-        Logger.debug("Shacl matching succeeded: " + validationResult)
+      case Success((validationResult: ShaclResult, pm)) => {
+        // TODO: extract shape name
+        val shape: String = validationResult.show(1)(pm)
+
+        Option(shape)
       }
-      case Failure(f) => Logger.debug("Shacl matching failed: " + f)
+      case Failure(f) => {
+        Logger.debug("Matching failed: " + f)
+        Logger.debug("Node: " + node)
+        Logger.debug("RDF: " + rdf)
+        None
+      }
     }
+//    result match {
+//      case Success((validationResult: Result[Typing], pm)) => {
+//        val typings: Stream[Typing] = validationResult.run().get
+//        val firstTyping: Option[Typing] = typings.headOption
+//
+//        firstTyping match {
+//          case Some(typing) => Option(typing.showTyping(pm))
+//          case None => {
+//            Logger.debug("Shex: empty stream")
+//            Logger.debug("Node: " + node)
+//            Logger.debug("RDF: " + rdf)
+//            None
+//          }
+//        }
+//      }
+//      case Failure(f) => {
+//        Logger.debug("Matching failed: " + f)
+//        Logger.debug("Node: " + node)
+//        Logger.debug("RDF: " + rdf)
+//        None
+//      }
+//    }
   }
 
   private def nodeToString(node: RDFNode): String = {
