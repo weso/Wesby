@@ -30,9 +30,15 @@ object ShapeMatcher {
     result match {
       case Success((validationResult: Result[Typing], pm)) => {
         val typings: Stream[Typing] = validationResult.run().get
-        val firstTyping: Typing = typings.head
-        val shape: String = firstTyping.showTyping(pm)
-        Option(shape)
+        val firstTyping: Option[Typing] = typings.headOption
+
+        firstTyping match {
+          case Some(typing) => Option(typing.showTyping(pm))
+          case None => {
+            Logger.debug("Shex: empty stream")
+            None
+          }
+        }
       }
       case Failure(f) => {
         Logger.debug("Matching failed: " + f)
