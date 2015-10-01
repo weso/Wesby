@@ -1,0 +1,49 @@
+prefix :     <http://example.org/>
+prefix sh: <http://www.w3.org/ns/shacl#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+:IssueShape
+    a sh:ShapeClass ;
+    sh:property [
+        sh:predicate :state ;
+        rdfs:label "state" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:allowedValues ( :unassigned :assigned ) ;
+    ] ;
+    sh:property [
+        sh:predicate :reportedBy ;
+        rdfs:label "reported by" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:valueShape :UserShape ;
+    ] .
+
+:UserShape
+    a sh:ShapeClass ;
+    sh:constraint [
+        a sh:OrConstraint ;
+        sh:shapes (
+            [
+                sh:property [
+                   sh:predicate foaf:name ;
+                   sh:valueClass xsd:string ;
+                ]
+            ]
+            [
+                sh:property [
+                    sh:predicate foaf:givenName ;
+                    sh:valueClass xsd:string ;
+                    sh:minCount 1 ;
+                ] ;
+                sh:property [
+                    sh:predicate foaf:familyName ;
+                    sh:valueClass xsd:string ;
+                    sh:minCount 1 ;
+                    sh:maxCount 1 ;
+                ]
+            ]
+        )
+    ] .

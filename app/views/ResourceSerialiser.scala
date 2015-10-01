@@ -50,7 +50,7 @@ trait ResourceSerialiserTrait
   }
 
   def asTurtle(graph: Rdf#Graph, base: String): Try[String] = {
-    turtleWriter.asString(graph, base)
+    turtleWriter.asString(graph, "") // TODO base?
   }
 
   def asNTriples(graph: Rdf#Graph, base: String): Try[String] = {

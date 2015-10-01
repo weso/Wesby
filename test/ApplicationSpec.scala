@@ -40,9 +40,9 @@ class ApplicationSpec extends Specification {
 //      dereference("n3", "text/n3")
 
       def dereference(extension: String, mimeType: String): MatchResult[Option[String]] = {
-        val resource = route(FakeRequest(GET, "/resource/Asturias").withHeaders(ACCEPT -> mimeType)).get
+        val resource = route(FakeRequest(GET, "/Bob").withHeaders(ACCEPT -> mimeType)).get
         status(resource) must equalTo(SEE_OTHER)
-        redirectLocation(resource) must beSome.which(_ == s"/resource/Asturias.$extension")
+        redirectLocation(resource) must beSome.which(_ == s"/Bob.$extension")
       }
 
 
@@ -59,7 +59,7 @@ class ApplicationSpec extends Specification {
 //      negotiate("n3", "text/n3")
 
       private def negotiate(extension: String, mimeType: String): MatchResult[Option[String]] = {
-        val resource = route(FakeRequest(GET, s"/resource/Asturias.$extension").withHeaders(ACCEPT -> mimeType)).get
+        val resource = route(FakeRequest(GET, s"/bob.$extension").withHeaders(ACCEPT -> mimeType)).get
         status(resource) must equalTo(OK)
         contentType(resource) must beSome(mimeType)
         charset(resource) must beSome("utf-8")

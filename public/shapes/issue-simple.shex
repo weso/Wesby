@@ -1,0 +1,17 @@
+prefix :     <http://example.org/>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+:IssueShape {                    # An <IssueShape> has:
+ :state (:unassigned :assigned), # state which is
+                                 #   unassigned or assigned.
+ :reportedBy @:UserShape         # reported by a :UserShape.
+}
+
+:UserShape {                         # A :UserShape has:
+    (                                # either
+       foaf:name xsd:string          #   a FOAF name
+     |                               #  or
+       foaf:givenName xsd:string+,   #   one or more givenNames
+       foaf:familyName xsd:string)   #   and one familyName.
+}

@@ -51,6 +51,7 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
     endpoint.executeConstruct(query)
   }
+
 }
 
 import org.w3.banana.jena.JenaModule
