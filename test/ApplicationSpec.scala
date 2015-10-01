@@ -59,7 +59,7 @@ class ApplicationSpec extends Specification {
 //      negotiate("n3", "text/n3")
 
       private def negotiate(extension: String, mimeType: String): MatchResult[Option[String]] = {
-        val resource = route(FakeRequest(GET, s"/Bob.$extension").withHeaders(ACCEPT -> mimeType)).get
+        val resource = route(FakeRequest(GET, s"/bob.$extension").withHeaders(ACCEPT -> mimeType)).get
         status(resource) must equalTo(OK)
         contentType(resource) must beSome(mimeType)
         charset(resource) must beSome("utf-8")
