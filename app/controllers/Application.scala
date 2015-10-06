@@ -6,7 +6,8 @@ import com.hp.hpl.jena.graph.Graph
 import es.weso.rdf.RDFTriples
 import es.weso.rdfgraph.nodes.RDFNode
 import models.http.{CustomContentTypes, CustomHeaderNames, CustomMimeTypes}
-import models.{QueryEngineWithJena, ShapeMatcher}
+import models.{ResourceBuilderWithJena, ResourceBuilder, QueryEngineWithJena, ShapeMatcher}
+import org.jboss.resteasy.spi.metadata.ResourceBuilder
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -14,6 +15,7 @@ import play.api.libs.Codecs
 import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
 import views.ResourceSerialiser
+import org.w3.banana._
 
 import scala.util.{Failure, Success, Try}
 
@@ -75,21 +77,21 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def getLDPR(path: String, extension: String) = Action { implicit request =>
     Logger.debug("Downloading: " + extension)
-    val resource = Play.application().configuration().getString("wesby.host") + path
+    val uriString = Play.application().configuration().getString("wesby.host") + path
     val constructQuery = Play.application().configuration().getString("queries.construct.s")
-    val graph = QueryEngineWithJena.construct(resource, constructQuery)
-
+    val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
+    
     graph match {
       case Failure(f) => InternalServerError
       case Success(g) => if (g.isEmpty) NotFound
         else extension match {
-          case "html" => buildHTMLResult(resource, g)
-          case "ttl" => buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
+          case "html" => buildHTMLResult(uriString, g)
+          case "ttl" => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
           case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
-          case "nt" => buildResult(resource, g, NTRIPLES, ResourceSerialiser.asNTriples)
-          case "jsonld" => buildResult(resource, g, JSONLD, ResourceSerialiser.asJsonLd)
+          case "nt" => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
+          case "jsonld" => buildResult(uriString, g, JSONLD, ResourceSerialiser.asJsonLd)
           // TODO      case "n3" =>
-          case "rdf" => buildResult(resource, g, RDFXML, ResourceSerialiser.asRdfXml)
+          case "rdf" => buildResult(uriString, g, RDFXML, ResourceSerialiser.asRdfXml)
           case _ => NotFound
         }
     }
@@ -120,16 +122,18 @@ class Application @Inject()(val messagesApi: MessagesApi)
   /**
    * TODO temporary
    */
-  def buildHTMLResult(resource: String, graph: Graph): Result = {
-    val strRDF = ResourceSerialiser.asTurtle(graph, resource).get
+  def buildHTMLResult(resourceUri: String, graph: Graph): Result = {
+    val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
     val rdf = RDFTriples.parse(strRDF).get
 
-    val shapes = ShapeMatcher.matchWithShex(rdf, resource)
+    val shapes = ShapeMatcher.matchWithShex(rdf, resourceUri)
 //    val shape = ShapeMatcher.matchWithShacl(rdf, resource).getOrElse("No shape found")
 
 //    Logger.debug("SHACL SHAPE: " + shape2)
 
-    Ok(views.html.resource(resource, strRDF, shapes)).as(HTML)
+    val resource = ResourceBuilderWithJena.build(resourceUri, graph)
+
+    Ok(views.html.resource(resourceUri, strRDF, shapes)).as(HTML)
   }
 
   /**
