@@ -131,9 +131,9 @@ class Application @Inject()(val messagesApi: MessagesApi)
 
 //    Logger.debug("SHACL SHAPE: " + shape2)
 
-    val resource = ResourceBuilderWithJena.build(resourceUri, graph)
+    val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
 
-    Ok(views.html.resource(resourceUri, strRDF, shapes)).as(HTML)
+    Ok(views.html.resource(resource)).as(HTML)
   }
 
   /**

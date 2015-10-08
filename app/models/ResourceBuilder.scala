@@ -13,31 +13,37 @@ trait ResourceBuilderDependencies
  */
 trait ResourceBuilder extends QueryEngineDependencies {
 
-  def build(uriString: String, graph: Rdf#Graph) = {
+  import ops._
 
-    import ops._
+  def trimQuotes(s: String) = {
+    s.substring(1, s.length - 1)
+  }
 
-
-    val uri = URI(uriString)
-
+  def getLabels(graph: Rdf#Graph): Option[Iterable[String]] = {
     val rdfs = RDFSPrefix[Rdf]
+    val labels: Iterable[String] = for (Triple(s, rdfs.label, o) <- graph.triples) yield {
+      trimQuotes(o.toString)
+    }
+    Logger.debug("Labels: " + labels)
+    if (labels.isEmpty) None
+    else Option(labels)
+  }
+
+  def build(uriString: String, graph: Rdf#Graph, shapes: List[String]) = {
+
 
     Logger.debug("Graph: " + graph)
-    Logger.debug("Label: " + graph.resolveAgainst(rdfs.label))
 
-//    graph.triples.foreach {
-//      case (s, p, o) => {
-//        Logger.debug("P: " + p)
-//      }
-//      case _ => Logger.debug("x")
-//    }
-    val g = graph.toPointedGraph
+    val labels = getLabels(graph).getOrElse(Iterable(uriString))
 
-    for (k <- g / rdfs.label) {
-      println(k)
-    }
 
-    val resource = new Resource(uri, "test")
+    //    val g = graph.toPointedGraph
+
+    //    for (k <- g / rdfs.label) {
+    //      println(k)
+    //    }
+
+    val resource = new Resource(uriString, labels.toList, shapes)
 
     resource
   }
