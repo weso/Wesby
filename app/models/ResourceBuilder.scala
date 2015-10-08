@@ -29,12 +29,21 @@ trait ResourceBuilder extends QueryEngineDependencies {
     else Option(labels)
   }
 
+  def getProperties(graph: Rdf#Graph, uri: String): Iterable[(Rdf#URI, Rdf#Node)] = {
+    val properties = for(Triple(uri, o, p) <- graph.triples) yield {
+      (o, p)
+    }
+    properties
+  }
+
   def build(uriString: String, graph: Rdf#Graph, shapes: List[String]) = {
 
 
     Logger.debug("Graph: " + graph)
 
+    val uri = URI(uriString)
     val labels = getLabels(graph).getOrElse(Iterable(uriString))
+    val properties: Iterable[(Rdf#URI, Rdf#Node)] = getProperties(graph, uriString)
 
 
     //    val g = graph.toPointedGraph
@@ -43,7 +52,7 @@ trait ResourceBuilder extends QueryEngineDependencies {
     //      println(k)
     //    }
 
-    val resource = new Resource(uriString, labels.toList, shapes)
+    val resource = new Resource[RDF](uri, labels.toList, shapes)
 
     resource
   }
