@@ -19,10 +19,10 @@ trait ResourceBuilder extends QueryEngineDependencies {
     s.substring(1, s.length - 1)
   }
 
-  def getLabels(graph: Rdf#Graph): Option[Iterable[String]] = {
+  def getLabels(graph: Rdf#Graph): Option[Iterable[Rdf#Literal]] = {
     val rdfs = RDFSPrefix[Rdf]
-    val labels: Iterable[String] = for (Triple(s, rdfs.label, o) <- graph.triples) yield {
-      trimQuotes(o.toString)
+    val labels: Iterable[Rdf#Literal] = for (Triple(s, rdfs.label, o) <- graph.triples) yield {
+      Literal(trimQuotes(o.toString), Literal.xsdString)
     }
     Logger.debug("Labels: " + labels)
     if (labels.isEmpty) None
@@ -42,7 +42,7 @@ trait ResourceBuilder extends QueryEngineDependencies {
     Logger.debug("Graph: " + graph)
 
     val uri = URI(uriString)
-    val labels = getLabels(graph).getOrElse(Iterable(uriString))
+    val labels = getLabels(graph).getOrElse(Iterable(Literal("Unknown")))
     val properties: Iterable[(Rdf#URI, Rdf#Node)] = getProperties(graph, uriString)
 
 
@@ -52,7 +52,7 @@ trait ResourceBuilder extends QueryEngineDependencies {
     //      println(k)
     //    }
 
-    val resource = new Resource[RDF](uri, labels.toList, shapes)
+    val resource = new Resource[RDF](uri, labels, shapes)
 
     resource
   }

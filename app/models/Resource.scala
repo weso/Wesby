@@ -7,10 +7,17 @@ import org.w3.banana._
  */
 class Resource[Rdf<:RDF](
   val uri: Rdf#URI,
-  val labels: List[String],
+  val labels: Iterable[Rdf#Literal],
   val shapes: List[String]//List[Rdf#URI],
   //  properties: List[Rdf#Node],
   //  inverseProperties: List[Rdf#Node]
   ) {
 
+  def label = {
+    val literal = labels.head.toString
+    literal.substring(1, literal.length - 1)
+  }
+
+
 }
+
