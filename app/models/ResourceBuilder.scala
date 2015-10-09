@@ -45,14 +45,13 @@ trait ResourceBuilder extends QueryEngineDependencies {
     val labels = getLabels(graph).getOrElse(Iterable(Literal("Unknown")))
     val properties: Iterable[(Rdf#URI, Rdf#Node)] = getProperties(graph, uriString)
 
-
     //    val g = graph.toPointedGraph
 
     //    for (k <- g / rdfs.label) {
     //      println(k)
     //    }
 
-    val resource = new Resource[RDF](uri, labels, shapes)
+    val resource = new Resource[RDF](uri, labels, shapes, properties)
 
     resource
   }

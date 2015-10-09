@@ -8,8 +8,8 @@ import org.w3.banana._
 class Resource[Rdf<:RDF](
   val uri: Rdf#URI,
   val labels: Iterable[Rdf#Literal],
-  val shapes: List[String]//List[Rdf#URI],
-  //  properties: List[Rdf#Node],
+  val shapes: List[String],//List[Rdf#URI],
+  val properties: Iterable[(Rdf#URI, Rdf#Node)]//,
   //  inverseProperties: List[Rdf#Node]
   ) {
 
@@ -17,7 +17,5 @@ class Resource[Rdf<:RDF](
     val literal = labels.head.toString
     literal.substring(1, literal.length - 1)
   }
-
-
 }
 
