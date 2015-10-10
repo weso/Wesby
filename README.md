@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/weso/wesby.png?label=ready&title=Ready)](https://waffle.io/weso/wesby)
 ![Wesby logo](https://github.com/weso/Wesby/raw/master/public/images/wesby-logo-850.png)
 Wesby is a linked data frontend that wraps your RDF resources with custom-built interfaces, effectively turning your SPARQL endpoints into rich HTML5 websites.
 
