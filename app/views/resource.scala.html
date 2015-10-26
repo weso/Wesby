@@ -5,8 +5,12 @@
 <h2>THIS IS A TEMPORARY SOLUTION</h2>
 
 <h1>@resource.label</h1>
-<h2><strong>Shapes:</strong><pre>@resource.shapes</pre></h2>
-<h2><strong>Properties:</strong></h2>
+<h2>Shapes:<pre>@resource.shapes</pre></h2>
+<h2>Properties:</h2>
 @for(p <- resource.properties) {
+    <li>@p._1 @p._2</li>
+}
+<h2>Inverse properties:</h2>
+@for(p <- resource.inverseProperties) {
     <li>@p._1 @p._2</li>
 }

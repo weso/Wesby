@@ -78,9 +78,9 @@ class Application @Inject()(val messagesApi: MessagesApi)
   def getLDPR(path: String, extension: String) = Action { implicit request =>
     Logger.debug("Downloading: " + extension)
     val uriString = Play.application().configuration().getString("wesby.host") + path
-    val constructQuery = Play.application().configuration().getString("queries.construct.s")
+    val constructQuery = Play.application().configuration().getString("queries.construct")
     val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
-    
+
     graph match {
       case Failure(f) => InternalServerError
       case Success(g) => if (g.isEmpty) NotFound

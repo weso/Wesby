@@ -1,8 +1,11 @@
 package models
 
 import org.w3.banana._
+import org.w3.banana.io.{RDFWriter, Turtle}
 import org.w3.banana.jena.JenaModule
 import play.Logger
+
+import scala.util.Try
 
 trait ResourceBuilderDependencies
   extends RDFModule
@@ -14,44 +17,38 @@ trait ResourceBuilderDependencies
 trait ResourceBuilder extends QueryEngineDependencies {
 
   import ops._
+  val turtleWriter: RDFWriter[Rdf, Try, Turtle]
 
-  def trimQuotes(s: String) = {
-    s.substring(1, s.length - 1)
+  def getProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#URI, Rdf#Node)] = {
+    val triples = graph.triples.filter(_._1.equals(uri))
+    for(Triple(s, p, o) <- triples) yield {
+      (p, o)
+    }
   }
 
-  def getLabels(graph: Rdf#Graph): Option[Iterable[Rdf#Literal]] = {
-    val rdfs = RDFSPrefix[Rdf]
-    val labels: Iterable[Rdf#Literal] = for (Triple(s, rdfs.label, o) <- graph.triples) yield {
-      Literal(trimQuotes(o.toString), Literal.xsdString)
+  def getInverseProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#Node, Rdf#URI)] = {
+    val inverseTriples = graph.triples.filter(_._3.equals(uri))
+    for(Triple(s, p, o) <- inverseTriples) yield {
+      (s,p)
     }
-    Logger.debug("Labels: " + labels)
-    if (labels.isEmpty) None
-    else Option(labels)
-  }
-
-  def getProperties(graph: Rdf#Graph, uri: String): Iterable[(Rdf#URI, Rdf#Node)] = {
-    val properties = for(Triple(uri, o, p) <- graph.triples) yield {
-      (o, p)
-    }
-    properties
   }
 
   def build(uriString: String, graph: Rdf#Graph, shapes: List[String]) = {
 
-
     Logger.debug("Graph: " + graph)
+    val rdfs = RDFSPrefix[Rdf]
 
     val uri = URI(uriString)
-    val labels = getLabels(graph).getOrElse(Iterable(Literal("Unknown")))
-    val properties: Iterable[(Rdf#URI, Rdf#Node)] = getProperties(graph, uriString)
+    val pg = PointedGraph(uri, graph)
+    val labelsPg = pg / rdfs.label
+    val labels = for (label <- labelsPg.map(_.pointer)) yield label match {
+      case l: Rdf#Literal => l
+    }
 
-    //    val g = graph.toPointedGraph
+    val properties = getProperties(graph, uri)
+    val inverseProperties = getInverseProperties(graph, uri)
 
-    //    for (k <- g / rdfs.label) {
-    //      println(k)
-    //    }
-
-    val resource = new Resource[RDF](uri, labels, shapes, properties)
+    val resource = new Resource[RDF](uri, labels, shapes, properties, inverseProperties)
 
     resource
   }
