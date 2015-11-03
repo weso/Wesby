@@ -13,7 +13,7 @@ class Resource[Rdf<:RDF](
   val uri: Rdf#URI,
   val labels: Iterable[Rdf#Literal],
   val shapes: List[String],//List[Rdf#URI],
-  val properties: Iterable[(Rdf#URI, Rdf#Node)],
+  val properties: Iterable[(WURI[Rdf], Rdf#Node)],
   val inverseProperties: Iterable[(Rdf#Node, Rdf#URI)]
   ) {
 

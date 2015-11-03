@@ -1,4 +1,6 @@
 @import org.w3.banana.RDF
+@import org.w3.banana.URIOps
+
 @(resource: Resource[_<:RDF])
 
 <h1>Wesby 2.0</h1>
@@ -8,7 +10,8 @@
 <h2>Shapes:<pre>@resource.shapes</pre></h2>
 <h2>Properties:</h2>
 @for(p <- resource.properties) {
-    <li>@p._1 @p._2</li>
+
+    <li>@p._1.getPrefix:@p._1.getLocalname @p._2</li>
 }
 <h2>Inverse properties:</h2>
 @for(p <- resource.inverseProperties) {

@@ -2,7 +2,6 @@ package models
 
 import org.w3.banana._
 import org.w3.banana.io.{RDFWriter, Turtle}
-import org.w3.banana.jena.JenaModule
 import play.Logger
 
 import scala.util.Try
@@ -14,15 +13,17 @@ trait ResourceBuilderDependencies
 /**
  * Created by jorge on 6/10/15.
  */
-trait ResourceBuilder extends QueryEngineDependencies {
+trait ResourceBuilder extends ResourceBuilderDependencies {
 
   import ops._
-  val turtleWriter: RDFWriter[Rdf, Try, Turtle]
 
-  def getProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#URI, Rdf#Node)] = {
+//  val turtleWriter: RDFWriter[Rdf, Try, Turtle]
+
+  def getProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(WURI[RDF], Rdf#Node)] = {
+    import ops._
     val triples = graph.triples.filter(_._1.equals(uri))
     for(Triple(s, p, o) <- triples) yield {
-      (p, o)
+      (WURI[RDF](p), o)
     }
   }
 
@@ -39,6 +40,14 @@ trait ResourceBuilder extends QueryEngineDependencies {
     val rdfs = RDFSPrefix[Rdf]
 
     val uri = URI(uriString)
+    val ncname = uri.lastPathSegment
+    val prefix = uriString.dropRight(ncname.length)
+
+    Logger.debug("URI: " + uri.getString)
+    Logger.debug("NCNAME: " + ncname)
+    Logger.debug("PREFIX: " + prefix)
+    Logger.debug("URI: " + PrefixMapping.getNsURIPrefix(prefix))
+
     val pg = PointedGraph(uri, graph)
     val labelsPg = pg / rdfs.label
     val labels = for (label <- labelsPg.map(_.pointer)) yield label match {

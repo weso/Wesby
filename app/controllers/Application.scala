@@ -8,6 +8,7 @@ import es.weso.rdfgraph.nodes.RDFNode
 import models.http.{CustomContentTypes, CustomHeaderNames, CustomMimeTypes}
 import models.{ResourceBuilderWithJena, ResourceBuilder, QueryEngineWithJena, ShapeMatcher}
 import org.jboss.resteasy.spi.metadata.ResourceBuilder
+import org.w3.banana.jena.JenaModule
 import play.Play
 import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -18,6 +19,8 @@ import views.ResourceSerialiser
 import org.w3.banana._
 
 import scala.util.{Failure, Success, Try}
+
+//object Application extends JenaModule
 
 class Application @Inject()(val messagesApi: MessagesApi)
   extends Controller
@@ -132,6 +135,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
 //    Logger.debug("SHACL SHAPE: " + shape2)
 
     val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
+
 
     Ok(views.html.resource(resource)).as(HTML)
   }
