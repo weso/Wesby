@@ -27,10 +27,11 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
     }
   }
 
-  def getInverseProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#Node, Rdf#URI)] = {
+  def getInverseProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#Node, WURI[RDF])] = {
     val inverseTriples = graph.triples.filter(_._3.equals(uri))
     for(Triple(s, p, o) <- inverseTriples) yield {
-      (s,p)
+//      (s,p)
+      (s, WURI[RDF](p))
     }
   }
 

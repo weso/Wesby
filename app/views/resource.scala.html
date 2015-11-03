@@ -9,11 +9,31 @@
 <h1>@resource.label</h1>
 <h2>Shapes:<pre>@resource.shapes</pre></h2>
 <h2>Properties:</h2>
-@for(p <- resource.properties) {
+<table>
+    <tr>
+        <th>Property:</th>
+        <th>Value:</th>
+    </tr>
+    @for(p <- resource.properties) {
+        <tr>
+            <td>
+                <a href="@p._1.getNamespace">@p._1.getPrefix</a>:<a href="@p._1.uri">@p._1.getLocalname</a>
+            </td>
+            <td>
+                @p._2
+            </td>
+        </tr>
+    }
+    @for(p <- resource.inverseProperties) {
+        <tr>
+            <td>
+                <a href="@p._2.getNamespace">@p._2.getPrefix</a>:<a href="@p._2.uri">@p._2.getLocalname</a>
+            </td>
+            <td>
+                @p._1
+            </td>
+        </tr>
+    }
+</table>
 
-    <li>@p._1.getPrefix:@p._1.getLocalname @p._2</li>
-}
-<h2>Inverse properties:</h2>
-@for(p <- resource.inverseProperties) {
-    <li>@p._1 @p._2</li>
-}
+
