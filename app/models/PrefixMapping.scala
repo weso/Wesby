@@ -14,7 +14,6 @@ object PrefixMapping {
   def setNsPreffix(prefix: String, uri: String) = ???
 
   def getNsURIPrefix(uri: String): String = {
-    Logger.debug("NS URI prefix: " + uri)
     uriToPrefix(uri)
   }
 
