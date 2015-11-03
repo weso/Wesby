@@ -17,8 +17,6 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
 
   import ops._
 
-//  val turtleWriter: RDFWriter[Rdf, Try, Turtle]
-
   def getProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(WURI[RDF], Rdf#Node)] = {
     import ops._
     val triples = graph.triples.filter(_._1.equals(uri))
@@ -30,7 +28,6 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
   def getInverseProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#Node, WURI[RDF])] = {
     val inverseTriples = graph.triples.filter(_._3.equals(uri))
     for(Triple(s, p, o) <- inverseTriples) yield {
-//      (s,p)
       (s, WURI[RDF](p))
     }
   }
@@ -43,11 +40,6 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
     val uri = URI(uriString)
     val ncname = uri.lastPathSegment
     val prefix = uriString.dropRight(ncname.length)
-
-    Logger.debug("URI: " + uri.getString)
-    Logger.debug("NCNAME: " + ncname)
-    Logger.debug("PREFIX: " + prefix)
-    Logger.debug("URI: " + PrefixMapping.getNsURIPrefix(prefix))
 
     val pg = PointedGraph(uri, graph)
     val labelsPg = pg / rdfs.label
