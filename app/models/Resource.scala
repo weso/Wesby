@@ -15,6 +15,7 @@ class Resource[Rdf<:RDF](
   val shapes: List[String],//List[Rdf#URI],
   val properties: Iterable[(WURI[Rdf], Rdf#Node)],
   val inverseProperties: Iterable[(Rdf#Node, WURI[Rdf])]
+//  val inverseProperties: Iterable[(Rdf#Node, Rdf#URI)]
   ) {
 
   def label = labels.headOption.getOrElse("Unknown")
