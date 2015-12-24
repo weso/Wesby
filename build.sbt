@@ -15,7 +15,9 @@ libraryDependencies ++= Seq(
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-resolvers += "Bintray" at "http://dl.bintray.com/weso/weso-releases"
+resolvers += "weso-bintray" at "http://dl.bintray.com/weso/weso-releases"
+
+resolvers += "labra-bintray" at " https://dl.bintray.com/labra/maven"
 
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
@@ -38,4 +40,4 @@ ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 80
 ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := false
 
 // ShExcala
-libraryDependencies += "es.weso" % "shexcala_2.11" % "0.5.4"
+libraryDependencies += "es.weso" % "shexcala_2.11" % "0.6.7"

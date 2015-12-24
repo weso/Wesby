@@ -30,7 +30,7 @@ object PrefixMapping {
           None
       }
     }).toList.flatten.toMap // TODO quitar el tolist
-    Logger.debug("Loaded: " + prefixes)
+
     prefixes
   }
 }
