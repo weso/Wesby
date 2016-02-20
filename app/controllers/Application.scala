@@ -1,12 +1,14 @@
 package controllers
 
 import javax.inject.Inject
+import javax.naming.directory.SearchResult
 
 import com.hp.hpl.jena.graph.Graph
+import com.hp.hpl.jena.query.ResultSet
 import es.weso.rdf.RDFTriples
 import es.weso.rdfgraph.nodes.RDFNode
 import models.http.{CustomContentTypes, CustomHeaderNames, CustomMimeTypes}
-import models.{ResourceBuilderWithJena, ResourceBuilder, QueryEngineWithJena, ShapeMatcher}
+import models._
 import org.jboss.resteasy.spi.metadata.ResourceBuilder
 import org.w3.banana.jena.JenaModule
 import play.Play
@@ -49,6 +51,32 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def welcome = Action { implicit request =>
     Ok(Messages("welcome.test"))
+  }
+
+  def search(searchQuery: String, a: Option[String],
+             labelProperty: Option[String], typeProperty: Option[String],
+             typeObject: Option[String]) = Action { implicit request =>
+
+    a match {
+      case Some(resourceType) => {
+        labelProperty match {
+          case Some(lp) => {
+            val solutions: ResultSet = QueryEngineWithJena.labelPropSearchSelect(searchQuery, resourceType, lp)
+            val results = SearchResultsBuilder.build(solutions)
+            Ok(views.html.search(results)).as(HTML)
+          }
+          case None =>
+            QueryEngineWithJena.simpleSearchSelect(searchQuery, resourceType) match {
+              case Success(solutions) => {
+                val results = SearchResultsBuilder.build(solutions)
+                Ok(views.html.search(results)).as(HTML)
+              }
+              case Failure(f) => NotFound(f.getMessage)
+            }
+        }
+      }
+      case None => BadRequest("Error 400: Missing resource type parameter")
+    }
   }
 
   /**
@@ -121,6 +149,8 @@ class Application @Inject()(val messagesApi: MessagesApi)
       else buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
     }
   }
+
+
 
   /**
    * TODO temporary
