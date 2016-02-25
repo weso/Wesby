@@ -1,0 +1,11 @@
+
+@(results: Iterator[(String, String)])
+
+<h1>Wesby 2.0</h1>
+<h2>Search results</h2>
+
+@for(r <- results) {
+    <a href="@r._2">@r._1</a><br/><br/>
+}
+
+

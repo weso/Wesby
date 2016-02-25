@@ -8,7 +8,7 @@ import org.w3.banana.io.{JsonLdExpanded, JsonLdFlattened, RDFWriter}
 import org.w3.banana.jena.Jena
 import play.{Logger, Play}
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 trait QueryEngineDependencies
   extends RDFModule
@@ -52,6 +52,46 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     endpoint.executeConstruct(query)
   }
 
+  def simpleSearchSelect(searchQuery: String, resourceType: String) = {
+    val simpleSearchQuery = Play.application().configuration().getString("queries.simpleSearch")
+    val selectQueryString =
+      getPrefixesString +
+      simpleSearchQuery
+      .replace("$query", searchQuery)
+      .replace("$type", resourceType)
+
+    parseSelect(selectQueryString) match {
+      case Success(q) => Success(endpoint.executeSelect(q).get)
+      case Failure(f) => Failure(f)
+    }
+  }
+
+  def labelPropSearchSelect(searchQuery: String, resourceType: String, labelProperty: String) = {
+    val simpleSearchQuery = Play.application().configuration().getString("queries.labelPropSearch")
+
+    val selectQueryString =
+      getPrefixesString +
+      simpleSearchQuery
+      .replace("$query", searchQuery)
+      .replace("$type", resourceType)
+      .replace("$labelProperty", labelProperty)
+    val query = parseSelect(selectQueryString).get
+
+    val solutions: Rdf#Solutions = endpoint.executeSelect(query).get
+
+    solutions
+  }
+
+  private def getPrefixesString: String = {
+    val prefixes = PrefixMapping.prefixToUri
+    val prefixesString = (
+      prefixes.map {
+        case (key, value) => s"""PREFIX $key: <$value>\n"""
+      }
+        mkString
+      )
+    prefixesString
+  }
 }
 
 import org.w3.banana.jena.JenaModule
