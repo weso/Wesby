@@ -1,0 +1,118 @@
+@import play.i18n._
+
+@main(title=Messages.get("welcome.test")) {
+    <div class="callout large">
+        <div class="row column text-center">
+            <h1>Welcome to Wesby 2.0</h1>
+            <p class="lead">
+                <strong>It's alive!
+                </strong>Wesby has been succesfully installed, you may now configure your data portal following the instructions below.</p>
+        </div>
+    </div>
+
+    <div class="column row">
+        <h2>Demo portal</h2>
+        <p>Wesby comes preconfigured with a few SPARQL endpoints so you can see how it works before deploying your own data portal.</p>
+        <p>You can choose between several demo portals in the menu below.</p>
+        <form action="">
+            <div class="row column">
+                <label>Select an example endpoint
+                    <select class="" name="">
+                        <option value="dbpedia">DBpedia: http://dbpedia.org/sparql</option>
+                    </select>
+                </label>
+            </div>
+        </form>
+
+        <ul class="accordion" data-accordion role="tablist">
+            <li class="accordion-item is-active">
+                    <!-- The tab title needs role="tab", an href, a unique ID, and aria-controls. -->
+                <a href="#panel-dbpedia" role="tab" class="accordion-title" id="panel-dbpedia-heading" aria-controls="panel-dbpedia">DBpedia</a>
+                    <!-- The content pane needs an ID that matches the above href, role="tabpanel", data-tab-content, and aria-labelledby. -->
+                <div id="panel-dbpedia" class="accordion-content" role="tabpanel" data-tab-content aria-labelledby="panel-dbpedia-heading">
+                    Wesby will point to the following SPARQL endpoint:
+                    <pre>http://dbpedia.org/sparql</pre>
+                    Example resources:
+                    <ul>
+                        <li><a href="#">Example resource</a></li>
+                        <li><a href="#">Example resource</a></li>
+                        <li><a href="#">Example resource</a></li>
+                    </ul>
+                </div>
+            </li>
+
+
+        </ul>
+
+        You can also use the search bar to discover resources:
+        <form action="">
+            <div class="input-group">
+                <input id="middle-label" class="input-group-field" type="text" placeholder="Example resource">
+                <a class="input-group-button button">Search</a>
+            </div>
+        </form>
+
+        <h2>Configuration assistant</h2>
+        <p>Fill the following form and press the green button to generate your data portal.</p>
+        <form action="" data-abide novalidate>
+            <div class="row column">
+                <label>Name of the data portal
+                    <input type="text" placeholder="Awesome Data Portal" required>
+                    <span class="form-error">
+                        This field it's required.
+                    </span>
+                </label>
+                <label>URL of your SPARQL endpoint
+                    <input type="text" placeholder="http://example.org/sparql" required pattern="url">
+                    <span class="form-error">
+                        This field must contain a valid URL.
+                    </span>
+                </label>
+                <label>Host URL
+                    <input type="text" placeholder="http://example.org/" required pattern="url">
+                    <span class="form-error">
+                        This field must contain a valid URL.
+                    </span>
+                </label>
+                <div data-abide-error class="alert callout" style="display: none;">
+                    <p><i class="fi-alert"></i> There are some errors in your form.</p>
+                </div>
+                <fieldset>
+                    <p><a class="success large button" data-open="generationModal">Generate the data portal</a></p>
+                </fieldset>
+            </div>
+        </form>
+
+
+
+
+        <h2>Manual configuration</h2>
+        <h2>Customising your data portal</h2>
+    </div>
+
+
+    <div class="reveal" id="generationModal" data-reveal>
+        <h1>It's almost ready!</h1>
+        <p class="lead">Please review the configuration before proceeding</p>
+        <p><strong>Name of the portal: </strong>Awesome Data Portal</p>
+        <p><strong>SPARQL endpoint URL: </strong>http://example.org/sparql</p>
+        <p><strong>Host URL: </strong>http://example.org/</p>
+
+        <ul class="accordion" data-accordion role="tablist">
+            <li class="accordion-item">
+                <a href="#panel-gen" role="tab" class="accordion-title" id="panel-gen-heading" aria-controls="panel-gen">Technical details</a>
+                <div id="panel-gen" class="accordion-content" role="tabpanel" data-tab-content aria-labelledby="panel1d-heading">
+                    The following changes will be performed in the configuration files:
+                </div>
+            </li>
+        </ul>
+
+        <button type="button" class="alert button">Cancel</button>
+        <button type="button" class="success button">Proceed</button>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+
+}

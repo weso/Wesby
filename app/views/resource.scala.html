@@ -5,39 +5,65 @@
 
 @(resource: Resource[Jena])
 
-<h1>Wesby 2.0</h1>
-<h2>THIS IS A TEMPORARY SOLUTION</h2>
+@main(title = resource.label.toString) {
+    <div class="callout large">
+        <div class="column row">
+            <h1>@resource.label</h1>
+            <p class="lead">@resource.shapes</p>
+        </div>
+    </div>
 
-<h1>@resource.label</h1>
-<h2>Shapes:<pre>@resource.shapes</pre></h2>
-<h2>Properties:</h2>
-<table>
-    <tr>
-        <th>Property:</th>
-        <th>Value:</th>
-    </tr>
-    @for(p <- resource.properties) {
-        <tr>
-            <td>
-                <a href="@p._1.getNamespace">@p._1.getPrefix</a>:<a href="@p._1.uri">@p._1.getLocalname</a>
-            </td>
-            <td>
-                @if(p._2.isLiteral) {
-                    @p._2.getLiteralLexicalForm
+    <div class="column row">
+
+        <div class="small-2 columns">
+            <label for="middle-label" class="text-right middle">Filter:</label>
+        </div>
+        <div class="small-8 columns">
+            <div class="input-group">
+                <input id="middle-label" class="input-group-field" type="text" placeholder="Examples: Bob, foaf:name, label">
+                <a class="input-group-button button">Submit</a>
+            </div>
+        </div>
+
+        <table class="hover">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(p <- resource.properties) {
+                    <tr>
+                        <td>
+                            <a href="@p._1.getNamespace">@p._1.getPrefix</a>:<a href="@p._1.uri">@p._1.getLocalname</a>
+                        </td>
+                        <td>
+                        @{if(p._2.isLiteral)
+                            p._2.getLiteralLexicalForm
+                         else if(p._2.isURI)
+                            p._2.getURI
+                         else
+                            p._2
+                        }
+                        </td>
+                    </tr>
                 }
-            </td>
-        </tr>
-    }
-    @for(p <- resource.inverseProperties) {
-        <tr>
-            <td>
-                Is <a href="@p._2.getNamespace">@p._2.getPrefix</a>:<a href="@p._2.uri">@p._2.getLocalname</a> of
-            </td>
-            <td>
-                @p._1
-            </td>
-        </tr>
-    }
-</table>
+                @for(p <- resource.inverseProperties) {
+                    <tr>
+                        <td>
+                            Is <a href="@p._2.getNamespace">@p._2.getPrefix</a>:<a href="@p._2.uri">@p._2.getLocalname</a> of
+                        </td>
+                        <td>
+                        @p._1
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
+
 
 

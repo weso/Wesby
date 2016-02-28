@@ -1,11 +1,24 @@
 
 @(results: Iterator[(String, String)])
 
-<h1>Wesby 2.0</h1>
-<h2>Search results</h2>
+@main(title="Search results") {
 
-@for(r <- results) {
-    <a href="@r._2">@r._1</a><br/><br/>
+    <div class="callout large">
+        <div class="column row">
+            <h1>Search results</h1>
+        </div>
+    </div>
+
+    <div class="column row">
+        <ul>
+        @for(r <- results) {
+            <li><a href="href="@r._2"">@r._1</a></li>
+        }
+        </ul>
+    </div>
+
 }
+
+
 
 
