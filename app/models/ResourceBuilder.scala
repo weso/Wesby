@@ -17,18 +17,18 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
 
   import ops._
 
-  def getProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(WURI[RDF], Rdf#Node)] = {
+  def getProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(WURI[Rdf], Rdf#Node)] = {
     import ops._
     val triples = graph.triples.filter(_._1.equals(uri))
     for(Triple(s, p, o) <- triples) yield {
-      (WURI[RDF](p), o)
+      (WURI[Rdf](p), o)
     }
   }
 
-  def getInverseProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#Node, WURI[RDF])] = {
+  def getInverseProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#Node, WURI[Rdf])] = {
     val inverseTriples = graph.triples.filter(_._3.equals(uri))
     for(Triple(s, p, o) <- inverseTriples) yield {
-      (s, WURI[RDF](p))
+      (s, WURI[Rdf](p))
     }
   }
 
@@ -50,7 +50,7 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
     val properties = getProperties(graph, uri)
     val inverseProperties = getInverseProperties(graph, uri)
 
-    val resource = new Resource[RDF](uri, labels, shapes, properties, inverseProperties)
+    val resource = new Resource[Rdf](uri, labels, shapes, properties, inverseProperties)
 
     resource
   }

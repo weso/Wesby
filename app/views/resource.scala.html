@@ -1,7 +1,9 @@
 @import org.w3.banana.RDF
 @import org.w3.banana.URIOps
+@import org.w3.banana.RDFOps
+@import org.w3.banana.jena.Jena
 
-@(resource: Resource[_<:RDF])
+@(resource: Resource[Jena])
 
 <h1>Wesby 2.0</h1>
 <h2>THIS IS A TEMPORARY SOLUTION</h2>
@@ -20,7 +22,9 @@
                 <a href="@p._1.getNamespace">@p._1.getPrefix</a>:<a href="@p._1.uri">@p._1.getLocalname</a>
             </td>
             <td>
-                @p._2
+                @if(p._2.isLiteral) {
+                    @p._2.getLiteralLexicalForm
+                }
             </td>
         </tr>
     }
