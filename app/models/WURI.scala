@@ -9,7 +9,7 @@ import org.w3.banana._
 case class WURI[Rdf <: RDF](val uri: Rdf#URI) {
   def getNamespace = uri.toString.dropRight(getLocalname.length)
   def getPrefix = PrefixMapping.getNsURIPrefix(getNamespace)
-  def getLocalname = {
+  def getLocalname: String = {
     val segments = if (uri.toString.contains("#")) { // TODO temporal solution, not really a canonical XML localname
       uri.toString.split("#")
     } else {

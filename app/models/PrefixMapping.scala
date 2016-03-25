@@ -13,9 +13,8 @@ object PrefixMapping {
 
   def setNsPreffix(prefix: String, uri: String) = ???
 
-  def getNsURIPrefix(uri: String): String = {
-    uriToPrefix(uri)
-  }
+  def getNsURIPrefix(uri: String) = uriToPrefix.getOrElse(uri, "unknown")
+
 
   private def loadPrefixes() = {
     val Matcher = "@prefix[' '||\t]*(.*):[' '||\t]*<(.*)>[' '||\t]*\\.".r

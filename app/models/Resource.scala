@@ -14,13 +14,12 @@ class Resource[Rdf<:RDF](
   val uri: Rdf#URI,
   val labels: Iterable[Rdf#Literal],
   val shapes: List[String],//List[Rdf#URI],
-  val properties: Iterable[(WURI[Rdf], Rdf#Node)],
-  val inverseProperties: Iterable[(Rdf#Node, WURI[Rdf])]
+  val properties: Map[Rdf#URI, Iterable[Rdf#Node]],
+  val inverseProperties: Iterable[(Rdf#URI, Rdf#URI)]
 //  val inverseProperties: Iterable[(Rdf#Node, Rdf#URI)]
   ) extends RDFModule with RDFOpsModule with JenaModule{
   import ops._
-  def label = labels.headOption.getOrElse("Unknown")
-  def test = properties.head._2
+  def label = labels.headOption
 }
 
 

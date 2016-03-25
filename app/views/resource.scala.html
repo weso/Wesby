@@ -2,13 +2,22 @@
 @import org.w3.banana.URIOps
 @import org.w3.banana.RDFOps
 @import org.w3.banana.jena.Jena
+@import play.i18n._
+@import views.helper.Curie
 
-@(resource: Resource[Jena])
+@(resource: Resource[Jena])(lang: String)
 
-@main(title = resource.label.toString) {
+@displayUri(uri: String) = {
+    <a href="@Curie(uri).namespace">@Curie(uri).prefix</a>:<a href="@uri">@Curie(uri).reference</a>
+}
+
+@main(title = resource.label.map(l => l.getLiteralLexicalForm).getOrElse("Unknown")) {
     <div class="callout large">
         <div class="column row">
-            <h1>@resource.label</h1>
+            <h1>@resource.label.map(l => l.getLiteralLexicalForm).getOrElse("Unknown")</h1>
+            @if(resource.labels.size > 1) {<p class="lead"> Synonyms: }
+            @for(l <- resource.labels.drop(1)) {@l.getLiteralValue}
+            @if(resource.labels.size > 1) {</p>}
             <p class="lead">@resource.shapes</p>
         </div>
     </div>
@@ -33,29 +42,39 @@
                 </tr>
             </thead>
             <tbody>
-                @for(p <- resource.properties) {
+
+
+                @for(p@(wuri, nodes) <- resource.properties) {
+
                     <tr>
-                        <td>
-                            <a href="@p._1.getNamespace">@p._1.getPrefix</a>:<a href="@p._1.uri">@p._1.getLocalname</a>
+                        <td rowspan="@nodes.size">
+                            @displayUri(wuri.getURI)
                         </td>
                         <td>
-                        @{if(p._2.isLiteral)
-                            p._2.getLiteralLexicalForm
-                         else if(p._2.isURI)
-                            p._2.getURI
-                         else
-                            p._2
-                        }
+                            @if(nodes.head.isLiteral) { @nodes.head.getLiteralLexicalForm } else {
+                                @if(nodes.head.isURI) {
+                                    @displayUri(nodes.head.getURI)
+                                } else { @nodes.head }
+                            }
                         </td>
+                    @for(n <- nodes.drop(1)) {
+                        <tr>
+                            <td>
+                                @if(n.isLiteral) { @n.getLiteralLexicalForm } else {
+                                    @if(n.isURI) { <a href="@n.getURI">@n.toString</a> } else { @n }
+                                }
+                            </td>
+                        </tr>
                     </tr>
+                    }
                 }
                 @for(p <- resource.inverseProperties) {
                     <tr>
                         <td>
-                            Is <a href="@p._2.getNamespace">@p._2.getPrefix</a>:<a href="@p._2.uri">@p._2.getLocalname</a> of
+                            Is @displayUri(p._2.getURI) of
                         </td>
                         <td>
-                        @p._1
+                            @displayUri(p._1.getURI)
                         </td>
                     </tr>
                 }

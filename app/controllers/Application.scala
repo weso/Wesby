@@ -13,12 +13,13 @@ import org.jboss.resteasy.spi.metadata.ResourceBuilder
 import org.w3.banana.jena.JenaModule
 import play.Play
 import play.api.Logger
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{Lang, I18nSupport, Messages, MessagesApi}
 import play.api.libs.Codecs
 import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
 import views.ResourceSerialiser
 import org.w3.banana._
+import views.html.resource
 
 import scala.util.{Failure, Success, Try}
 
@@ -88,7 +89,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
   def dereference(path: String) = Action { implicit request =>
     Logger.debug("Dereferencing: " + path)
     render {
-      case Accepts.Html() => Redirect(request.path + ".html")
+      case Accepts.Html() => Redirect(request.path + ".display")
       case AcceptsTurtle() => Redirect(request.path + ".ttl")
       case AcceptsJSONLD() => Redirect(request.path + ".jsonld")
       case AcceptsPlainText() => Redirect(request.path + ".txt")
@@ -116,7 +117,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
       case Failure(f) => InternalServerError
       case Success(g) => if (g.isEmpty) NotFound
         else extension match {
-          case "html" => buildHTMLResult(uriString, g)
+          case "html" => buildHTMLResult(uriString, g, request2lang)
           case "ttl" => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
           case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
           case "nt" => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
@@ -150,19 +151,17 @@ class Application @Inject()(val messagesApi: MessagesApi)
     }
   }
 
-
-
   /**
    * TODO temporary
    */
-  def buildHTMLResult(resourceUri: String, graph: Graph): Result = {
+  def buildHTMLResult(resourceUri: String, graph: Graph, lang: Lang): Result = {
     val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
     val rdf = RDFTriples.parse(strRDF).get
 
     val shapes = ShapeMatcher.matchWithShacl(rdf, resourceUri)
     val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
 
-    Ok(views.html.resource(resource)).as(HTML)
+    Ok(views.html.resource(resource)(lang.language)).as(HTML)
   }
 
   /**
