@@ -2,7 +2,7 @@ package models
 
 import org.w3.banana._
 import org.w3.banana.io.{RDFWriter, Turtle}
-import play.Logger
+import play.{Logger, Play}
 
 import scala.util.Try
 
@@ -35,20 +35,26 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
   }
 
   def build(uriString: String, graph: Rdf#Graph, shapes: List[String]) = {
-
-    Logger.debug("Graph: " + graph)
-    val rdfs = RDFSPrefix[Rdf]
+    val mainLabelProp = Play.application().configuration().getString("wesby.altLabelProperty")
 
     val uri = URI(uriString)
-    val ncname = uri.lastPathSegment
-    val prefix = uriString.dropRight(ncname.length)
-
     val pg = PointedGraph(uri, graph)
-    val labelsPg = pg / rdfs.label
-    val labels = for (label <- labelsPg.map(_.pointer)) yield label match {
+
+    val ncname = uri.lastPathSegment
+
+    val rdfs: RDFSPrefix[Rdf] = RDFSPrefix[Rdf]
+
+    val rdfsLabelsPg = pg / rdfs.label
+    val mainLabelsPg = pg / URI(mainLabelProp)
+
+    val rdfsLabels = for (label <- rdfsLabelsPg.map(_.pointer)) yield label match {
+      case l: Rdf#Literal => l
+    }
+    val defaultLabels = for (label <- mainLabelsPg.map(_.pointer)) yield label match {
       case l: Rdf#Literal => l
     }
 
+    val labels = defaultLabels ++ rdfsLabels
     val properties = getProperties(graph, uri)
     val inverseProperties = getInverseProperties(graph, uri)
 
