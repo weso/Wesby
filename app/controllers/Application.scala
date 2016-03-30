@@ -89,7 +89,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
   def dereference(path: String) = Action { implicit request =>
     Logger.debug("Dereferencing: " + path)
     render {
-      case Accepts.Html() => Redirect(request.path + ".display")
+      case Accepts.Html() => Redirect(request.path + ".html")
       case AcceptsTurtle() => Redirect(request.path + ".ttl")
       case AcceptsJSONLD() => Redirect(request.path + ".jsonld")
       case AcceptsPlainText() => Redirect(request.path + ".txt")
