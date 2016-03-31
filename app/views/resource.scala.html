@@ -8,7 +8,11 @@
 @(resource: Resource[Jena])(lang: String)
 
 @displayUri(uri: String) = {
-    <a href="@Curie(uri).namespace">@Curie(uri).prefix</a>:<a href="@uri">@Curie(uri).reference</a>
+    @if(Curie(uri).prefix.equals("unknown")) {
+        <a href="@uri">@uri</a>
+    } else {
+        <a href="@Curie(uri).namespace">@Curie(uri).prefix</a>:<a href="@uri">@Curie(uri).reference</a>
+    }
 }
 
 @main(title = resource.label.map(l => l.getLiteralLexicalForm).getOrElse("Unknown")) {
