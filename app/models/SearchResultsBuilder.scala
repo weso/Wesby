@@ -1,10 +1,10 @@
 package models
 
-import java.net.URI
+import java.util.regex.Pattern
 
 import org.w3.banana._
 import org.w3.banana.io.{RDFWriter, Turtle}
-import play.Logger
+import play.{Logger, Play}
 
 import scala.util.Try
 
@@ -23,10 +23,16 @@ trait SearchResultsBuilder extends SparqlSolutionsDependencies {
   import sparqlOps._
   import sparqlHttp.sparqlEngineSyntax._
 
+  def rewrite(uri: Rdf#URI) = { // TODO extract to utils
+    val host = Play.application().configuration().getString("wesby.host")
+    val dereferencedUri = uri.toString.replaceFirst(Pattern.quote(host), "http://localhost:9000/")
+    URI(dereferencedUri)
+  }
+
   def build(solutions: Rdf#Solutions) = {
     val resources = solutions.iterator map { row =>
 
-      (row("label").get.as[String].get, row("resource").get.as[Rdf#URI].get.toString)
+      (row("label").get.as[String].get, rewrite(row("resource").get.as[Rdf#URI].get).toString)
     }
 
     resources

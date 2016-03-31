@@ -76,7 +76,15 @@ class Application @Inject()(val messagesApi: MessagesApi)
             }
         }
       }
-      case None => BadRequest("Error 400: Missing resource type parameter")
+      case None => {
+        QueryEngineWithJena.textSearchSelect(searchQuery) match {
+          case Success(solutions) => {
+            val results = SearchResultsBuilder.build(solutions)
+            Ok(views.html.search(results)).as(HTML)
+          }
+          case Failure(f) => NotFound(f.getMessage)
+        }
+      }
     }
   }
 
