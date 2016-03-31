@@ -20,12 +20,12 @@
                     <li class="menu-text">Wesby 2.0</li>
                 </ul>
             </div>
-            <div class="top-bar-right">
+            <form class="top-bar-right" role="search" action="/search">
                 <ul class="menu">
-                    <li><input type="search" placeholder="Search resources"></li>
-                    <li><button type="button" class="button">Search</button></li>
+                    <li><input type="search" class="form-control" placeholder="Search resources" name="q"></li>
+                    <li><button type="submit" class="button">Search</button></li>
                 </ul>
-            </div>
+            </form>
         </div>
         @content
             <!-- Compressed JavaScript -->
