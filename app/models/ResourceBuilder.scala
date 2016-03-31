@@ -1,5 +1,7 @@
 package models
 
+import java.util.regex.Pattern
+
 import org.w3.banana._
 import org.w3.banana.io.{RDFWriter, Turtle}
 import play.{Logger, Play}
@@ -17,11 +19,17 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
 
   import ops._
 
+  def rewrite(uri: Rdf#URI) = {
+    val host = Play.application().configuration().getString("wesby.host")
+    val dereferencedUri = uri.toString.replaceFirst(Pattern.quote(host), "http://localhost:9000/")
+    URI(dereferencedUri)
+  }
+
   def getProperties(graph: Rdf#Graph, uri: Rdf#URI): Map[Rdf#URI, Iterable[Rdf#Node]] = {
     import ops._
     val triples = graph.triples.filter(_._1.equals(uri))
     val l = for(Triple(s, p, o) <- triples) yield {
-      (p, o)
+      (rewrite(p), o)
     }
 
     l.groupBy(e => e._1).mapValues(e => e.map(x => x._2))
@@ -30,7 +38,7 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
   def getInverseProperties(graph: Rdf#Graph, uri: Rdf#URI): Iterable[(Rdf#URI, Rdf#URI)] = {
     val inverseTriples = graph.triples.filter(_._3.equals(uri))
     for(Triple(s, p, o) <- inverseTriples) yield {
-      (URI(s.toString), p)
+      (rewrite(URI(s.toString)), rewrite(p))
     }
   }
 
