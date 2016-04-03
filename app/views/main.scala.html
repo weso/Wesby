@@ -1,3 +1,5 @@
+@import play.i18n._
+
 @(title: String)(content: Html)
 
 <!DOCTYPE display>
@@ -17,13 +19,13 @@
         <div class="top-bar">
             <div class="top-bar-left">
                 <ul class="dropdown menu" data-dropdown-menu>
-                    <li class="menu-text">Wesby 2.0</li>
+                    <li class="menu-text">@Messages.get("portal.title")</li>
                 </ul>
             </div>
             <form class="top-bar-right" role="search" action="/search">
                 <ul class="menu">
-                    <li><input type="search" class="form-control" placeholder="Search resources" name="q"></li>
-                    <li><button type="submit" class="button">Search</button></li>
+                    <li><input type="search" class="form-control" placeholder="@Messages.get("search.placeholder")" name="q"></li>
+                    <li><button type="submit" class="button">@Messages.get("search.button")</button></li>
                 </ul>
             </form>
         </div>

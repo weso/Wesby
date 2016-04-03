@@ -7,4 +7,15 @@ wesby.title=\n\
                              by WESO
 welcome.test=Welcome to Wesby.
 
+portal.title=Wesby 2.0
+
+search.button=Search
+search.placeholder=Search resources
+search.title=Search results
+
+resource.table.properties=Property
+resource.table.values=Value
+resource.table.is=Is
+resource.table.of=of
+
 error.serialise=Coudn't serialize the graph.

@@ -41,8 +41,8 @@
         <table class="hover">
             <thead>
                 <tr>
-                    <th>Property</th>
-                    <th>Value</th>
+                    <th>@Messages.get("resource.table.properties")</th>
+                    <th>@Messages.get("resource.table.values")</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +75,7 @@
                 @for(p <- resource.inverseProperties) {
                     <tr>
                         <td>
-                            Is @displayUri(p._2.getURI) of
+                            @Messages.get("resource.table.is") @displayUri(p._2.getURI) @Messages.get("resource.table.of")
                         </td>
                         <td>
                             @displayUri(p._1.getURI)
