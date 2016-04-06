@@ -11,6 +11,14 @@
     </div>
 
     <div class="column row">
+        <div class="callout alert">
+            <h3>Wesby is under development</h3>
+            <p>The configuration wizard is not ready yet, but you can still manually setup Wesby.
+                You can learn how to do it reading the <a href="#manual-config">manual configuration section.</a></p>
+        </div>
+    </div>
+
+    <div class="column row">
         <h2>Demo portal</h2>
         <p>Wesby comes preconfigured with a few SPARQL endpoints so you can see how it works before deploying your own data portal.</p>
         <p>You can choose between several demo portals in the menu below.</p>
@@ -83,11 +91,59 @@
             </div>
         </form>
 
+        <h2 id="manual-config">Manual configuration</h2>
+        <p>To manually configure your data portal you may modify the default configuration settings found in <code>application.conf</code>.
+        You can find this file in the <code>conf</code> folder, inside the Wesby installation folder.</p>
+        <p>This file should should include some documentation comments to ease the process.</p>
 
-
-
-        <h2>Manual configuration</h2>
-        <h2>Customising your data portal</h2>
+        <h3>Customising your data portal</h3>
+        <p>Wesby is fully customizable, allowing you to adapt your data portal by means of standard HTML and CSS templates.</p>
+        <p>If you just want to adapt the CSS styles to your site, you can override the default styles by adding your
+            custom styles to the <code>main.css</code> file, inside the <code>public/</code> folder.</p>
+        <p>By default, Wesby uses the <a href="http://foundation.zurb.com/">Foundation Framework</a> to simplify the
+        portal building process and provide a responsive interface. You can choose not to use this framework by modifying
+        the stylesheets in the <code>main.scala.html</code> template.</p>
+        <p>In the following sections you can find more information and help about the customization process,
+        Wesby's anatomy, and how to customize the HTML templates.</p>
+        <h4>Templates</h4>
+        <p>Wesby is built on top of <a href="https://www.playframework.com/">Play Framework</a>, which
+        uses the <a href="https://www.playframework.com/documentation/2.4.x/ScalaTemplates">Twirl</a> template engine to
+        provide a customisable user interface. This template engine binds the resources data to the HTML templates using the
+        special character <code>@@</code>. In the templates you will find some code preceded with that character, where
+         the data will be inserted by the server. </p>
+        <p>In the folder <code>Wesby/app/views/</code>, you can find the following HTML templates that you can modify,
+            inside each template you may find some comments to help you with the customization process:</p>
+        <ul>
+            <li>
+                <strong>main.scala.html</strong>
+                <p>This is the root template. It defines the header, the styles and
+                the scripts applied to every page in the data portal. The content of the other templates is inserted by
+                the server into the <code>@@content</code> tag. This template is where you can replace the Foundation
+                Framework if you like.</p>
+            </li>
+            <li>
+                <strong>resource.scala.html</strong>
+                <p>It is applied to the resources of the data portal. By default
+                it shows a table listing the properties and its values of the retrieved RDF resource.</p>
+            </li>
+            <li>
+                <strong>search.scala.html</strong>
+                <p>Template for the search results page.</p>
+            </li>
+            <li>
+                <strong>welcome.scala.html</strong>
+                <p>This is the template for this page that you are reading. By
+                default, it is configured as the Index page in the <code>application.conf</code> file, but you can replace it
+                with your own index page once you've finished the configuration process.</p>
+            </li>
+            <li>
+                <strong>index.scala.html</strong>
+                <p>You can use this template to place the content of the index page
+                    for your data portal. Once you've finished the configuration you can replace the value of the <code>wesby.index</code>
+                    property in <code>application.conf</code> by <code>"/index"</code>, so the data portal will display it
+                    as the index page instead of this welcome page.</p>
+            </li>
+        </ul>
     </div>
 
 

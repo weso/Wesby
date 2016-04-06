@@ -51,7 +51,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * You can change the index page in `application.conf`.
    */
   def welcome = Action { implicit request =>
-    Ok(Messages("welcome.test"))
+    Ok(views.html.welcome()).as(HTML)
   }
 
   def search(searchQuery: String, a: Option[String],
