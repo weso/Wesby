@@ -27,7 +27,7 @@ class QueryEngineSpec[Rdf <: RDF] extends Specification {
       "query for triples" >> {
         "in wich Asturias is the subject" in new WithApplication() {
           val path = "resource/Asturias"
-          val resource = Play.application().configuration().getString("wesby.host") + path
+          val resource = Play.application().configuration().getString("wesby.datasetBase") + path
           val query = Play.application().configuration().getString("queries.s")
 //          val solutions: Rdf#Solutions = QueryEngineWithJena.select(resource, query)
 //

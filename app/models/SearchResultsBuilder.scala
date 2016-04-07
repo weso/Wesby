@@ -24,8 +24,9 @@ trait SearchResultsBuilder extends SparqlSolutionsDependencies {
   import sparqlHttp.sparqlEngineSyntax._
 
   def rewrite(uri: Rdf#URI) = { // TODO extract to utils
-    val host = Play.application().configuration().getString("wesby.host")
-    val dereferencedUri = uri.toString.replaceFirst(Pattern.quote(host), "http://localhost:9000/")
+  val host = Play.application().configuration().getString("wesby.host")
+    val datasetBase = Play.application().configuration().getString("wesby.datasetBase")
+    val dereferencedUri = uri.toString.replaceFirst(Pattern.quote(datasetBase), host)
     URI(dereferencedUri)
   }
 

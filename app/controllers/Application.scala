@@ -117,7 +117,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def getLDPR(path: String, extension: String) = Action { implicit request =>
     Logger.debug("Downloading: " + extension)
-    val uriString = Play.application().configuration().getString("wesby.host") + path
+    val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
     val constructQuery = Play.application().configuration().getString("queries.construct")
     val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
 
@@ -145,7 +145,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def getLDPC(path: String) = Action { implicit request =>
     Logger.debug("Container: " + path)
-    val resource = Play.application().configuration().getString("wesby.host") + path + "/"
+    val resource = Play.application().configuration().getString("wesby.datasetBase") + path + "/"
     val constructQuery = Play.application().configuration().getString("queries.construct.s")
     val graph = QueryEngineWithJena.construct(resource, constructQuery)
 

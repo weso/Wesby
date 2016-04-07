@@ -21,7 +21,8 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
 
   def rewrite(uri: Rdf#URI) = {
     val host = Play.application().configuration().getString("wesby.host")
-    val dereferencedUri = uri.toString.replaceFirst(Pattern.quote(host), "http://localhost:9000/")
+    val datasetBase = Play.application().configuration().getString("wesby.datasetBase")
+    val dereferencedUri = uri.toString.replaceFirst(Pattern.quote(datasetBase), host)
     URI(dereferencedUri)
   }
 
