@@ -30,7 +30,10 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
     import ops._
     val triples = graph.triples.filter(_._1.equals(uri))
     val l = for(Triple(s, p, o) <- triples) yield {
-      (rewrite(p), o)
+
+      if (o.isURI)
+        (rewrite(p), rewrite(o.asInstanceOf[Rdf#URI]).asInstanceOf[Rdf#Node])
+      else (rewrite(p), o)
     }
 
     l.groupBy(e => e._1).mapValues(e => e.map(x => x._2))
