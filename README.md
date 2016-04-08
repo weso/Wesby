@@ -3,6 +3,7 @@ Wesby is a linked data frontend that wraps your RDF resources with custom-built 
 
 [![Build Status](https://travis-ci.org/weso/Wesby.svg?branch=2.0)](https://travis-ci.org/weso/Wesby)
 [![codecov.io](http://codecov.io/github/weso/Wesby/coverage.svg?branch=2.0)](http://codecov.io/github/weso/Wesby?branch=2.0)
+[![Stories in Ready](https://badge.waffle.io/weso/wesby.png?label=ready&title=Ready)](http://waffle.io/weso/wesby)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/weso/Wesby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 by [WESO](www.weso.es)
 
