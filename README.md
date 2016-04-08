@@ -6,7 +6,7 @@ Wesby is a linked data frontend that wraps your RDF resources with custom-built 
 [![Stories in Ready](https://img.shields.io/waffle/label/weso/Wesby/ready.svg)](http://waffle.io/weso/wesby)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/weso/Wesby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weso/Wesby/2.0/LICENSE.txt)
-by [WESO](www.weso.es)
+[![by WESO](https://img.shields.io/badge/by-WESO-29c7c0.svg)](http://www.weso.es/)
 
 ## Features
 * RDF retrieval from SPARQL endpoint
