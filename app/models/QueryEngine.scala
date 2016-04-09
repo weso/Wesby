@@ -97,6 +97,23 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     solutions
   }
 
+  def getLabel(uri: String): Option[Rdf#Literal] = {
+    val getLabelQuery = Play.application().configuration().getString("queries.getLabel")
+
+    val queryString = getPrefixesString + getLabelQuery
+      .replace("$resource", uri)
+      .replace("$lang", "es")
+    val query = parseSelect(queryString).get
+    val labels = endpoint.executeSelect(query).get.iterator map { row =>
+      row("label").get.as[Rdf#Literal].get
+    }
+
+    if(labels.isEmpty)
+      None
+    else
+      Some(labels.toList.head)
+  }
+
   private def getPrefixesString: String = {
     val prefixes = PrefixMapping.prefixToUri
     val prefixesString = (

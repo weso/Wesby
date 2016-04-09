@@ -159,6 +159,13 @@ class Application @Inject()(val messagesApi: MessagesApi)
     }
   }
 
+  def label(uri: String) = Action { implicit request =>
+    QueryEngineWithJena.getLabel(uri) match {
+      case None => NotFound
+      case Some(s) => Ok(s.getLiteralValue.toString)
+    }
+  }
+
   /**
    * TODO temporary
    */
