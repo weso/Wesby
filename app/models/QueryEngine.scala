@@ -98,11 +98,9 @@ trait QueryEngine extends QueryEngineDependencies { self =>
 
   def getLabel(uri: String): Option[Rdf#Literal] = {
     val getLabelQuery = Play.application().configuration().getString("queries.getLabel")
-    val labelProp = Play.application().configuration().getString("wesby.altLabelProperty")
 
     val queryString = getPrefixesString + getLabelQuery
       .replace("$resource", uri)
-      .replace("$labelProperty", labelProp)
       .replace("$lang", "es")
     val query = parseSelect(queryString).get
     val labels = endpoint.executeSelect(query).get.iterator map { row =>
