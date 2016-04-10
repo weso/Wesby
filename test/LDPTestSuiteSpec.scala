@@ -42,5 +42,5 @@ class LDPTestSuiteSpec extends Specification {
 ////      options.put("skipLogging", null);
 ////      options.put("excludedGroups", "MANUAL");
 //    }
-  }
+//  }
 }
