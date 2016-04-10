@@ -52,7 +52,7 @@
 
                     <tr>
                         @* Properties *@
-                        <td rowspan="@nodes.size">
+                        <td class="triple-value" rowspan="@nodes.size">
                             @displayUri(wuri.getURI)
                         </td>
 
@@ -77,7 +77,7 @@
                 }
                 @for(p <- resource.inverseProperties) {
                     <tr>
-                        <td>
+                        <td class="triple-value">
                             @* Properties *@
                             @Messages.get("resource.table.is") @displayUri(p._2.getURI) @Messages.get("resource.table.of")
                         </td>
