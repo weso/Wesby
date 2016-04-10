@@ -20,7 +20,7 @@
         <div class="column row">
             <h1>@resource.label.map(l => l.getLiteralLexicalForm).getOrElse("Unknown")</h1>
             @if(resource.labels.size > 1) {<p class="lead"> Synonyms: }
-            @for(l <- resource.labels.drop(1)) {@l.getLiteralValue}
+            @resource.labels.drop(1).map(l => l.getLiteralValue).toSet.mkString(", ")
             @if(resource.labels.size > 1) {</p>}
             <p class="lead">@resource.shapes</p>
         </div>
