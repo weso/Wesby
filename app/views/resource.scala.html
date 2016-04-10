@@ -9,9 +9,9 @@
 
 @displayUri(uri: String) = {
     @if(Curie(uri).prefix.equals("unknown")) {
-        <a href="@uri">@uri</a>
+        <a href="@uri" class="value-uri">@uri</a>
     } else {
-        <a href="@Curie(uri).namespace">@Curie(uri).prefix</a>:<a href="@uri">@Curie(uri).reference</a>
+        <a href="@Curie(uri).namespace">@Curie(uri).prefix</a>:<a href="@uri" class="value-uri">@Curie(uri).reference</a>
     }
 }
 
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <table class="hover">
+        <table id="resource-table" class="hover">
             <thead>
                 <tr>
                     <th>@Messages.get("resource.table.properties")</th>
@@ -51,10 +51,13 @@
                 @for(p@(wuri, nodes) <- resource.properties) {
 
                     <tr>
+                        @* Properties *@
                         <td rowspan="@nodes.size">
                             @displayUri(wuri.getURI)
                         </td>
-                        <td>
+
+                        @* Values *@
+                        <td class="triple-value">
                             @if(nodes.head.isLiteral) { @nodes.head.getLiteralLexicalForm } else {
                                 @if(nodes.head.isURI) {
                                     @displayUri(nodes.head.getURI)
@@ -63,7 +66,7 @@
                         </td>
                     @for(n <- nodes.drop(1)) {
                         <tr>
-                            <td>
+                            <td  class="triple-value">
                                 @if(n.isLiteral) { @n.getLiteralLexicalForm } else {
                                     @if(n.isURI) { <a href="@n.getURI">@n.toString</a> } else { @n }
                                 }

@@ -1,5 +1,6 @@
 package controllers
 
+import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.naming.directory.SearchResult
 
@@ -13,7 +14,7 @@ import org.jboss.resteasy.spi.metadata.ResourceBuilder
 import org.w3.banana.jena.JenaModule
 import play.Play
 import play.api.Logger
-import play.api.i18n.{Lang, I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, Lang, Messages, MessagesApi}
 import play.api.libs.Codecs
 import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
@@ -159,8 +160,15 @@ class Application @Inject()(val messagesApi: MessagesApi)
     }
   }
 
+  def rewrite(uri: String) = {
+    val host = Play.application().configuration().getString("wesby.host")
+    val datasetBase = Play.application().configuration().getString("wesby.datasetBase")
+    val dereferencedUri = uri.replaceFirst(Pattern.quote(host), datasetBase)
+    dereferencedUri
+  }
+
   def label(uri: String) = Action { implicit request =>
-    QueryEngineWithJena.getLabel(uri) match {
+    QueryEngineWithJena.getLabel(rewrite(uri)) match {
       case None => NotFound
       case Some(s) => Ok(s.getLiteralValue.toString)
     }
