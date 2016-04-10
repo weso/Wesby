@@ -10,6 +10,7 @@ GET        /welcome             controllers.Application.welcome
 GET        /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /search              controllers.Application.search(q, a: Option[String], p: Option[String], tp: Option[String], to: Option[String])
+GET        /wesby-label         controllers.Application.label(uri)
 
 GET        /*path/              controllers.Application.getLDPC(path)
 GET        /*path.:extension    controllers.Application.getLDPR(path, extension)
