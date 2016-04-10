@@ -21,13 +21,13 @@ class LDPTestSuiteSpec extends Specification {
       // Default port: 19001
 
       //configure test suite
-      Logger.info("Running W3C official LDP Test Suite")
-      val options = new util.HashMap[String, String]()
-      options.put("server", "http://localhost:19001")
+//      Logger.info("Running W3C official LDP Test Suite")
+//      val options = new util.HashMap[String, String]()
+//      options.put("server", "http://localhost:19001")
 
-      val ldpTestSuite = new LdpTestSuite(options)
-      ldpTestSuite.run()
-      Logger.debug(ldpTestSuite.getStatus.toString)
+//      val ldpTestSuite = new LdpTestSuite(options)
+//      ldpTestSuite.run()
+//      Logger.debug(ldpTestSuite.getStatus.toString)
 
 //      log.info("Running W3C official LDP Test Suite against '{}' server", baseUrl);
 //      Map<String, String> options = new HashMap<>();
