@@ -1,6 +1,8 @@
-@import play.i18n._
 
-@(results: Iterator[(String, String)])
+@import play.i18n._
+@import com.hp.hpl.jena.graph.Node_Literal
+
+@(results: Iterator[(Node_Literal, String)])
 
 @main(title=Messages.get("search.title")) {
 
@@ -13,7 +15,7 @@
     <div class="column row">
         <ul>
         @for(r <- results) {
-            <li><a href="@r._2">@r._1</a></li>
+            <li><a href="@r._2">@r._1.getLiteralValue</a></li>
         }
         </ul>
     </div>
