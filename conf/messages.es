@@ -13,3 +13,4 @@ resource.table.is=Es
 resource.table.of=de
 
 error.serialise=No se pudo serializar el grafo.
+error.404=No se encontró el recurso

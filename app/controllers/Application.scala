@@ -124,8 +124,8 @@ class Application @Inject()(val messagesApi: MessagesApi)
 
     graph match {
       case Failure(f) => InternalServerError
-      case Success(g) => if (g.isEmpty) NotFound
-        else extension match {
+      case Success(g) => if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
+    else extension match {
           case "html" => buildHTMLResult(uriString, g, request2lang)
           case "ttl" => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
           case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
