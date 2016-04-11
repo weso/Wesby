@@ -13,6 +13,7 @@ search.button=Search
 search.placeholder=Search resources
 search.title=Search results
 
+resource.missingLabel=Unlabeled resource
 resource.table.properties=Property
 resource.table.values=Value
 resource.table.is=Is

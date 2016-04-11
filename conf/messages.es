@@ -6,6 +6,7 @@ search.button=Buscar
 search.placeholder=Buscar recursos
 search.title=Resultados de búsqueda
 
+resource.missingLabel=Recurso sin nombre
 resource.table.properties=Propiedades del recuso
 resource.table.values=Valores
 resource.table.is=Es

@@ -15,10 +15,10 @@
     }
 }
 
-@main(title = resource.label.map(l => l.getLiteralLexicalForm).getOrElse("Unknown")) {
+@main(title = resource.label.map(l => l.getLiteralLexicalForm).getOrElse(Messages.get("resource.missingLabel"))) {
     <div class="callout large">
         <div class="column row">
-            <h1>@resource.label.map(l => l.getLiteralLexicalForm).getOrElse("Unknown")</h1>
+            <h1>@resource.label.map(l => l.getLiteralLexicalForm).getOrElse(Messages.get("resource.missingLabel"))</h1>
             @if(resource.labels.size > 1) {<p class="lead"> Synonyms: }
             @resource.labels.drop(1).map(l => l.getLiteralValue).toSet.mkString(", ")
             @if(resource.labels.size > 1) {</p>}
