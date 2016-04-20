@@ -20,6 +20,7 @@ import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
 import views.ResourceSerialiser
 import org.w3.banana._
+import play.api.libs.json.Json
 import views.html.resource
 
 import scala.util.{Failure, Success, Try}
@@ -169,8 +170,23 @@ class Application @Inject()(val messagesApi: MessagesApi)
 
   def label(uri: String) = Action { implicit request =>
     QueryEngineWithJena.getLabel(rewrite(uri)) match {
-      case None => NotFound
-      case Some(s) => Ok(s.getLiteralValue.toString)
+//      case None => NotFound TODO Find a way to prevent 404 logging in browser
+      case None => Ok(Json.toJson(Json.parse(
+        """
+          |{
+          | "status": "error",
+          | "message": "Label not found"
+          |}
+        """.stripMargin
+      )))
+      case Some(s) => Ok(Json.toJson(Json.parse(
+        s"""
+           |{
+           |  "status": "success",
+           |  "data": {"label": "${s.getLiteralValue.toString}"}
+           |}
+         """.stripMargin
+      )))
     }
   }
 
