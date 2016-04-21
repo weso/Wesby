@@ -19,6 +19,7 @@ resource.table.values=Value
 resource.table.is=Is
 resource.table.of=of
 resource.downloadAs=Download as...
+resource.synonyms=Synonyms
 
 error.serialise=Coudn't serialize the graph.
 error.404=Resource not found

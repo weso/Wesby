@@ -12,6 +12,7 @@ resource.table.values=Valores
 resource.table.is=Es
 resource.table.of=de
 resource.downloadAs=Descargar como...
+resource.synonyms=Sinónimos
 
 error.serialise=No se pudo serializar el grafo.
 error.404=No se encontró el recurso
