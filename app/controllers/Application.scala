@@ -118,7 +118,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @return the HTTP response
    */
   def getLDPR(path: String, extension: String) = Action { implicit request =>
-    Logger.debug("Downloading: " + extension)
+    Logger.debug(s"""Downloading: $path.$extension""")
     val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
     val constructQuery = Play.application().configuration().getString("queries.construct")
     val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
@@ -145,21 +145,22 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param path the resource path
    * @return the HTTP response
    */
-  def getLDPC(path: String) = Action { implicit request =>
-    Logger.debug("Container: " + path)
-    val resource = Play.application().configuration().getString("wesby.datasetBase") + path + "/"
-    val constructQuery = Play.application().configuration().getString("queries.construct.s")
-    val graph = QueryEngineWithJena.construct(resource, constructQuery)
-
-    //    val query = Play.application().configuration().getString("queries.s")
-    //    val solutions = QueryEngineWithJena.select(resource, query)
-
-    graph match {
-      case Failure(f) => InternalServerError
-      case Success(g) => if (g.isEmpty) NotFound
-      else buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
-    }
-  }
+  def getLDPC(path: String) = getLDPR(path + "/", "html")
+//    Action { implicit request =>
+//    Logger.debug("Container: " + path)
+//    val resource = Play.application().configuration().getString("wesby.datasetBase") + path + "/"
+//    val constructQuery = Play.application().configuration().getString("queries.construct.s")
+//    val graph = QueryEngineWithJena.construct(resource, constructQuery)
+//
+//    //    val query = Play.application().configuration().getString("queries.s")
+//    //    val solutions = QueryEngineWithJena.select(resource, query)
+//
+//    graph match {
+//      case Failure(f) => InternalServerError
+//      case Success(g) => if (g.isEmpty) NotFound
+//      else buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
+//    }
+//  }
 
   def rewrite(uri: String) = {
     val host = Play.application().configuration().getString("wesby.host")

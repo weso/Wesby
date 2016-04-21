@@ -68,7 +68,7 @@
                         <tr>
                             <td  class="triple-value">
                                 @if(n.isLiteral) { @n.getLiteralLexicalForm } else {
-                                    @if(n.isURI) { <a href="@n.getURI">@n.toString</a> } else { @n }
+                                    @if(n.isURI) { <a href="@n.getURI" class="value-uri">@n.toString</a> } else { @n }
                                 }
                             </td>
                         </tr>
