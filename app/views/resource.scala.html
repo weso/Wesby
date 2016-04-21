@@ -24,20 +24,24 @@
             @if(resource.labels.size > 1) {</p>}
             <p class="lead">@resource.shapes</p>
         </div>
+        <div class="column row">
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li>
+                    <a>@Messages.get("resource.downloadAs")</a>
+                    <ul class="menu">
+                        <li><a href="" onclick="event.preventDefault(); downloadAs('jsonld')">JSON-LD</a></li>
+                        <li><a href="" onclick="event.preventDefault(); downloadAs('ttl')">Turtle</a></li>
+                        <li><a href="" onclick="event.preventDefault(); downloadAs('rdf')">RDF</a></li>
+                        <li><a href="" onclick="event.preventDefault(); downloadAs('txt')">Text</a></li>
+                        <li><a href="" onclick="event.preventDefault(); downloadAs('n3')">N3</a></li>
+                        <li><a href="" onclick="event.preventDefault(); downloadAs('nt')">N-Triples</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="column row">
-
-        <div class="small-2 columns">
-            <label for="middle-label" class="text-right middle">Filter:</label>
-        </div>
-        <div class="small-8 columns">
-            <div class="input-group">
-                <input id="middle-label" class="input-group-field" type="text" placeholder="Examples: Bob, foaf:name, label">
-                <a class="input-group-button button">Submit</a>
-            </div>
-        </div>
-
         <table id="resource-table" class="hover">
             <thead>
                 <tr>
