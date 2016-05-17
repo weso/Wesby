@@ -1,0 +1,35 @@
+prefix :        <http://coteam-sear.rhcloud.com/vocab/coteam.owl#>
+prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+prefix dc:      <http://purl.org/dc/elements/1.1/>
+prefix dbpo:    <http://dbpedia.org/ontology/>
+prefix xsd:     <http://www.w3.org/2001/XMLSchema#>
+prefix shex:    <http://www.w3.org/2013/ShEx/ns#>
+
+:Corpus {
+    a (:Corpus),
+    :tieneLibro @:Obra+
+}
+
+:Obra {
+    a (dbpo:WrittenWork)
+}
+
+:Parrafo {
+    a (:Parrafo),
+    :textoParrafo xsd:string,
+    (:tieneLibro @:Obra)? # TODO remove optional
+}
+
+:Palabra {
+    a (:Palabra),
+    :label xsd:string
+}
+
+:Concordancia {
+    a (:Concordancia),
+    :pagina xsd:string,
+    :posicion xsd:int,
+    (:tienePalabra @:Palabra)?, # TODO remove optional
+    (:tieneParrafo @:Parrafo)?  # TODO remove optional
+}

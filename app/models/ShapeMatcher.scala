@@ -1,8 +1,11 @@
 package models
 
+import es.weso.rdf.nodes.IRI
+import es.weso.rdf.validator.ValidationResult
 import es.weso.rdf.{PrefixMap, RDFReader}
-import es.weso.rdfgraph.nodes.{IRI, RDFNode}
-import es.weso.shacl.{Schema => ShaclSchema, Label, ShaclResult, ShaclMatcher}
+import es.weso.rdf.nodes.{IRI, RDFNode}
+import es.weso.shex.{Label, Schema, ShExMatcher}
+import org.scalatest.matchers.Matcher
 import play.Play
 import play.api.Logger
 
@@ -11,7 +14,7 @@ import scala.util.{Failure, Success, Try}
 object ShapeMatcher {
 
   val schemaFormat = Play.application().configuration().getString("shapes.format")
-  val shaclSchema: Try[(ShaclSchema, PrefixMap)] = ShaclSchema.fromFile(
+  val shaclSchema: Try[(Schema, PrefixMap)] = Schema.fromFile(
     Play.application().configuration().getString("shapes.location"),
     schemaFormat
   )
@@ -27,13 +30,13 @@ object ShapeMatcher {
     val result = for (
           (schema, pm) <- shaclSchema
         ) yield {
-            val validator = ShaclMatcher(schema, rdf)
+            val validator = ShExMatcher(schema, rdf)
             val r = validator.match_node_label(IRI(node))(label)
             (r, pm)
           }
 
         result match {
-          case Success((validationResult: ShaclResult, pm)) => {
+          case Success((validationResult: ValidationResult[RDFNode, Label, Throwable], pm)) => {
             val r = validationResult.show(0)(pm)
 
             if (r.equals("<No results>")) None else Option(label.toString)

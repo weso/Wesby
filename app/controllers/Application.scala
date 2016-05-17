@@ -6,8 +6,12 @@ import javax.naming.directory.SearchResult
 
 import com.hp.hpl.jena.graph.Graph
 import com.hp.hpl.jena.query.ResultSet
-import es.weso.rdf.RDFTriples
-import es.weso.rdfgraph.nodes.RDFNode
+import com.hp.hpl.jena.rdf.model.RDFReader
+import es.weso.rdf.jena.RDFAsJenaModel
+import es.weso.rdf.validator.jena.JenaValidator
+import es.weso.utils.{JenaUtils, Parsed}
+//import es.weso.rdf.RDFTriples
+import es.weso.rdf.nodes.RDFNode
 import models.http.{CustomContentTypes, CustomHeaderNames, CustomMimeTypes}
 import models._
 import org.jboss.resteasy.spi.metadata.ResourceBuilder
@@ -196,12 +200,25 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def buildHTMLResult(resourceUri: String, graph: Graph, lang: Lang): Result = {
     val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
-    val rdf = RDFTriples.parse(strRDF).get
+//    val rdf = RDFTriples.parse(strRDF).get
+    JenaUtils.str2Model(strRDF) match {
+      case Parsed(model) => {
+        val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
+        val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
+//        val template = Play.application().configuration().getString(shapes.head)
+//        template match {
+//          case "user" => Ok(views.html.user(resource)(lang.language)).as(HTML)
+//          case _ => Ok(views.html.resource(resource)(lang.language)).as(HTML)
+//        }
+        Ok(views.html.resource(resource)(lang.language)).as(HTML)
+      }
+    }
 
-    val shapes = ShapeMatcher.matchWithShacl(rdf, resourceUri)
-    val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
 
-    Ok(views.html.resource(resource)(lang.language)).as(HTML)
+
+
+
+
   }
 
   /**
@@ -216,7 +233,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
   private def buildResult(resource: String, graph: Graph, mimeType: String, asString: (Graph, String) => Try[String]): Result = {
 
     val strRDF = ResourceSerialiser.asTurtle(graph, resource).get
-    val rdf = RDFTriples.parse(strRDF).get
+//    val rdf = RDFTriples.parse(strRDF).get
 
 //    val shaclShape = ShapeMatcher.matchWithShacl(rdf)
 

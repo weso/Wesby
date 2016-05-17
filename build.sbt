@@ -40,4 +40,4 @@ ScoverageSbtPlugin.ScoverageKeys.coverageMinimum := 80
 ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := false
 
 // ShExcala
-libraryDependencies += "es.weso" % "shexcala_2.11" % "0.6.7"
+libraryDependencies += "es.weso" % "shexcala_2.11" % "0.7.8"

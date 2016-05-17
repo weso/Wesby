@@ -1,4 +1,4 @@
-@prefix : <http://coteam-sear.rhcloud.com/vocab/coteam#> .
+@prefix : <http://example.org/> .
 @prefix yago:       <http://yago-knowledge.org/resource/>.
 @prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix foaf:       <http://xmlns.com/foaf/0.1/>.
