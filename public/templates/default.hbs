@@ -1,0 +1,92 @@
+<div class="column row">
+  <div class="callout large">
+    <div class="column row">
+      {{#each label}}
+        {{#if @first}}
+          <h1>{{this}}</h1>
+        {{else}}
+          <p class="lead">{{this}}</p>
+        {{/if}}
+      {{else}}
+        <h1>Recurso sin nombre</h1>
+      {{/each}}
+    </div>
+    <div class="column row">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li>
+          <a>Descargar como...</a>
+          <ul class="menu">
+            <li><a href="" onclick="event.preventDefault(); Wesby.downloadAs('jsonld')">JSON-LD</a></li>
+            <li><a href="" onclick="event.preventDefault(); Wesby.downloadAs('ttl')">Turtle</a></li>
+            <li><a href="" onclick="event.preventDefault(); Wesby.downloadAs('rdf')">RDF</a></li>
+            <li><a href="" onclick="event.preventDefault(); Wesby.downloadAs('txt')">Text</a></li>
+            <li><a href="" onclick="event.preventDefault(); Wesby.downloadAs('n3')">N3</a></li>
+            <li><a href="" onclick="event.preventDefault(); Wesby.downloadAs('nt')">N-Triples</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="column row">
+  <table id="resource-table" class="hover">
+    <thead>
+    <tr>
+      <th>Propiedad</th>
+      <th>Valor</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {{#each this}}
+      {{#unless [@context]}}
+        {{@key}}<br>
+      {{/unless}}
+    {{/each}}
+
+
+    @for(p@(wuri, nodes) <- resource.properties) {
+
+    <tr>
+      @* Properties *@
+      <td class="triple-value" rowspan="@nodes.size">
+        @displayUri(wuri.getURI)
+      </td>
+
+      @* Values *@
+      <td class="triple-value">
+        @if(nodes.head.isLiteral) { @nodes.head.getLiteralLexicalForm } else {
+        @if(nodes.head.isURI) {
+        @displayUri(nodes.head.getURI)
+        } else { @nodes.head }
+        }
+      </td>
+      @for(n <- nodes.drop(1)) {
+    <tr>
+      <td  class="triple-value">
+        @if(n.isLiteral) { @n.getLiteralLexicalForm } else {
+        @if(n.isURI) { <a href="@n.getURI" class="value-uri">@n.toString</a> } else { @n }
+        }
+      </td>
+    </tr>
+    </tr>
+    }
+    }
+    @for(p <- resource.inverseProperties) {
+    <tr>
+      <td class="triple-value">
+        @* Properties *@
+        @Messages.get("resource.table.is") @displayUri(p._2.getURI) @Messages.get("resource.table.of")
+      </td>
+      <td class="triple-value">
+        @* Values *@
+        @displayUri(p._1.getURI)
+      </td>
+    </tr>
+    }
+    </tbody>
+  </table>
+</div>
+
+

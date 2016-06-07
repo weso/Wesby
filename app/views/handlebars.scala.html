@@ -1,0 +1,19 @@
+@import scala.util.Try
+
+@(resourceUri: String)(lang: String)
+
+@main(title = "Resource") {
+
+    <div id="result"></div>
+
+    @*<script id="resource" type="text/dust">*@
+
+
+    @*<div id="output"></div>*@
+
+    <script type="text/javascript">
+        $(function () {
+            Wesby.loadTemplate('@resourceUri'.replace(/\.[^/.]+$/, ".jsonld"));
+        });
+    </script>
+}

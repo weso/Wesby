@@ -11,6 +11,7 @@ GET        /assets/*file        controllers.Assets.versioned(path="/public", fil
 
 GET        /search              controllers.Application.search(q, a: Option[String], p: Option[String], tp: Option[String], to: Option[String])
 GET        /wesby-label         controllers.Application.label(uri)
+GET        /context             controllers.Application.context
 
 GET        /*path/              controllers.Application.getLDPC(path)
 GET        /*path.:extension    controllers.Application.getLDPR(path, extension)

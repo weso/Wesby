@@ -41,3 +41,14 @@ ScoverageSbtPlugin.ScoverageKeys.coverageFailOnMinimum := false
 
 // ShExcala
 libraryDependencies += "es.weso" % "shexcala_2.11" % "0.7.8"
+
+// WebJars
+libraryDependencies += "org.webjars.npm" % "handlebars" % "4.0.5"
+
+libraryDependencies += "org.webjars" % "jsonld.js" % "0.3.19"
+
+libraryDependencies += "org.webjars" % "dustjs-linkedin" % "2.7.2"
+
+// http://mvnrepository.com/artifact/com.github.jsonld-java/jsonld-java-jena
+libraryDependencies += "com.github.jsonld-java" % "jsonld-java-jena" % "0.4.1"
+

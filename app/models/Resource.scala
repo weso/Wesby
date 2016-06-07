@@ -1,25 +1,70 @@
 package models
 
+import com.hp.hpl.jena.graph.{Node, Graph => JenaGraph}
 import org.w3.banana._
-import org.w3.banana.io.{Turtle, RDFWriter}
-import org.w3.banana.jena.JenaModule
+import org.w3.banana.io.{RDFWriter, Turtle}
+import org.w3.banana.jena.{Jena, JenaModule}
+import play.api.libs.json.{JsResult, JsSuccess, JsValue}
 
+import scalaz.Digit._2
+
+//import scala.collection.immutable.Iterable
 import scala.util.Try
 
 
 /**
  * Created by jorge on 6/10/15.
  */
-class Resource[Rdf<:RDF](
-  val uri: Rdf#URI,
-  val labels: Iterable[Rdf#Literal],
-  val shapes: List[String],//List[Rdf#URI],
-  val properties: Map[Rdf#URI, Iterable[Rdf#Node]],
-  val inverseProperties: Iterable[(Rdf#URI, Rdf#URI)]
+case class Resource[Rdf<:RDF](
+  uri: Rdf#URI,
+  labels: Iterable[Rdf#Literal],
+  shapes: List[String],//List[Rdf#URI],
+  properties: Map[Rdf#URI, Iterable[Rdf#Node]],
+  inverseProperties: Iterable[(Rdf#URI, Rdf#URI)]
 //  val inverseProperties: Iterable[(Rdf#Node, Rdf#URI)]
-  ) extends RDFModule with RDFOpsModule with JenaModule{
+  ) extends RDFModule with RDFOpsModule with JenaModule
+//  with Format[Resource[Jena]]
+{
   import ops._
   def label = labels.headOption
 }
+
+object Resource {
+  import play.api.libs.json._
+  implicit object ResourceFormat extends Format[Resource[Jena]] {
+      override def writes(r: Resource[Jena]): JsValue = {
+
+        val common: JsObject = Json.obj(
+          "@context" -> "./context",
+          "@id" -> r.uri.toString()
+        )
+
+        val props: Map[String, Iterable[String]] = for(p <- r.properties) yield p._1.getLocalName -> p._2.map(n =>
+          if (n.isURI) n.getURI
+          else if (n.isLiteral) n.getLiteral.getLexicalForm
+          else n.toString
+        )
+
+        val reverseProps = r.inverseProperties
+          .map(p => (p._2.getURI, p._1.getURI))
+          .groupBy(_._1)
+          .mapValues(_.map(_._2))
+          .map {
+            case (k, v) => k -> (for (u <- v) yield Json.obj("@id" -> u))
+          }
+
+        val jsonReverse = Json.toJson(reverseProps)
+        val json: JsValue = Json.toJson(props)
+
+        common ++ json.as[JsObject] + ("@reverse" -> jsonReverse)
+      }
+
+      override def reads(json: JsValue): JsResult[Resource[Jena]] = {
+        val res: models.Resource[Jena] = ResourceBuilderWithJena.build("", JenaGraph.emptyGraph, List(""))
+        JsSuccess(res)
+      }
+  }
+}
+
 
 

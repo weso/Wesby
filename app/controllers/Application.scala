@@ -10,6 +10,10 @@ import com.hp.hpl.jena.rdf.model.RDFReader
 import es.weso.rdf.jena.RDFAsJenaModel
 import es.weso.rdf.validator.jena.JenaValidator
 import es.weso.utils.{JenaUtils, Parsed}
+import org.scalatest.path
+import org.w3.banana.jena.Jena
+import play.api.libs.iteratee.Enumeratee
+import play.api.libs.json.{JsObject, JsValue}
 //import es.weso.rdf.RDFTriples
 import es.weso.rdf.nodes.RDFNode
 import models.http.{CustomContentTypes, CustomHeaderNames, CustomMimeTypes}
@@ -131,11 +135,12 @@ class Application @Inject()(val messagesApi: MessagesApi)
       case Failure(f) => InternalServerError
       case Success(g) => if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
     else extension match {
-          case "html" => buildHTMLResult(uriString, g, request2lang)
+          case "html" => buildHTMLResult(request.path, g, request2lang)
           case "ttl" => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
           case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
           case "nt" => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
-          case "jsonld" => buildResult(uriString, g, JSONLD, ResourceSerialiser.asJsonLd)
+//          case "jsonld" => buildResult(uriString, g, JSONLD, ResourceSerialiser.asJsonLd)
+          case "jsonld" => buildTemplateResult(uriString, g, request2lang)
           // TODO      case "n3" =>
           case "rdf" => buildResult(uriString, g, RDFXML, ResourceSerialiser.asRdfXml)
           case _ => NotFound
@@ -149,22 +154,29 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param path the resource path
    * @return the HTTP response
    */
-  def getLDPC(path: String) = getLDPR(path + "/", "html")
-//    Action { implicit request =>
-//    Logger.debug("Container: " + path)
-//    val resource = Play.application().configuration().getString("wesby.datasetBase") + path + "/"
-//    val constructQuery = Play.application().configuration().getString("queries.construct.s")
-//    val graph = QueryEngineWithJena.construct(resource, constructQuery)
-//
-//    //    val query = Play.application().configuration().getString("queries.s")
-//    //    val solutions = QueryEngineWithJena.select(resource, query)
-//
-//    graph match {
-//      case Failure(f) => InternalServerError
-//      case Success(g) => if (g.isEmpty) NotFound
-//      else buildResult(resource, g, TURTLE, ResourceSerialiser.asTurtle)
-//    }
-//  }
+  def getLDPC(pathWithoutSlash: String) = Action { implicit request =>
+    val path = pathWithoutSlash + "/"
+    Logger.debug(s"""Downloading: $path""")
+    val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
+
+    val constructQuery = Play.application().configuration().getString("queries.construct")
+    val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
+
+    graph match {
+      case Failure(f) => InternalServerError
+      case Success(g) => if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
+      else render {
+        case Accepts.Html() => buildHTMLResult(uriString, g, request2lang)
+        case AcceptsTurtle() => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
+        case AcceptsJSONLD() => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
+        case AcceptsPlainText() => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
+        case AcceptsNTriples() => buildResult(uriString, g, JSONLD, ResourceSerialiser.asJsonLd)
+        // TODO      case "n3" =>
+        case AcceptsRdfXML() => buildResult(uriString, g, RDFXML, ResourceSerialiser.asRdfXml)
+        case _ => UnsupportedMediaType
+      }
+    }
+  }
 
   def rewrite(uri: String) = {
     val host = Play.application().configuration().getString("wesby.host")
@@ -200,19 +212,37 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def buildHTMLResult(resourceUri: String, graph: Graph, lang: Lang): Result = {
     val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
-//    val rdf = RDFTriples.parse(strRDF).get
+    //    val rdf = RDFTriples.parse(strRDF).get
     JenaUtils.str2Model(strRDF) match {
       case Parsed(model) => {
         val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
         val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
-//        val template = Play.application().configuration().getString(shapes.head)
-//        template match {
-//          case "user" => Ok(views.html.user(resource)(lang.language)).as(HTML)
-//          case _ => Ok(views.html.resource(resource)(lang.language)).as(HTML)
-//        }
-        Ok(views.html.resource(resource)(lang.language)).as(HTML)
+        //        val template = Play.application().configuration().getString(shapes.head)
+        //        template match {
+        //          case "user" => Ok(views.html.user(resource)(lang.language)).as(HTML)
+        //          case _ => Ok(views.html.resource(resource)(lang.language)).as(HTML)
+        //        }
+        //        Ok(views.html.resource(resource)(lang.language)).as(HTML)
+
+        Ok(views.html.handlebars(resourceUri)(lang.language)).as(HTML)
       }
     }
+  }
+
+    def buildTemplateResult(resourceUri: String, graph: Graph, lang: Lang): Result = {
+      val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
+      //    val rdf = RDFTriples.parse(strRDF).get
+      JenaUtils.str2Model(strRDF) match {
+        case Parsed(model) => {
+          val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
+          val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
+//          val res = ResourceSerialiser.asTemplateData(resource)
+//          Logger.debug(Json.toJson(resource).toString)
+//          Ok(views.html.handlebars(resourceUri)(lang.language)).as(HTML)
+          val res: JsValue = Json.toJson(resource)
+          Ok(res)
+        }
+      }
 
 
 
@@ -274,6 +304,10 @@ class Application @Inject()(val messagesApi: MessagesApi)
     ETAG -> {
       "W/\"" + Codecs.sha1(content) + "\""
     }
+  }
+
+  def context() = Action {
+    Ok(Json.parse(scala.io.Source.fromFile("conf/context.json").mkString))
   }
 }
 

@@ -1,0 +1,71 @@
+{
+  "@context" : {
+    "label" : "http://coteam-sear.rhcloud.com/vocab/coteam#label",
+    "paragraphText" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#paragraphText",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "hasBook" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#hasBook",
+      "@type" : "@id"
+    },
+    "hasConcordance" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#hasConcordance",
+      "@type" : "@id"
+    },
+    "isWordOf" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#isWordOf",
+      "@type" : "@id"
+    },
+    "isBookOf" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#isBookOf",
+      "@type" : "@id"
+    },
+    "hasWord" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#hasWord",
+      "@type" : "@id"
+    },
+    "isConcordanceOf" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#isConcordanceOf",
+      "@type" : "@id"
+    },
+    "Corpus" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#Corpus"
+    },
+    "Concordance" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#Concordance"
+    },
+    "hasParagraph" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#hasParagraph",
+      "@type" : "@id"
+    },
+    "position" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#position",
+      "@type" : "http://www.w3.org/2001/XMLSchema#integer"
+    },
+    "isParagraphOf" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#isParagraphOf",
+      "@type" : "@id"
+    },
+    "row" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#row",
+      "@type" : "http://www.w3.org/2001/XMLSchema#integer"
+    },
+    "Word" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#Word"
+    },
+    "WrittenWork" : {
+      "@id" : "http://dbpedia.org/ontology/WrittenWork"
+    },
+    "Paragraph" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#Paragraph"
+    },
+    "comment" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#comment"
+    },
+    "page" : {
+      "@id" : "http://coteam-sear.rhcloud.com/vocab/coteam#page",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    }
+  }
+}

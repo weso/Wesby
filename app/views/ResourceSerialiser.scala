@@ -1,11 +1,27 @@
 package views
 
-import models.QueryEngineDependencies
+import java.io.ByteArrayOutputStream
+import java.util
+
+import com.github.jsonldjava.core.JsonLdProcessor
+import com.github.jsonldjava.utils.JsonUtils
+import com.hp.hpl.jena.graph.Graph
+import models.{QueryEngineDependencies, Resource}
+import org.apache.jena.riot.{RDFDataMgr, RDFFormat, RDFWriterRegistry}
+import org.apache.jena.riot.out.JsonLDWriter
 import org.w3.banana.io.{JsonLdExpanded, JsonLdFlattened, RDFWriter}
 import org.w3.banana.jena.{Jena, JenaModule}
 import org.w3.banana.{JsonLDWriterModule, NTriplesWriterModule, RDFXMLWriterModule, TurtleWriterModule}
+import play.api.Logger
+//import org.json4s._
+//import org.json4s.JsonDSL
+//import org.json4s.native.JsonParser
+//import org.json4s.native.JsonMethods
+//import org.json4s.native.Printer
+//import org.json4s.JsonAST
+//import org.json4s.native.Serialization.write
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
 
 /**
@@ -58,7 +74,25 @@ trait ResourceSerialiserTrait
   }
 
   def asJsonLd(graph: Rdf#Graph, base: String): Try[String] = {
-    jsonldCompactedWriter.asString(graph, base)
+//    val out = new ByteArrayOutputStream()
+//    RDFDataMgr.write(out, graph.asInstanceOf[Graph], RDFFormat.JSONLD_PRETTY)
+//    Logger.debug(out.toString("UTF-8"))
+
+    jsonldFlattenedWriter.asString(graph, base)
+  }
+
+  def asTemplateData(resource: Resource[Jena]): Try[String] = {
+//    implicit val formats = DefaultFormats
+
+//    val json = (
+//      "@context" -> "context",
+//      "@id" -> "id",
+//      "@type" -> "type"
+//      )
+
+
+
+    Success("")
   }
 
   def asN3(graph: Rdf#Graph, base: String): Try[String] = ???
