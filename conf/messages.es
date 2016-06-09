@@ -1,9 +1,9 @@
 welcome.test=Bienvenido a Wesby.
 
-portal.title=Wesby 2.0
+portal.title=COTEAM
 
 search.button=Buscar
-search.placeholder=Buscar recursos
+search.placeholder=Buscar palabra
 search.title=Resultados de búsqueda
 
 resource.missingLabel=Recurso sin nombre

@@ -1,7 +1,23 @@
-@(message: String)
+@import play.i18n._
 
-@main("Welcome to Play") {
+@main(title=Messages.get("search.title")) {
 
-    @play20.welcome(message)
+    <div class="callout large">
+        <div class="column row">
+            <h1>COTEAM: Corpus de Textos Aljamiado-Moriscos</h1>
+            <form role="search" action="/search">
+                <div class="input-group">
+                    <span class="input-group-label"><i class="fi-magnifying-glass"></i></span>
+                    <input type="search" class="input-group-field" placeholder="@Messages.get("search.placeholder")" name="q">
+                    <a class="input-group-button button" onclick="$('form').submit();">@Messages.get("search.button")</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="small-4 columns">
+            <img class="thumbnail" src="http://placehold.it/210x297" alt="397BNF">
+        </div>
+    </div>
 }

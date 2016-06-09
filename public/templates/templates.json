@@ -1,4 +1,6 @@
 {
+  "http://coteam-sear.rhcloud.com/vocab/coteam#Corpus": "corpus",
   "http://coteam-sear.rhcloud.com/vocab/coteam#Concordance": "concordance",
+  "http://coteam-sear.rhcloud.com/vocab/coteam#Word": "word",
   "http://dbpedia.org/ontology/WrittenWork": "work"
 }

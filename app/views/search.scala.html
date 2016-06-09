@@ -9,6 +9,13 @@
     <div class="callout large">
         <div class="column row">
             <h1>@Messages.get("search.title")</h1>
+            <form role="search" action="/search">
+                <div class="input-group">
+                    <span class="input-group-label"><i class="fi-magnifying-glass"></i></span>
+                    <input type="search" class="input-group-field keyboard" placeholder="Buscar palabra" name="q">
+                    <a class="input-group-button button" onclick="$('form').submit();">Buscar</a>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -1,0 +1,24 @@
+<div class="column row">
+  <div class="callout large">
+    <h1>Concordancias para: <strong>{{label}}</strong></h1>
+      <table>
+          <thead>
+              <tr>
+                  <td>ID</td>
+                  <td>Párrafo</td>
+              </tr>
+          </thead>
+          <tbody>
+              {{#[@reverse]}}
+                {{#hasWord}}
+                    {{!-- concordance --}}
+                    <tr>
+                        <td></td>
+                        <td>{{wordInParagraph this.[@id]}}</td>
+                    </tr>
+                {{/hasWord}}
+              {{/[@reverse]}}
+          </tbody>
+      </table>
+  </div>
+</div>

@@ -215,8 +215,8 @@ class Application @Inject()(val messagesApi: MessagesApi)
     //    val rdf = RDFTriples.parse(strRDF).get
     JenaUtils.str2Model(strRDF) match {
       case Parsed(model) => {
-        val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
-        val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
+//        val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
+//        val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
         //        val template = Play.application().configuration().getString(shapes.head)
         //        template match {
         //          case "user" => Ok(views.html.user(resource)(lang.language)).as(HTML)
@@ -234,8 +234,8 @@ class Application @Inject()(val messagesApi: MessagesApi)
       //    val rdf = RDFTriples.parse(strRDF).get
       JenaUtils.str2Model(strRDF) match {
         case Parsed(model) => {
-          val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
-          val resource = ResourceBuilderWithJena.build(resourceUri, graph, shapes)
+//          val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
+          val resource = ResourceBuilderWithJena.build(resourceUri, graph, List(""))
 //          val res = ResourceSerialiser.asTemplateData(resource)
 //          Logger.debug(Json.toJson(resource).toString)
 //          Ok(views.html.handlebars(resourceUri)(lang.language)).as(HTML)

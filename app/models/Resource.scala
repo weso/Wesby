@@ -46,7 +46,7 @@ object Resource {
         )
 
         val reverseProps = r.inverseProperties
-          .map(p => (p._2.getURI, p._1.getURI))
+          .map(p => (p._2.getLocalName, p._1.getURI))
           .groupBy(_._1)
           .mapValues(_.map(_._2))
           .map {
