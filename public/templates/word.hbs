@@ -1,20 +1,22 @@
 <div class="column row">
   <div class="callout large">
     <h1>Concordancias para: <strong>{{label}}</strong></h1>
-      <table>
+      <table class="concordance-table">
           <thead>
               <tr>
-                  <td>ID</td>
-                  <td>Párrafo</td>
+                  <td width="5%">ID</td>
+                  <td width="42.5%"></td>
+                  <td width="10%" class="text-center">Concordancia</td>
+                  <td width="42.5%"></td>
               </tr>
           </thead>
           <tbody>
               {{#[@reverse]}}
                 {{#hasWord}}
                     {{!-- concordance --}}
-                    <tr>
+                    <tr onclick="window.document.location='{{this.[@id]}}'">
                         <td></td>
-                        <td>{{wordInParagraph this.[@id]}}</td>
+                        {{{concordance id=this.[@id] word=@root.label}}}
                     </tr>
                 {{/hasWord}}
               {{/[@reverse]}}

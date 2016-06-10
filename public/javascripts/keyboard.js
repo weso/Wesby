@@ -12,7 +12,7 @@ $(function () {
             ],
             'shift' : [
                 '\u0100 \u010C \u1E0C \u1E0E \u0112 \u01E6',
-                '\u0121 \u1E24 H\u0331 \u1E2A \u0126 \u012A',
+                '\u0120 \u1E24 H\u0331 \u1E2A \u0126 \u012A',
                 'J\u030C \u1E32 \u014C \u1E62 \u0160 \u1E6C',
                 '\u1E6E \u016A \u0176 \u1E92 \u1E94 \u1D9C',
                 '{shift} {accept} {cancel}'

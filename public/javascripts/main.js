@@ -93,20 +93,61 @@ Handlebars.registerHelper('a', function(id, options) {
 // Word helpers
 // ----------------------------------------------------------------------------
 
-Handlebars.registerHelper('wordInParagraph', function (concordance, options) {
-  var out = Metamorph(Wesby.getSpinner());
+Handlebars.registerHelper('concordance', function (options) {
+  var out = Metamorph('<td class="text-right concordance-left"></td><td class="text-center concordance-word">' + Wesby.getSpinner() + '</td><td class="text-left concordance-right"></td>');
+  var concordance = options.hash.id;
+  var word = options.hash.word[0];
 
   Wesby.getContext(concordance, function (concordanceCtx) {
     Wesby.getContext(concordanceCtx.hasParagraph, function(paragraphCtx) {
       var text = paragraphCtx.paragraphText[0];
       var position = +concordanceCtx.position[0];
       var textL = text.substring(0, position);
-      var textR = text.substring(position + 'cantidad'.length, text.length);
+      var textR = text.substring(position + word.length, text.length);
       // var regex = new RegExp('\\b' + 'cantidad' + '\\b', 'ig');
       // out.html(text.replace(regex, '<strong>cantidad</strong>'));
-      out.html(textL + ' <strong>cantidad</strong> ' + textR);
+      out.html(
+          '<td class="text-right concordance-left">' + textL +
+          '</td><td class="text-center concordance-word"><strong>'+ word +
+          '</strong></td><td class="text-left concordance-right">'+ textR + '</td>'
+      );
     });
   });
 
   return new Handlebars.SafeString(out.outerHTML());
 });
+
+// Work helpers
+// ----------------------------------------------------------------------------
+
+Handlebars.registerHelper('p', function(paragraph, options) {
+  var out = Metamorph('<img src="' + window.location.origin + '/assets/images/loader.svg">');
+
+  Wesby.getContext(paragraph, function (ctx) {
+    out.html('<p>' + ctx.paragraphText[0] + '</p>');
+  });
+
+  return new Handlebars.SafeString(out.outerHTML());
+});
+
+// Util helpers
+// ----------------------------------------------------------------------------
+// Handlebars.registerHelper('loadMore', function (items, options) {
+//   var out = Metamorph('<img src="' + window.location.origin + '/assets/images/loader.svg">');
+//   var load = options.hash.load;
+//   Wesby.pages = items;
+//
+//   var pages = items.slice(0, load);
+//   var html = pages.forEach
+//   out.html();
+//
+// });
+
+// Register partials
+// ----------------------------------------------------------------------------
+// $.ajax({
+//   method: "GET",
+//   url: window.location.origin + '/assets/templates/partials/' + name + '.hbs'
+// }).done(function (partial) {
+//   Handlebars.registerPartial('pagination', partial);
+// });

@@ -1,0 +1,22 @@
+.concordance-table {
+    table-layout: fixed;
+}
+
+.concordance-table tr {
+    cursor: hand;
+}
+
+.concordance-table .concordance-right {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.concordance-left {
+    direction: rtl;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.concordance-table .concordance-word {
+    white-space: nowrap;
+}

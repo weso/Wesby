@@ -1,11 +1,13 @@
 package models
 
 import com.hp.hpl.jena.graph.{Node, Graph => JenaGraph}
+import es.weso.utils.JenaUtils
 import org.w3.banana._
 import org.w3.banana.io.{RDFWriter, Turtle}
 import org.w3.banana.jena.{Jena, JenaModule}
 import play.api.libs.json.{JsResult, JsSuccess, JsValue}
 
+import scala.Int
 import scalaz.Digit._2
 
 //import scala.collection.immutable.Iterable
@@ -39,7 +41,7 @@ object Resource {
           "@id" -> r.uri.toString()
         )
 
-        val props: Map[String, Iterable[String]] = for(p <- r.properties) yield p._1.getLocalName -> p._2.map(n =>
+        val props = for(p <- r.properties) yield p._1.getLocalName -> p._2.map(n =>
           if (n.isURI) n.getURI
           else if (n.isLiteral) n.getLiteral.getLexicalForm
           else n.toString
@@ -48,7 +50,13 @@ object Resource {
         val reverseProps = r.inverseProperties
           .map(p => (p._2.getLocalName, p._1.getURI))
           .groupBy(_._1)
-          .mapValues(_.map(_._2))
+          .mapValues(_.map(_._2).toSeq.sortWith((s1: String, s2: String) => {
+            val id1 = s1.substring(s1.lastIndexOf("/") + 1, s1.length)
+            val id2 = s2.substring(s2.lastIndexOf("/") + 1, s2.length)
+
+            if(id1.forall(_.isDigit) && id2.forall(_.isDigit)) id1.toInt < id2.toInt
+            else s1 < s2
+          }))
           .map {
             case (k, v) => k -> (for (u <- v) yield Json.obj("@id" -> u))
           }
