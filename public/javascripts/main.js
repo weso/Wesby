@@ -59,8 +59,7 @@ var Wesby = (function () {
   };
 
   var getSpinner = function() {
-    return '<img src="' + window.location.origin + '/assets/images/loader.svg">';
-    // return 'Loading...';
+    return '<div class="loading"></div>';
   };
 
   return {
