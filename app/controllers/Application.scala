@@ -105,7 +105,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @return a 303 redirection
    */
   def dereference(path: String) = Action { implicit request =>
-    Logger.debug("Dereferencing: " + path)
+//    Logger.debug("Dereferencing: " + path)
     render {
       case Accepts.Html() => Redirect(request.path + ".html")
       case AcceptsTurtle() => Redirect(request.path + ".ttl")
@@ -126,7 +126,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @return the HTTP response
    */
   def getLDPR(path: String, extension: String) = Action { implicit request =>
-    Logger.debug(s"""Downloading: $path.$extension""")
+//    Logger.debug(s"""Downloading: $path.$extension""")
     val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
     val constructQuery = Play.application().configuration().getString("queries.construct")
     val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
@@ -156,7 +156,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
    */
   def getLDPC(pathWithoutSlash: String) = Action { implicit request =>
     val path = pathWithoutSlash + "/"
-    Logger.debug(s"""Downloading: $path""")
+//    Logger.debug(s"""Downloading: $path""")
     val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
 
     val constructQuery = Play.application().configuration().getString("queries.construct")

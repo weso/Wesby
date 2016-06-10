@@ -50,13 +50,14 @@ object Resource {
         val reverseProps = r.inverseProperties
           .map(p => (p._2.getLocalName, p._1.getURI))
           .groupBy(_._1)
-          .mapValues(_.map(_._2).toSeq.sortWith((s1: String, s2: String) => {
-            val id1 = s1.substring(s1.lastIndexOf("/") + 1, s1.length)
-            val id2 = s2.substring(s2.lastIndexOf("/") + 1, s2.length)
-
-            if(id1.forall(_.isDigit) && id2.forall(_.isDigit)) id1.toInt < id2.toInt
-            else s1 < s2
-          }))
+          .mapValues(_.map(_._2))
+//          .mapValues(_.map(_._2).toSeq.sortWith((s1: String, s2: String) => {
+//            val id1 = s1.substring(s1.lastIndexOf("/") + 1, s1.length)
+//            val id2 = s2.substring(s2.lastIndexOf("/") + 1, s2.length)
+//
+//            if(id1.forall(_.isDigit) && id2.forall(_.isDigit)) id1.toInt < id2.toInt
+//            else s1 < s2
+//          }))
           .map {
             case (k, v) => k -> (for (u <- v) yield Json.obj("@id" -> u))
           }

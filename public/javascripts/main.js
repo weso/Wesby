@@ -59,7 +59,7 @@ var Wesby = (function () {
   };
 
   var getSpinner = function() {
-    return '<div class="loading"></div>';
+    return '<div class="loading">Cargando</div>';
   };
 
   return {

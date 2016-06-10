@@ -34,7 +34,7 @@ trait QueryEngine extends QueryEngineDependencies { self =>
   }
 
   def select(resource: String, queryString: String): Rdf#Solutions = {
-    Logger.debug("Querying: " + resource)
+//    Logger.debug("Querying: " + resource)
     val selectQueryString = queryString.replace("$resource", resource)
     val query = parseSelect(selectQueryString).get
 
@@ -44,7 +44,7 @@ trait QueryEngine extends QueryEngineDependencies { self =>
   }
 
   def construct(resource: String, queryString: String): Try[Rdf#Graph] = {
-    Logger.debug("Querying: " + resource)
+//    Logger.debug("Querying: " + resource)
     val constructQueryString = queryString.replace("$resource", resource)
     val query = parseConstruct(constructQueryString).get
 
