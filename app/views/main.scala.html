@@ -10,7 +10,6 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
             <!-- Compressed CSS -->
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/foundation-icons/foundation-icons.css")">
@@ -20,8 +19,8 @@
     <body>
         <div class="top-bar">
             <div class="top-bar-left">
-                <ul class="dropdown menu" data-dropdown-menu>
-                    <li class="menu-text"><a href="/">@Messages.get("portal.title")</a></li>
+                <ul class="menu" data-dropdown-menu>
+                    <li class="topbar-title lead"><a href="/">@Messages.get("portal.title")</a></li>
                 </ul>
             </div>
             <form class="top-bar-right" role="search" action="/search">
@@ -31,7 +30,12 @@
                 </ul>
             </form>
         </div>
+        <div class="wrap">
         @content
+        </div>
+        <footer class="footer">
+            COTEAM: Corpus de Textos Aljamiado-Moriscos | Portal generado por <a href="http://weso.github.io/Wesby/">Wesby</a>
+        </footer>
             <!-- Compressed JavaScript -->
         <script src="https://cdn.jsdelivr.net/foundation/6.1.2/foundation.min.js"></script>
 
@@ -55,5 +59,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.25.29/js/jquery.keyboard.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.25.29/js/jquery.keyboard.extension-all.min.js"></script>
         <script src="@routes.Assets.versioned("javascripts/keyboard.js")" type="text/javascript"></script>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
     </body>
 </display>

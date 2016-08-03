@@ -52,7 +52,7 @@ trait ResourceBuilder extends ResourceBuilderDependencies {
     val uri = URI(uriString)
     val pg = PointedGraph(uri, graph)
 
-    val ncname = uri.lastPathSegment
+//    val ncname = uri.lastPathSegment
 
     val rdfs: RDFSPrefix[Rdf] = RDFSPrefix[Rdf]
 

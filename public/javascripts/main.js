@@ -8,6 +8,7 @@ var Wesby = (function () {
   };
 
   var getContext = function (resource, cb) {
+    // console.log('Getting ' + resource);
     $.ajax({
       method: "GET",
       url: resource + '.jsonld',
@@ -79,9 +80,10 @@ Handlebars.registerHelper('id', function(ctx) {
 });
 
 Handlebars.registerHelper('a', function(id, options) {
-  var morph = Metamorph('<img src="' + window.location.origin + '/assets/images/loader.svg">');
-
-  Wesby.getContext(id, function (ctx) {
+  var morph = Metamorph(Wesby.getSpinner());
+  console.log(id);
+  console.log(options);
+  Wesby.getContext(id[0], function (ctx) {
     morph.html('<a href="' + id + '">' + ctx[options.hash['textProp']][0] + '</a>');
     return ctx;
   });
@@ -89,16 +91,34 @@ Handlebars.registerHelper('a', function(id, options) {
   return new Handlebars.SafeString(morph.outerHTML());
 });
 
+Handlebars.registerHelper('img', function(id, options) {
+    var morph = Metamorph(Wesby.getSpinner());
+
+    Wesby.getContext(id, function (ctx) {
+        console.log(ctx['thumbnail'][0]);
+        morph.html('<img class="thumbnail" ' +
+            'src="' + ctx['thumbnail'][0] + '" ' +
+            'alt="' + ctx['label'] + '" </img>');
+        return ctx;
+    });
+
+    return new Handlebars.SafeString(morph.outerHTML());
+});
+
+
 // Word helpers
 // ----------------------------------------------------------------------------
 
 Handlebars.registerHelper('concordance', function (options) {
   var out = Metamorph('<td class="text-right concordance-left"></td><td class="text-center concordance-word">' + Wesby.getSpinner() + '</td><td class="text-left concordance-right"></td>');
   var concordance = options.hash.id;
+  // console.log('Concordance: ' + concordance);
+  // console.log(options.hash);
   var word = options.hash.word[0];
 
   Wesby.getContext(concordance, function (concordanceCtx) {
-    Wesby.getContext(concordanceCtx.hasParagraph, function(paragraphCtx) {
+    Wesby.getContext(concordanceCtx.hasParagraph[0], function(paragraphCtx) {
+      // TODO sólo coge el primer párrafo
       var text = paragraphCtx.paragraphText[0];
       var position = +concordanceCtx.position[0];
       var textL = text.substring(0, position);

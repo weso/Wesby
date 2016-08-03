@@ -1,26 +1,24 @@
-<div class="column row">
-  <div class="callout large">
-    <h1>Concordancias para: <strong>{{label}}</strong></h1>
-      <table class="concordance-table">
-          <thead>
-              <tr>
-                  <td width="5%">ID</td>
-                  <td width="42.5%"></td>
-                  <td width="10%" class="text-center">Concordancia</td>
-                  <td width="42.5%"></td>
-              </tr>
-          </thead>
-          <tbody>
-              {{#[@reverse]}}
-                {{#hasWord}}
-                    {{!-- concordance --}}
-                    <tr onclick="window.document.location='{{this.[@id]}}'">
-                        <td></td>
-                        {{{concordance id=this.[@id] word=@root.label}}}
-                    </tr>
-                {{/hasWord}}
-              {{/[@reverse]}}
-          </tbody>
-      </table>
-  </div>
+<div class="callout large">
+<h1>Concordancias para: <strong>{{label}}</strong></h1>
+  <table class="concordance-table">
+      <thead>
+          <tr>
+              <td width="5%">ID</td>
+              <td width="42.5%"></td>
+              <td width="10%" class="text-center">Concordancia</td>
+              <td width="42.5%"></td>
+          </tr>
+      </thead>
+      <tbody>
+          {{#[@reverse]}}
+            {{#hasWord}}
+                {{!-- concordance --}}
+                <tr onclick="window.document.location='{{this.[@id]}}'">
+                    <td></td>
+                    {{{concordance id=this.[@id] word=@root.label}}}
+                </tr>
+            {{/hasWord}}
+          {{/[@reverse]}}
+      </tbody>
+  </table>
 </div>

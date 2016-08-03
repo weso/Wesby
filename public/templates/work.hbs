@@ -1,17 +1,14 @@
-<div class="column row">
   <div class="callout large">
     <h1>Ficha de texto</h1>
-    <ul>
-      <li>Título: </li>
-      <li>Autor: </li>
-      <li>Fecha: </li>
-      <li>Tema: </li>
-      <li>Medios: </li>
-      <li>Edición: </li>
-      <li>Publicación: </li>
-    </ul>
+      <dl>
+          <dt>Título</dt><dd>{{originalTitle}}</dd>
+          <dt>Descripción</dt><dd>{{description}}</dd>
+          <dt>Fecha de publicación</dt><dd>{{firstPublicationDate}}</dd>
+          <dt>Idioma original</dt><dd>{{originalLanguage}}</dd>
+          <dt>ISBN</dt><dd>{{isbn}}</dd>
+      </dl>
+      <a href="{{sameAs}}" class="button">Texto TEI</a>
   </div>
-</div>
 <!--div class="column row">
     <h2>Contenidos</h2>
     {{!--#[@reverse]}}

@@ -154,28 +154,31 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param path the resource path
    * @return the HTTP response
    */
-  def getLDPC(pathWithoutSlash: String) = Action { implicit request =>
+  def getLDPC(pathWithoutSlash: String, format: Option[String]) = Action { implicit request =>
+    val listings = Play.application().configuration().getBoolean("wesby.generateListings")
     val path = pathWithoutSlash + "/"
-//    Logger.debug(s"""Downloading: $path""")
+    val queryName = if (listings) "queries.listing" else "queries.construct"
+
+      //    Logger.debug(s"""Downloading: $path""")
     val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
 
-    val constructQuery = Play.application().configuration().getString("queries.construct")
+    val constructQuery = Play.application().configuration().getString(queryName)
     val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
 
     graph match {
       case Failure(f) => InternalServerError
-      case Success(g) => if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
-      else render {
-        case Accepts.Html() => buildHTMLResult(uriString, g, request2lang)
-        case AcceptsTurtle() => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
-        case AcceptsJSONLD() => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
-        case AcceptsPlainText() => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
-        case AcceptsNTriples() => buildResult(uriString, g, JSONLD, ResourceSerialiser.asJsonLd)
-        // TODO      case "n3" =>
-        case AcceptsRdfXML() => buildResult(uriString, g, RDFXML, ResourceSerialiser.asRdfXml)
-        case _ => UnsupportedMediaType
-      }
+      case Success(g) =>
+        if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
+        else format match {
+          case None => buildHTMLResult(uriString, g, request2lang)
+          case Some(s) => s match {
+            case "html" => buildHTMLResult(uriString, g, request2lang)
+            case "jsonld" => buildTemplateResult(uriString, g, request2lang)
+            case _ => UnsupportedMediaType
+          }
+        }
     }
+
   }
 
   def rewrite(uri: String) = {
@@ -230,23 +233,24 @@ class Application @Inject()(val messagesApi: MessagesApi)
   }
 
     def buildTemplateResult(resourceUri: String, graph: Graph, lang: Lang): Result = {
-      val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
-      //    val rdf = RDFTriples.parse(strRDF).get
-      JenaUtils.str2Model(strRDF) match {
-        case Parsed(model) => {
-//          val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
-          val resource = ResourceBuilderWithJena.build(resourceUri, graph, List(""))
-//          val res = ResourceSerialiser.asTemplateData(resource)
-//          Logger.debug(Json.toJson(resource).toString)
-//          Ok(views.html.handlebars(resourceUri)(lang.language)).as(HTML)
-          val res: JsValue = Json.toJson(resource)
-          Ok(res)
-        }
-      }
+//      val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
+//      //    val rdf = RDFTriples.parse(strRDF).get
+//      JenaUtils.str2Model(strRDF) match {
+//        case Parsed(model) => {
+////          val shapes = ShapeMatcher.matchWithShacl(RDFAsJenaModel(model), resourceUri)
+//          val resource = ResourceBuilderWithJena.build(resourceUri, graph, List(""))
+////          val res = ResourceSerialiser.asTemplateData(resource)
+////          Logger.debug(Json.toJson(resource).toString)
+////          Ok(views.html.handlebars(resourceUri)(lang.language)).as(HTML)
+//          val res: JsValue = Json.toJson(resource)
+//          Ok(res)
+//        }
+//      }
 
 
-
-
+      val resource = ResourceBuilderWithJena.build(resourceUri, graph, List(""))
+      val res: JsValue = Json.toJson(resource)
+      Ok(res)
 
 
   }
