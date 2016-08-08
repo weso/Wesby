@@ -104,16 +104,21 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param path the resource path
    * @return a 303 redirection
    */
-  def dereference(path: String) = Action { implicit request =>
-//    Logger.debug("Dereferencing: " + path)
+  def dereference(path: String, page: Option[String]) = Action { implicit request =>
+
+    val query = page match {
+      case Some(p) => "?page=" + p
+      case None => ""
+    }
+
     render {
-      case Accepts.Html() => Redirect(request.path + ".html")
-      case AcceptsTurtle() => Redirect(request.path + ".ttl")
-      case AcceptsJSONLD() => Redirect(request.path + ".jsonld")
-      case AcceptsPlainText() => Redirect(request.path + ".txt")
-      case AcceptsNTriples() => Redirect(request.path + ".nt")
-      case AcceptsN3() => Redirect(request.path + ".n3")
-      case AcceptsRdfXML() => Redirect(request.path + ".rdf")
+      case Accepts.Html() => Redirect(request.path + ".html" + query)
+      case AcceptsTurtle() => Redirect(request.path + ".ttl" + query)
+      case AcceptsJSONLD() => Redirect(request.path + ".jsonld" + query)
+      case AcceptsPlainText() => Redirect(request.path + ".txt" + query)
+      case AcceptsNTriples() => Redirect(request.path + ".nt" + query)
+      case AcceptsN3() => Redirect(request.path + ".n3" + query)
+      case AcceptsRdfXML() => Redirect(request.path + ".rdf" + query)
       case _ => UnsupportedMediaType
     }
   }
@@ -125,17 +130,36 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param extension the document extension
    * @return the HTTP response
    */
-  def getLDPR(path: String, extension: String) = Action { implicit request =>
-//    Logger.debug(s"""Downloading: $path.$extension""")
+  def getLDPR(path: String, extension: String, page: Option[String]) = Action { implicit request =>
+    Logger.debug(s"""Downloading: $path.$extension""")
+
+    val queryPart: String = page match {
+      case Some(p) => "?page=" + p
+      case None => ""
+    }
     val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
-    val constructQuery = Play.application().configuration().getString("queries.construct")
-    val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
+    val dataPath = "/" + (path + ".jsonld" + queryPart)
+
+    val graph = page match {
+      case Some(p) =>  {
+        val constructQuery = Play.application().configuration().getString("queries.pagedConstruct")
+        val limit = 10
+        val offset = limit * p.toInt
+        QueryEngineWithJena.pagedConstruct(uriString, constructQuery, limit, offset)
+      }
+      case None => {
+        val constructQuery = Play.application().configuration().getString("queries.construct")
+        QueryEngineWithJena.construct(uriString, constructQuery)
+      }
+    }
+
+    val resourceType = QueryEngineWithJena.getType(uriString).getOrElse("default")
 
     graph match {
       case Failure(f) => InternalServerError
       case Success(g) => if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
     else extension match {
-          case "html" => buildHTMLResult(request.path, g, request2lang)
+          case "html" => buildHTMLResult(request.path, g, request2lang, dataPath, resourceType)
           case "ttl" => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
           case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
           case "nt" => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
@@ -161,18 +185,20 @@ class Application @Inject()(val messagesApi: MessagesApi)
 
       //    Logger.debug(s"""Downloading: $path""")
     val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
+    val dataPath = Play.application().configuration().getString("wesby.datasetBase") + path + ".jsonld"// + page
 
     val constructQuery = Play.application().configuration().getString(queryName)
     val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
+    val resourceType = QueryEngineWithJena.getType(uriString).getOrElse("default")
 
     graph match {
       case Failure(f) => InternalServerError
       case Success(g) =>
         if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
         else format match {
-          case None => buildHTMLResult(uriString, g, request2lang)
+          case None => buildHTMLResult(uriString, g, request2lang, dataPath, resourceType)
           case Some(s) => s match {
-            case "html" => buildHTMLResult(uriString, g, request2lang)
+            case "html" => buildHTMLResult(uriString, g, request2lang, dataPath, resourceType)
             case "jsonld" => buildTemplateResult(uriString, g, request2lang)
             case _ => UnsupportedMediaType
           }
@@ -213,7 +239,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
   /**
    * TODO temporary
    */
-  def buildHTMLResult(resourceUri: String, graph: Graph, lang: Lang): Result = {
+  def buildHTMLResult(resourceUri: String, graph: Graph, lang: Lang, dataPath: String, resourceType: String): Result = {
     val strRDF = ResourceSerialiser.asTurtle(graph, resourceUri).get
     //    val rdf = RDFTriples.parse(strRDF).get
     JenaUtils.str2Model(strRDF) match {
@@ -227,7 +253,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
         //        }
         //        Ok(views.html.resource(resource)(lang.language)).as(HTML)
 
-        Ok(views.html.handlebars(resourceUri)(lang.language)).as(HTML)
+        Ok(views.html.handlebars(resourceUri)(lang.language)(dataPath)(resourceType)).as(HTML)
       }
     }
   }

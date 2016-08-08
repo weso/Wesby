@@ -21,7 +21,7 @@ var Wesby = (function () {
   };
 
 
-  var loadTemplate = function (dataLocation) {
+  var loadTemplate = function (dataLocation, resourceType) {
 
     $.ajax({
       method: "GET",
@@ -43,7 +43,7 @@ var Wesby = (function () {
             method: "GET",
             url: window.location.origin + '/assets/templates/templates.json'
           }).done(function (templates) {
-            var templateName = templates[data.type[0]];
+            var templateName = templates[resourceType];
             if (!templateName) {templateName = 'default';}
             $.ajax({
               method: "GET",
@@ -83,7 +83,7 @@ Handlebars.registerHelper('a', function(id, options) {
   var morph = Metamorph(Wesby.getSpinner());
   console.log(id);
   console.log(options);
-  Wesby.getContext(id[0], function (ctx) {
+  Wesby.getContext(id, function (ctx) {
     morph.html('<a href="' + id + '">' + ctx[options.hash['textProp']][0] + '</a>');
     return ctx;
   });

@@ -51,6 +51,17 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     endpoint.executeConstruct(query)
   }
 
+  def pagedConstruct(resource: String, queryString: String, limit: Int, offset: Int): Try[Rdf#Graph] = {
+    //    Logger.debug("Querying: " + resource)
+    val constructQueryString = queryString
+      .replace("$resource", resource)
+      .replace("$limit", limit.toString)
+      .replace("$offset", offset.toString)
+    val query = parseConstruct(constructQueryString).get
+
+    endpoint.executeConstruct(query)
+  }
+
   def textSearchSelect(searchQuery: String) = {
     val simpleSearchQuery = Play.application().configuration().getString("queries.textSearch")
     val labelProp = Play.application().configuration().getString("wesby.altLabelProperty")
@@ -111,6 +122,23 @@ trait QueryEngine extends QueryEngineDependencies { self =>
       None
     else
       Some(labels.toList.head)
+  }
+
+  def getType(uri: String): Option[String] = {
+    val getLabelQuery = Play.application().configuration().getString("queries.getType")
+
+    val queryString = getPrefixesString + getLabelQuery
+      .replace("$resource", uri)
+
+    val query = parseSelect(queryString).get
+    val types = endpoint.executeSelect(query).get.iterator map { row =>
+      row("type").get.as[Rdf#Node].get.toString
+    }
+
+    if(types.isEmpty)
+      None
+    else
+      Some(types.toList.head)
   }
 
   private def getPrefixesString: String = {

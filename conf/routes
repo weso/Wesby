@@ -14,5 +14,5 @@ GET        /wesby-label         controllers.Application.label(uri)
 GET        /context             controllers.Application.context
 
 GET        /*path/              controllers.Application.getLDPC(path, format: Option[String])
-GET        /*path.:extension    controllers.Application.getLDPR(path, extension)
-GET        /*path               controllers.Application.dereference(path)
+GET        /*path.:extension    controllers.Application.getLDPR(path, extension, page: Option[String])
+GET        /*path               controllers.Application.dereference(path, page: Option[String])
