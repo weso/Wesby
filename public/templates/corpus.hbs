@@ -11,12 +11,14 @@
         <button class="open button" onclick="$('.keyboard').getkeyboard().reveal();">Mostrar teclado de símbolos</button>
     </div>
 </div>
-
+<div class="column row">
+    <h2>Relación de textos</h2>
+</div>
 <div class="row small-up-1 medium-up-2 large-up-4">
     {{#hasBook}}
         <div class="column">
             <a href="{{this}}">{{img this}}</a>
-            <a href="{{this}}">Ir al libro</a>
+            <strong>{{a this textProp="label"}}</strong>
         </div>
     {{/hasBook}}
 </div>
