@@ -2,6 +2,7 @@
   "http://coteam-sear.rhcloud.com/vocab/coteam#Corpus": "corpus",
   "http://coteam-sear.rhcloud.com/vocab/coteam#Concordance": "concordance",
   "http://coteam-sear.rhcloud.com/vocab/coteam#Word": "word",
+  "http://coteam-sear.rhcloud.com/vocab/coteam#Paragraph": "paragraph",
   "http://dbpedia.org/ontology/WrittenWork": "work",
   "http://www.w3.org/ns/ldp#Container": "ldpc",
   "default": "default"
