@@ -136,9 +136,20 @@ Handlebars.registerHelper('concordance', function (options) {
       var position = +concordanceCtx.position[0];
       var textL = text.substring(0, position);
       var textR = text.substring(position + word.length, text.length);
+      var bookId = paragraphCtx['hasBook'];
       // var regex = new RegExp('\\b' + 'cantidad' + '\\b', 'ig');
       // out.html(text.replace(regex, '<strong>cantidad</strong>'));
+
+      Wesby.getContext(bookId, function(book) {
+        out.html(
+            '<td><a href="' + bookId + '" >' + book['label'] + '</a></td>' +
+            '<td class="text-right concordance-left">' + textL +
+            '</td><td class="text-center concordance-word"><strong>'+ word +
+            '</strong></td><td class="text-left concordance-right">'+ textR + '</td>'
+        );
+      });
       out.html(
+          '<td>' + Wesby.getSpinner() + '</td>' +
           '<td class="text-right concordance-left">' + textL +
           '</td><td class="text-center concordance-word"><strong>'+ word +
           '</strong></td><td class="text-left concordance-right">'+ textR + '</td>'

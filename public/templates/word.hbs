@@ -3,10 +3,10 @@
   <table class="concordance-table">
       <thead>
           <tr>
-              <td width="5%">ID</td>
-              <td width="42.5%"></td>
+              <td width="17%">Obra</td>
+              <td width="33.5%"></td>
               <td width="10%" class="text-center">Concordancia</td>
-              <td width="42.5%"></td>
+              <td width="33.5%"></td>
           </tr>
       </thead>
       <tbody>
@@ -14,7 +14,6 @@
             {{#hasWord}}
                 {{!-- concordance --}}
                 <tr onclick="window.document.location='{{this.[@id]}}'">
-                    <td></td>
                     {{{concordance id=this.[@id] word=@root.label}}}
                 </tr>
             {{/hasWord}}
