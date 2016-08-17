@@ -32,7 +32,7 @@ var Wesby = (function () {
       cache: true
     }).done(function (data) {
       if (data.redirect) {
-        console.log("Redirecting to " + data.redirect);
+        // console.log("Redirecting to " + data.redirect);
         this.loadTemplate(data.redirect);
       } else {
         $.ajax({
@@ -81,8 +81,8 @@ Handlebars.registerHelper('id', function(ctx) {
 
 Handlebars.registerHelper('a', function(id, options) {
   var morph = Metamorph(Wesby.getSpinner());
-  console.log(id);
-  console.log(options);
+  // console.log(id);
+  // console.log(options);
   Wesby.getContext(id, function (ctx) {
     morph.html('<a href="' + id + '">' + ctx[options.hash['textProp']][0] + '</a>');
     return ctx;
@@ -95,7 +95,7 @@ Handlebars.registerHelper('img', function(id, options) {
     var morph = Metamorph(Wesby.getSpinner());
 
     Wesby.getContext(id, function (ctx) {
-        console.log(ctx['thumbnail'][0]);
+        // console.log(ctx['thumbnail'][0]);
         morph.html('<img class="thumbnail" ' +
             'src="' + ctx['thumbnail'][0] + '" ' +
             'alt="' + ctx['label'] + '" </img>');
@@ -108,6 +108,19 @@ Handlebars.registerHelper('img', function(id, options) {
 
 // Word helpers
 // ----------------------------------------------------------------------------
+
+Handlebars.registerHelper('book', function(paragraphId, options) {
+  var morph = Metamorph(Wesby.getSpinner());
+
+  Wesby.getContext(paragraphId, function (paragraph) {
+    var bookId = paragraph['hasBook'];
+    Wesby.getContext(bookId, function (book) {
+      morph.html('<a href="bookId" >' + book['label'] + '</a>');
+    });
+  });
+
+  return new Handlebars.SafeString(morph.outerHTML());
+});
 
 Handlebars.registerHelper('concordance', function (options) {
   var out = Metamorph('<td class="text-right concordance-left"></td><td class="text-center concordance-word">' + Wesby.getSpinner() + '</td><td class="text-left concordance-right"></td>');

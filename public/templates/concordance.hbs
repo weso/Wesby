@@ -1,10 +1,11 @@
 <div class="callout large">
 <h1>Ficha de concordancia</h1>
-<ul>
-  <li>Palabra: {{a hasWord textProp="label"}}</li>
-  <li>Párrafo: {{a hasParagraph textProp="paragraphText"}}</li>
-  <li>Página: {{page}}</li>
-  <li>Posición: {{position}}</li>
-</ul>
+<dl>
+  <dt>Palabra</dt><dd>{{a hasWord textProp="label"}}</dd>
+  <dt>Obra</dt><dd>{{book hasParagraph}}</dd>
+  <dt>Página</dt><dd>{{page}}</dd>
+  <dt>Párrafo</dt><dd>{{a hasParagraph textProp="paragraphText"}}</dd>
+  <dt>Posición</dt><dd>{{position}}</dd>
+</dl>
 </div>
 
