@@ -50,6 +50,7 @@ var Wesby = (function () {
               url: window.location.origin + '/assets/templates/' + templateName + '.hbs'
             }).done(function (source) {
               data['@context'] = ctx['@context'];
+              if (data['label']) { document.title = data['label'] + ' - ' + document.title; }
               var template = Handlebars.compile(source);
               $('#result').append(template(data));
             });

@@ -1,8 +1,9 @@
 @import scala.util.Try
+@import play.i18n._
 
 @(resourceUri: String)(lang: String)(dataUri: String)(resourceType: String)
 
-@main(title = "Resource") {
+@main(title = Messages.get("portal.title")) {
 
     <div id="result"></div>
 

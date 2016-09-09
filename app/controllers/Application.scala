@@ -68,16 +68,17 @@ class Application @Inject()(val messagesApi: MessagesApi)
              labelProperty: Option[String], typeProperty: Option[String],
              typeObject: Option[String]) = Action { implicit request =>
 
+    val upperCaseQuery = searchQuery.toUpperCase();
     a match {
       case Some(resourceType) => {
         labelProperty match {
           case Some(lp) => {
-            val solutions: ResultSet = QueryEngineWithJena.labelPropSearchSelect(searchQuery, resourceType, lp)
+            val solutions: ResultSet = QueryEngineWithJena.labelPropSearchSelect(upperCaseQuery, resourceType, lp)
             val results = SearchResultsBuilder.build(solutions)
             Ok(views.html.search(results)).as(HTML)
           }
           case None =>
-            QueryEngineWithJena.simpleSearchSelect(searchQuery, resourceType) match {
+            QueryEngineWithJena.simpleSearchSelect(upperCaseQuery, resourceType) match {
               case Success(solutions) => {
                 val results = SearchResultsBuilder.build(solutions)
                 Ok(views.html.search(results)).as(HTML)
@@ -87,7 +88,7 @@ class Application @Inject()(val messagesApi: MessagesApi)
         }
       }
       case None => {
-        QueryEngineWithJena.textSearchSelect(searchQuery) match {
+        QueryEngineWithJena.textSearchSelect(upperCaseQuery) match {
           case Success(solutions) => {
             val results = SearchResultsBuilder.build(solutions)
             Ok(views.html.search(results)).as(HTML)
