@@ -12,7 +12,7 @@ $(function () {
                 '\u012B \u01F0 \u1E33 \u014D \u1E63 \u0161',
                 // t t u y z z
                 '\u1E6D \u1E6F \u016B \u0177 \u1E93 \u1E95',
-                '{shift} {alt} {accept} {cancel}'
+                '{shift} {alt} {cancel}'
             ],
             'shift' : [
                 // a c _ d d e
@@ -23,19 +23,18 @@ $(function () {
                 '\u012A J\u030C \u1E32 \u014C \u1E62 \u0160',
                 // t t u y z z
                 '\u1E6C \u1E6E \u016A \u0176 \u1E92 \u1E94',
-                '{shift} {alt} {accept} {cancel}'
+                '{shift} {alt} {cancel}'
             ],
             'alt' : [
                 // a c h i
                 '\u1D43 \u1D9C \u02B0 \u1DA5' ,
                 // i n t u
                 '\u02E1 \u207F \u1D57 \u1D58',
-                '{shift} {alt} {accept} {cancel}'
+                '{shift} {alt} {cancel}'
             ]
         },
         usePreview: false,
         display: {
-            'accept': 'Buscar',
             'shift': 'Mayus',
             'cancel': 'Cancelar'
         }
