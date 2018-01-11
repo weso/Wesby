@@ -43,6 +43,10 @@
         width: 20px;
     }
 }
+
+.words-list {
+    columns: 6;
+}
 /* --- */
 
 /* Estilo web SEAR */
@@ -152,4 +156,25 @@ button, .button {
 .footer a {
     /*text-decoration: none;*/
     color: #b5b5b5;
+}
+
+.pagination .current {
+    background: #4c4c4c;
+}
+
+.pagination .current:hover {
+    background-color: #b83535;
+}
+
+.pagination .current a {
+    color: #fefefe;
+}
+
+.pagination a {
+    padding: .1875rem .525rem;
+}
+
+.pagination a:hover {
+    background: #b83535;
+    color: #fefefe;
 }

@@ -62,6 +62,18 @@ trait QueryEngine extends QueryEngineDependencies { self =>
     endpoint.executeConstruct(query)
   }
 
+  def listWords(letter: String) = {
+    val listWordsQuery = Play.application().configuration().getString("queries.listWords")
+
+    val selectQueryString = listWordsQuery.replace("$letter", letter)
+    val query = parseSelect(selectQueryString).get
+
+    parseSelect(selectQueryString) match {
+      case Success(q) => Success(endpoint.executeSelect(q).get)
+      case Failure(f) => Failure(f)
+    }
+  }
+
   def textSearchSelect(searchQuery: String) = {
     val simpleSearchQuery = Play.application().configuration().getString("queries.textSearch")
     val labelProp = Play.application().configuration().getString("wesby.altLabelProperty")

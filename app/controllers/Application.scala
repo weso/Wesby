@@ -12,6 +12,7 @@ import es.weso.rdf.validator.jena.JenaValidator
 import es.weso.utils.{JenaUtils, Parsed}
 import org.scalatest.path
 import org.w3.banana.jena.Jena
+import play.api.cache.{CacheApi, Cached}
 import play.api.libs.iteratee.Enumeratee
 import play.api.libs.json.{JsObject, JsValue}
 //import es.weso.rdf.RDFTriples
@@ -35,7 +36,7 @@ import scala.util.{Failure, Success, Try}
 
 //object Application extends JenaModule
 
-class Application @Inject()(val messagesApi: MessagesApi)
+class Application @Inject() (val messagesApi: MessagesApi) (cache: CacheApi) (cached: Cached)
   extends Controller
   with I18nSupport
   with CustomContentTypes
@@ -52,8 +53,10 @@ class Application @Inject()(val messagesApi: MessagesApi)
   /**
    * Redirects to the index page declared in `application.conf`
    */
-  def index = Action { implicit request =>
-    Redirect(Play.application().configuration().getString("wesby.index"))
+  def index = cached("index") {
+    Action { implicit request =>
+      Redirect(Play.application().configuration().getString("wesby.index"))
+    }
   }
 
   /**
@@ -64,11 +67,21 @@ class Application @Inject()(val messagesApi: MessagesApi)
     Ok(views.html.welcome()).as(HTML)
   }
 
+  def words(letter: String) = Action { implicit request =>
+    QueryEngineWithJena.listWords(letter) match {
+      case Success(solutions) => {
+        val results = SearchResultsBuilder.build(solutions)
+        Ok(views.html.words(results, letter)).as(HTML)
+      }
+      case Failure(f) => NotFound("Not found")
+    }
+  }
+
   def search(searchQuery: String, a: Option[String],
              labelProperty: Option[String], typeProperty: Option[String],
              typeObject: Option[String]) = Action { implicit request =>
 
-    val upperCaseQuery = searchQuery.toUpperCase();
+    val upperCaseQuery = searchQuery.toUpperCase()
     a match {
       case Some(resourceType) => {
         labelProperty match {
@@ -131,52 +144,72 @@ class Application @Inject()(val messagesApi: MessagesApi)
    * @param extension the document extension
    * @return the HTTP response
    */
-  def getLDPR(path: String, extension: String, page: Option[String]) = Action { implicit request =>
-    Logger.debug(s"""Downloading: $path.$extension""")
+  def getLDPR(path: String, extension: String, page: Option[String]) = // cached(path + "." + extension + "." + page) {
+      Action { implicit request =>
+        Logger.debug(s"""Downloading: $path.$extension""")
 
-    val queryPart: String = page match {
-      case Some(p) => "?page=" + p
-      case None => ""
-    }
-    val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
-    val dataPath = "/" + (path + ".jsonld" + queryPart)
-
-    val graph = page match {
-      case Some(p) =>  {
-        val constructQuery = Play.application().configuration().getString("queries.pagedConstruct")
-        val limit = 10
-        val offset = limit * p.toInt
-        QueryEngineWithJena.pagedConstruct(uriString, constructQuery, limit, offset)
-      }
-      case None => {
-        val constructQuery = Play.application().configuration().getString("queries.construct")
-        QueryEngineWithJena.construct(uriString, constructQuery)
-      }
-    }
-
-    val resourceType = QueryEngineWithJena.getType(uriString).getOrElse("default")
-
-    graph match {
-      case Failure(f) => InternalServerError
-      case Success(g) => if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
-    else extension match {
-          case "html" => buildHTMLResult(request.path, g, request2lang, dataPath, resourceType)
-          case "ttl" => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
-          case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
-          case "nt" => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
-//          case "jsonld" => buildResult(uriString, g, JSONLD, ResourceSerialiser.asJsonLd)
-          case "jsonld" => buildTemplateResult(uriString, g, request2lang)
-          // TODO      case "n3" =>
-          case "rdf" => buildResult(uriString, g, RDFXML, ResourceSerialiser.asRdfXml)
-          case _ => NotFound
+        val queryPart: String = page match {
+          case Some(p) => "?page=" + p
+          case None => ""
         }
-    }
-  }
+        val uriString = Play.application().configuration().getString("wesby.datasetBase") + path
+        val dataPath = "/" + (path + ".jsonld" + queryPart)
+
+//        val graph = page match {
+//          case Some(p) =>  {
+//            val constructQuery = Play.application().configuration().getString("queries.pagedConstruct")
+//            val limit = 10
+//            val offset = limit * p.toInt
+//            QueryEngineWithJena.pagedConstruct(uriString, constructQuery, limit, offset)
+//          }
+//          case None => {
+//            val constructQuery = Play.application().configuration().getString("queries.construct")
+//            QueryEngineWithJena.construct(uriString, constructQuery)
+//          }
+//        }
+
+        val graph: Try[Graph] = cache.getOrElse[Try[Graph]](uriString) {
+          Logger.debug("not cached")
+          page match {
+            case Some(p) =>  {
+              val constructQuery = Play.application().configuration().getString("queries.pagedConstruct")
+              val limit = 10
+              val offset = limit * p.toInt
+              QueryEngineWithJena.pagedConstruct(uriString, constructQuery, limit, offset)
+            }
+            case None => {
+              val constructQuery = Play.application().configuration().getString("queries.construct")
+              QueryEngineWithJena.construct(uriString, constructQuery)
+            }
+          }
+        }
+
+        cache.set(uriString, graph)
+
+        val resourceType = QueryEngineWithJena.getType(uriString).getOrElse("default")
+
+        graph match {
+          case Failure(f) => InternalServerError
+          case Success(g) => if (g.isEmpty) NotFound(views.html.errors.error404("Not found")).as(HTML)
+          else extension match {
+            case "html" => buildHTMLResult(request.path, g, request2lang, dataPath, resourceType)
+            case "ttl" => buildResult(uriString, g, TURTLE, ResourceSerialiser.asTurtle)
+            case "txt" => Ok(ResourceSerialiser.asPlainText(g, Messages("wesby.title"))).as(TEXT)
+            case "nt" => buildResult(uriString, g, NTRIPLES, ResourceSerialiser.asNTriples)
+            //          case "jsonld" => buildResult(uriString, g, JSONLD, ResourceSerialiser.asJsonLd)
+            case "jsonld" => buildTemplateResult(uriString, g, request2lang)
+            // TODO      case "n3" =>
+            case "rdf" => buildResult(uriString, g, RDFXML, ResourceSerialiser.asRdfXml)
+            case _ => NotFound
+          }
+        }
+      }
+//  }
 
   /**
    * Renders the requested LDPC resource.
    *
-   * @param path the resource path
+   * @param pathWithoutSlash the resource path
    * @return the HTTP response
    */
   def getLDPC(pathWithoutSlash: String, format: Option[String]) = Action { implicit request =>
@@ -189,7 +222,16 @@ class Application @Inject()(val messagesApi: MessagesApi)
     val dataPath = Play.application().configuration().getString("wesby.datasetBase") + path + ".jsonld"// + page
 
     val constructQuery = Play.application().configuration().getString(queryName)
+
     val graph: Try[Graph] = QueryEngineWithJena.construct(uriString, constructQuery)
+
+//    val graph: Try[Graph] = cache.getOrElse[Try[Graph]](uriString) {
+//      Logger.debug("not cached")
+//      QueryEngineWithJena.construct(uriString, constructQuery)
+//    }
+
+//    cache.set(uriString, graph)
+
     val resourceType = QueryEngineWithJena.getType(uriString).getOrElse("default")
 
     graph match {

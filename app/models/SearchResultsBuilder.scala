@@ -33,7 +33,7 @@ trait SearchResultsBuilder extends SparqlSolutionsDependencies {
   def build(solutions: Rdf#Solutions) = {
     val resources = solutions.iterator map { row =>
 
-      (row("label").get.as[Rdf#Literal].get, rewrite(row("resource").get.as[Rdf#URI].get).toString)
+      (row("label").get.as[Rdf#Literal].get, rewrite(row("subject").get.as[Rdf#URI].get).toString)
     }
 
     resources

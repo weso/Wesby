@@ -1,0 +1,43 @@
+
+@import play.i18n._
+@import com.hp.hpl.jena.graph.Node_Literal
+
+@(results: Iterator[(Node_Literal, String)], current: String)
+
+@main(title=Messages.get("search.title")) {
+
+
+    @if(results.isEmpty) {
+        <div class="callout large">
+            <p class="lead">No hay resultados para esta búsqueda.</p>
+        </div>
+    } else {
+        <div class="callout large">
+            <h2>Resultados de búsqueda</h2>
+
+            <ul class="pagination text-center" role="navigation" aria-label="Pagination">
+                @for(letter <- 'A' to 'Z') {
+                    @if(letter.toString == current) {
+                    <li class="current"><a href="/words?letter=@letter" aria-label="@letter">@letter</a></li>
+                    } else {
+                        <li><a href="/words?letter=@letter" aria-label="@letter">@letter</a></li>
+                    }
+                }
+            </ul>
+
+            <div class="column row">
+                <ul class="words-list">
+                @for(r <- results) {
+                    <li><a href="@r._2">@r._1.getLiteralValue</a></li>
+                }
+                </ul>
+            </div>
+        </div>
+    }
+
+
+}
+
+
+
+

@@ -18,17 +18,22 @@
             @*</form>*@
         @*</div>*@
     @*</div>*@
-
-    <div class="callout large">
-        <h2>Resultados de búsqueda</h2>
-        <div class="column row">
-            <ul>
-            @for(r <- results) {
-                <li><a href="@r._2">@r._1.getLiteralValue</a></li>
-            }
-            </ul>
+    @if(results.isEmpty) {
+        <div class="callout large">
+            <p class="lead">No hay resultados para esta búsqueda.</p>
         </div>
-    </div>
+    } else {
+        <div class="callout large">
+            <h2>Resultados de búsqueda</h2>
+            <div class="column row">
+                <ul>
+                @for(r <- results) {
+                    <li><a href="@r._2">@r._1.getLiteralValue</a></li>
+                }
+                </ul>
+            </div>
+        </div>
+    }
 
 }
 
