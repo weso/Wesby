@@ -1,14 +1,23 @@
-  <div class="callout large">
-    <h1>Ficha de texto</h1>
-      <dl>
-          <dt>Título</dt><dd>{{originalTitle}}</dd>
-          <dt>Descripción</dt><dd>{{description}}</dd>
-          <dt>Fecha de publicación</dt><dd>{{firstPublicationDate}}</dd>
-          <dt>Idioma original</dt><dd>{{originalLanguage}}</dd>
-          <dt>ISBN</dt><dd>{{isbn}}</dd>
-      </dl>
-      <a href="{{sameAs}}" class="button">Texto TEI</a>
-  </div>
+<div class="row">
+    <div class="column">
+        <h1>Ficha de la obra</h1>
+        <dl>
+            <dt>Título</dt>
+            <dd>{{originalTitle}}</dd>
+            <dt>Descripción</dt>
+            <dd>{{description}}</dd>
+            <dt>Fecha de redacción/composición</dt>
+            <dd>{{firstPublicationDate}}</dd>
+            <dt>Idioma original</dt>
+            <dd>{{originalLanguage}}</dd>
+            <dt>Signatura</dt>
+            <dd>{{isbn}}</dd>
+            <dt>Responsable de la edición digital</dt>
+            <dd></dd>
+        </dl>
+        <a class="columns" href="{{sameAs}}">Texto TEI</a>
+    </div>
+</div>
 <!--div class="column row">
     <h2>Contenidos</h2>
     {{!--#[@reverse]}}

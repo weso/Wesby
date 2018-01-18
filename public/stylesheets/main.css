@@ -67,14 +67,15 @@ a{
     outline: none;
     color:#5d5d5d;
     text-decoration: none;
-    -webkit-transition: background-color 0.2s ease, border 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    -moz-transition: background-color 0.2s ease, border 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    -ms-transition: background-color 0.2s ease, border 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    -o-transition: background-color 0.2s ease, border 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     transition: background-color 0.2s ease, border 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    font-weight: bold;
+    text-align: justify;
+    font-size: 12px;
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    line-height: 21px;
 }
 a:hover{
-    color:#ed7811;
+    color:#b83535;
 }
 
 a img{
@@ -85,11 +86,69 @@ a.button {
     color: #ffffff;;
 }
 
+li a {
+    font-weight: 400;
+}
+
+p {
+    text-align: justify;
+    color: black;
+    margin-bottom: 11px;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font-weight: 400;
+    line-height: 21px;
+}
+
+dl {
+
+}
+
+dl dd {
+    color: black;
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font-weight: 400;
+    line-height: 21px;
+    text-align: justify;
+    width: 75%;
+    float: left;
+    padding-left: 15px;
+}
+
+dl dd a {
+    font-weight: 400;
+    color: black;
+}
+
+dl dt {
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 21px;
+    text-align: left;
+    float:left;
+    clear: left;
+    width: 25%;
+    color: #b83535;
+}
+
+/*dl dt {*/
+    /*font-weight: 400;*/
+/*}*/
+
+dl dt::after {
+    /*content: ":";*/
+}
+
 h1 {
-    color:#5d5d5d;
-    font-weight:300;
-    font-size: 22px;
-    line-height: 32px;
+    color:#993300;
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font-weight:600;
+    font-size: 18px;
+    line-height: 27px;
+    text-align: justify;
 }
 
 h2 {
@@ -139,6 +198,14 @@ button, .button {
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
 }
 
+#result {
+    height: 100%;
+}
+
+.column {
+    padding: 15px 30px;
+}
+
 .callout {
     border-top: 0px;
     border-right: 0px;
@@ -151,23 +218,36 @@ button, .button {
     color: #999999;
     font-size: 11px;
     position: relative;
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
 }
 
 .footer a {
     /*text-decoration: none;*/
     color: #b5b5b5;
+    font-weight: normal;
+}
+
+footer .left {
+    float: left;
+}
+
+footer .right {
+    float: right;
 }
 
 .pagination .current {
-    background: #4c4c4c;
+    background: none;
+    padding: 0;
 }
 
 .pagination .current:hover {
-    background-color: #b83535;
+    background: none;
 }
 
 .pagination .current a {
-    color: #fefefe;
+    color: #b83535;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .pagination a {
@@ -175,6 +255,18 @@ button, .button {
 }
 
 .pagination a:hover {
-    background: #b83535;
-    color: #fefefe;
+    background: none;
+    color: #b83535;
+}
+
+table thead {
+    background: transparent;
+}
+
+thead td {
+    color: #b83535;
+}
+
+tbody td:hover {
+    color: #b83535;
 }

@@ -6,23 +6,20 @@
 
 @main(title=Messages.get("search.title")) {
 
-
-    @if(results.isEmpty) {
-        <div class="callout large">
+    <div class="column row">
+        @if(results.isEmpty) {
             <p class="lead">No hay resultados para esta búsqueda.</p>
-        </div>
-    } else {
-        <div class="callout large">
-            <h2>Resultados de búsqueda</h2>
+        } else {
+            <h2>Índice alfabético</h2>
 
             <ul class="pagination text-center" role="navigation" aria-label="Pagination">
-                @for(letter <- 'A' to 'Z') {
-                    @if(letter.toString == current) {
+            @for(letter <- 'A' to 'Z') {
+                @if(letter.toString == current) {
                     <li class="current"><a href="/words?letter=@letter" aria-label="@letter">@letter</a></li>
-                    } else {
-                        <li><a href="/words?letter=@letter" aria-label="@letter">@letter</a></li>
-                    }
+                } else {
+                    <li><a href="/words?letter=@letter" aria-label="@letter">@letter</a></li>
                 }
+            }
             </ul>
 
             <div class="column row">
@@ -32,8 +29,8 @@
                 }
                 </ul>
             </div>
-        </div>
-    }
+        }
+    </div>
 
 
 }
