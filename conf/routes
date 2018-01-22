@@ -5,6 +5,8 @@
 # Home page
 GET        /                    controllers.Application.index
 GET        /welcome             controllers.Application.welcome
+GET        /presentacion        controllers.Application.presentacion
+
 GET        /words               controllers.Application.words(letter: String)
 
 # Map static resources from the /public folder to the /assets URL path

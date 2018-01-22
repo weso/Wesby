@@ -270,3 +270,54 @@ thead td {
 tbody td:hover {
     color: #b83535;
 }
+
+.top-bar {
+    background: white;
+    padding: 0;
+    box-shadow: initial;
+    margin: 0px auto 1px auto;
+    border-bottom: 1px solid #cacaca;
+    text-align: center;
+}
+
+.top-bar a {
+    background: white;
+    color: #666666;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 11px;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.2);
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    padding: 13px 19px 13px 20px !important;
+}
+
+.top-bar .active  a {
+    color: #b83535;
+}
+
+.top-bar li {
+    background: white;
+}
+
+.top-bar input {
+    padding: 6px 4px 6px 29px;
+    border: 1px solid #d5d5d5;
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    border-radius: 2px;
+    /*box-shadow: 0px 0px 0px 4px #f4f4f4, inset 0px 1px 1px 0px rgba(0, 0, 0, 0.05);*/
+    height: 31px;
+    width: 250px;
+}
+
+.top-bar li + li:before {
+    content: " | ";
+    padding: 0.6em 0 0;
+    float: left;
+    color: #cacaca;
+}
+
+.search-box {
+    padding-top: 3px;
+}

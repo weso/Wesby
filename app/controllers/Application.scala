@@ -67,6 +67,10 @@ class Application @Inject() (val messagesApi: MessagesApi) (cache: CacheApi) (ca
     Ok(views.html.welcome()).as(HTML)
   }
 
+  def presentacion = Action { implicit request =>
+    Ok(views.html.presentacion()).as(HTML)
+  }
+
   def words(letter: String) = Action { implicit request =>
     QueryEngineWithJena.listWords(letter) match {
       case Success(solutions) => {
