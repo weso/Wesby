@@ -6,6 +6,7 @@
 GET        /                    controllers.Application.index
 GET        /welcome             controllers.Application.welcome
 GET        /presentacion        controllers.Application.presentacion
+GET        /descripcion         controllers.Application.descripcion
 
 GET        /words               controllers.Application.words(letter: String)
 

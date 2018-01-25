@@ -74,6 +74,7 @@ a{
     font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
     line-height: 21px;
 }
+
 a:hover{
     color:#b83535;
 }
@@ -151,9 +152,21 @@ h1 {
     text-align: justify;
 }
 
+/*h2 {*/
+    /*font-size: 18px;*/
+    /*line-height: 27px;*/
+/*}*/
+
 h2 {
-    font-size: 18px;
-    line-height: 27px;
+    font-family: "Open Sans", "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 21px;
+    /*text-align: left;*/
+    /*float:left;*/
+    /*clear: left;*/
+    /*width: 25%;*/
+    color: #b83535;
 }
 
 h3 {
@@ -210,6 +223,10 @@ button, .button {
     border-top: 0px;
     border-right: 0px;
     border-left: 0px;
+}
+
+.callout.large {
+    min-height: 920px;
 }
 
 .footer {
