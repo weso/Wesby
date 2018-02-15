@@ -114,8 +114,8 @@ Handlebars.registerHelper('prevP', function(paragraphID) {
 
     var paragraphName = paragraphID[0].split('/').pop();
     var paragraphNumber = Number(paragraphName.split('_').pop()) - 1;
-
-    var prevPID = 'http://localhost:9000/corpus/BNE4871/parrafo/par_' + pad(paragraphNumber, 6);
+    var book = paragraphID[0].split('/', 5)[4];
+    var prevPID = window.location.origin + '/corpus/' + book + '/parrafo/par_' + pad(paragraphNumber, 6);
 
     Wesby.getContext(prevPID, function (ctx) {
         morph.html('<a href="' + prevPID + '">' + ctx['paragraphText'][0] + '</a>');
@@ -130,8 +130,9 @@ Handlebars.registerHelper('nextP', function(paragraphID) {
 
     var paragraphName = paragraphID[0].split('/').pop();
     var paragraphNumber = Number(paragraphName.split('_').pop()) + 1;
+    var book = paragraphID[0].split('/', 5)[4];
+    var nextPID = window.location.origin + '/corpus/' + book + '/parrafo/par_' + pad(paragraphNumber, 6);
 
-    var nextPID = 'http://localhost:9000/corpus/BNE4871/parrafo/par_' + pad(paragraphNumber, 6);
     Wesby.getContext(nextPID, function (ctx) {
         morph.html('<a href="' + nextPID + '">' + ctx['paragraphText'][0] + '</a>');
         return ctx;
@@ -143,7 +144,7 @@ Handlebars.registerHelper('nextP', function(paragraphID) {
 Handlebars.registerHelper('concordanceP', function(id, options) {
     var morph = Metamorph(Wesby.getSpinner());
     var concordanceCtx = this;
-    console.log(this);
+    // console.log(this);
     // console.log(options);
     Wesby.getContext(id, function (ctx) {
         var word = concordanceCtx.hasWord[0].split('/').pop();
